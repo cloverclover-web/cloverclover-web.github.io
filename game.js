@@ -3190,6 +3190,17 @@ function makeTextChoice(label, correct = false) {
   };
 }
 
+function withSpokenLabel(option, spokenLabel) {
+  return {
+    ...option,
+    spokenLabel
+  };
+}
+
+function spokenTextForOption(option) {
+  return String(option?.spokenLabel || option?.label || "").trim();
+}
+
 function makeBigTextChoice(label, correct = false, className = "") {
   return {
     type: "group",
@@ -3751,6 +3762,11 @@ function buildMathReasoningChallenge(item) {
 
   if (item.type === "compare-symbol") {
     const answer = item.left > item.right ? ">" : item.left < item.right ? "<" : "=";
+    const spokenSymbols = {
+      ">": "greater than",
+      "<": "less than",
+      "=": "equals"
+    };
     return {
       game: "mathReasoning",
       level: "compare-symbol",
@@ -3761,7 +3777,7 @@ function buildMathReasoningChallenge(item) {
       spoken: `Which sign goes between ${item.left} and ${item.right}?`,
       hint: "The open mouth faces the bigger number.",
       targetHtml: renderCompareNumberToken(item.left, item.right),
-      options: shuffle([">", "<", "="].map((label) => makeTextChoice(label, label === answer)))
+      options: shuffle([">", "<", "="].map((label) => withSpokenLabel(makeTextChoice(label, label === answer), spokenSymbols[label])))
     };
   }
 
@@ -5335,7 +5351,7 @@ function renderRound() {
     button.type = "button";
     button.dataset.correct = String(option.correct);
     button.dataset.index = String(index);
-    button.setAttribute("aria-label", option.label);
+    button.setAttribute("aria-label", option.spokenLabel || option.label);
 
     if (option.type === "math") {
       const number = document.createElement("span");
@@ -5444,7 +5460,7 @@ function handleChoice(button, option) {
   nodes.feedback.textContent = option.type === "math" ? `${option.label}! ${cheer}` : `${option.label}. ${cheer}`;
   playTone([523, 659, 784], 0.11, "triangle");
   const showedExplanation = shouldShowCorrectExplanation() ? showTeachingExplanation() : false;
-  speakFeedbackThenAdvance(option.type === "math" ? `${option.label}.` : option.label, showedExplanation ? state.challenge.explanationMinimumMs || 900 : 850);
+  speakFeedbackThenAdvance(spokenTextForOption(option), showedExplanation ? state.challenge.explanationMinimumMs || 900 : 850);
 }
 
 function refreshSequenceTarget() {
@@ -5486,7 +5502,7 @@ function handleSequenceChoice(button, option) {
   playTone([523, 659], 0.1, "triangle");
 
   if (state.challenge.sequenceIndex < state.challenge.sequence.length) {
-    speakEnglish(option.label);
+    speakEnglish(spokenTextForOption(option));
     const nextStep = state.challenge.sequenceIndex + 1;
     nodes.feedback.textContent = `Good. Tap number ${nextStep}.`;
     nodes.promptHint.textContent = `Now tap picture ${nextStep}.`;
@@ -5497,7 +5513,7 @@ function handleSequenceChoice(button, option) {
   state.locked = true;
   cheerCompanion();
   nodes.feedback.textContent = `Beautifully done, princess!`;
-  speakFeedbackThenAdvance(option.label);
+  speakFeedbackThenAdvance(spokenTextForOption(option));
 }
 
 function speakFeedbackThenAdvance(text, minimumMs = 850) {
@@ -5853,7 +5869,7 @@ async function setupOfflineApp() {
     const sendCacheRequest = () => {
       const target = registration.active || navigator.serviceWorker.controller || worker;
       if (target) {
-        showPwaStatus("Saving offline audio...", false);
+        showPwaStatus("Checking offline audio...", false);
         target.postMessage({ type: "CACHE_AUDIO" });
       }
     };
@@ -5861,9 +5877,10 @@ async function setupOfflineApp() {
     navigator.serviceWorker.addEventListener("message", (event) => {
       const data = event.data || {};
       if (data.type === "OFFLINE_PROGRESS") {
-        showPwaStatus(`Saving offline audio... ${data.done}/${data.total}`, false);
+        const action = data.downloaded > 0 ? "Saving offline audio" : "Checking offline audio";
+        showPwaStatus(`${action}... ${data.done}/${data.total}`, false);
       } else if (data.type === "OFFLINE_READY") {
-        showPwaStatus("Offline ready for iPad.", true);
+        showPwaStatus(data.downloaded > 0 ? "Offline ready for iPad." : "Offline audio already ready.", true);
       } else if (data.type === "OFFLINE_ERROR") {
         showPwaStatus("Offline cache paused. Open online again to finish.", true);
       }

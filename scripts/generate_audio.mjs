@@ -243,11 +243,28 @@ function collectTexts(data) {
     if (item.type === "one-more") add(`What is one more than ${item.number}?`);
     if (item.type === "one-less") add(`What is one less than ${item.number}?`);
     if (item.type === "count-on") add(`Count forward from ${item.start}. What number is missing?`);
+    if (item.type === "odd-even") add(`Is ${item.count} odd or even?`);
+    if (item.type === "skip-count") add(`Count by ${item.step}s. What comes next?`);
+    if (item.type === "place-value") add(`How many tens and ones are in ${item.number}?`);
+    if (item.type === "compare-two-digit") add("Which number is bigger?");
+    if (item.type === "bond-ways") add(`Which two numbers make ${item.whole}?`);
+    if (item.type === "ordinal") add(`Which one is number ${item.target}?`);
   });
 
   data.mathReasoningBank.forEach((item) => {
     if (item.type === "add") add(`What is ${item.left} plus ${item.right}?`);
     if (item.type === "subtract") add(`What is ${item.left} minus ${item.right}?`);
+    if (item.type === "missing-addend") add(`${item.left} plus what equals ${item.whole}?`);
+    if (item.type === "three-addend") add(`What is ${item.first} plus ${item.second} plus ${item.third}?`);
+    if (item.type === "doubles") add(`Double ${item.number}.`);
+    if (item.type === "halves") add(`Half of ${item.whole} is what?`);
+    if (item.type === "compare-symbol") {
+      add(`Which sign goes between ${item.left} and ${item.right}?`);
+      add("greater than");
+      add("less than");
+      add("equals");
+    }
+    if (item.type === "fraction") add("How much is pink?");
     if (item.type === "balance") add(`What number balances the scale? ${item.left} plus what equals ${item.total}?`);
     if (item.type === "two-step") add(`Mia has ${item.start} stars. She gets ${item.add} more, then gives away ${item.take}. How many stars are left?`);
     if (item.type === "array") add(`There are ${item.rows} rows with ${item.cols} in each row. How many are there?`);

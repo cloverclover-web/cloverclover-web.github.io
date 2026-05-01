@@ -1,6 +1,6 @@
 const CACHE_VERSION = "yoyo-study-2026-05-01-v1";
 const CORE_CACHE = `${CACHE_VERSION}-core`;
-const AUDIO_CACHE = `${CACHE_VERSION}-audio`;
+const AUDIO_CACHE = "yoyo-study-audio-v1";
 
 const CORE_ASSETS = [
   "./",
@@ -29,12 +29,30 @@ self.addEventListener("activate", (event) => {
     caches.keys()
       .then((keys) => Promise.all(
         keys
-          .filter((key) => key.startsWith("yoyo-study-") && !key.startsWith(CACHE_VERSION))
+          .filter((key) => key.startsWith("yoyo-study-") && key !== CORE_CACHE && !isAudioCacheName(key))
           .map((key) => caches.delete(key))
       ))
       .then(() => self.clients.claim())
   );
 });
+
+function isAudioCacheName(key) {
+  return key === AUDIO_CACHE || key.endsWith("-audio");
+}
+
+async function findCachedAudio(request, primaryCache) {
+  const primaryMatch = await primaryCache.match(request);
+  if (primaryMatch) return primaryMatch;
+
+  const keys = await caches.keys();
+  const legacyAudioNames = keys.filter((key) => isAudioCacheName(key) && key !== AUDIO_CACHE);
+  for (const cacheName of legacyAudioNames) {
+    const legacyCache = await caches.open(cacheName);
+    const legacyMatch = await legacyCache.match(request);
+    if (legacyMatch) return legacyMatch;
+  }
+  return null;
+}
 
 async function cacheAudioForOffline() {
   const manifestResponse = await fetch("./audio-manifest.json", { cache: "no-store" });
@@ -42,23 +60,28 @@ async function cacheAudioForOffline() {
   const files = Array.isArray(manifest.files) ? manifest.files : [];
   const cache = await caches.open(AUDIO_CACHE);
   let done = 0;
+  let downloaded = 0;
 
   for (const file of files) {
     const url = new URL(file, self.registration.scope).href;
-    const cached = await cache.match(url);
+    const request = new Request(url);
+    const cached = await findCachedAudio(request, cache);
     if (!cached) {
-      const response = await fetch(url);
+      const response = await fetch(request);
       if (response.ok) {
-        await cache.put(url, response);
+        await cache.put(request, response);
+        downloaded += 1;
       }
+    } else {
+      await cache.put(request, cached.clone());
     }
     done += 1;
     if (done === files.length || done % 50 === 0) {
-      postOfflineMessage({ type: "OFFLINE_PROGRESS", done, total: files.length });
+      postOfflineMessage({ type: "OFFLINE_PROGRESS", done, total: files.length, downloaded });
     }
   }
 
-  postOfflineMessage({ type: "OFFLINE_READY", done, total: files.length });
+  postOfflineMessage({ type: "OFFLINE_READY", done, total: files.length, downloaded });
 }
 
 async function postOfflineMessage(message) {

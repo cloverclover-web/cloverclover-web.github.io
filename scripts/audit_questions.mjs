@@ -123,7 +123,6 @@ function loadGame() {
 function audioExistsFor(text, audioKeyForText) {
   const clean = String(text || "").trim();
   if (!clean) return true;
-  if (/^[<>=+\-×÷?]+$/.test(clean)) return true;
   const key = audioKeyForText(clean);
   return existsSync(resolve(audioDir, `${key}.mp3`));
 }
@@ -177,7 +176,7 @@ function auditChallenge(mode, challenge, audioKeyForText, index) {
   if (challenge.spoken) audioTexts.add(challenge.spoken);
   (challenge.speechSegments || []).forEach((text) => audioTexts.add(text));
   options.forEach((option) => {
-    if (option.correct && option.label) audioTexts.add(option.label);
+    if (option.correct) audioTexts.add(option.spokenLabel || option.label);
   });
 
   const missingAudio = [...audioTexts].filter((text) => !audioExistsFor(text, audioKeyForText));
