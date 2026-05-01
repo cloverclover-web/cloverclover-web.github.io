@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="YOYO Study">
+  <rect width="512" height="512" rx="108" fill="#fff0f8"/>
+  <circle cx="256" cy="268" r="168" fill="#fffaf0" stroke="#253041" stroke-width="18"/>
+  <path d="M122 278 L158 154 L218 228 L256 116 L294 228 L354 154 L390 278 Z" fill="#f0c463" stroke="#253041" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M122 278 H390 V326 H122 Z" fill="#ffd166" stroke="#253041" stroke-width="18" stroke-linejoin="round"/>
+  <circle cx="158" cy="154" r="18" fill="#f29ec2" stroke="#253041" stroke-width="10"/>
+  <circle cx="256" cy="116" r="22" fill="#c0a7e8" stroke="#253041" stroke-width="10"/>
+  <circle cx="354" cy="154" r="18" fill="#9ee0c8" stroke="#253041" stroke-width="10"/>
+  <path d="M188 382 H324" stroke="#253041" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="220" cy="366" r="12" fill="#f29ec2"/>
+  <circle cx="256" cy="366" r="12" fill="#9ee0c8"/>
+  <circle cx="292" cy="366" r="12" fill="#c0a7e8"/>
+</svg>

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#fff0f8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="YOYO Study">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Quest</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="game" aria-labelledby="game-title">
+      <header class="topbar">
+        <div class="title-block">
+          <span class="title-icon" aria-hidden="true">
+            <svg viewBox="0 0 56 44" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path d="M6 32 L14 14 L22 26 L28 8 L34 26 L42 14 L50 32 Z" fill="#f0c463" stroke="#8c5d22" stroke-width="2.2" stroke-linejoin="round"/>
+              <path d="M6 32 H50 V36 H6 Z" fill="#e8b54e" stroke="#8c5d22" stroke-width="2.2" stroke-linejoin="round"/>
+              <circle cx="14" cy="14" r="2.4" fill="#f29ec2" stroke="#8c5d22" stroke-width="1"/>
+              <circle cx="28" cy="8" r="3" fill="#c0a7e8" stroke="#8c5d22" stroke-width="1"/>
+              <circle cx="42" cy="14" r="2.4" fill="#9ee0c8" stroke="#8c5d22" stroke-width="1"/>
+            </svg>
+          </span>
+          <div>
+            <h1 id="game-title">Quest</h1>
+            <p id="roundLabel">KET Listening 1 / 10</p>
+          </div>
+        </div>
+
+        <nav class="mode-tabs" aria-label="Game mode">
+          <button class="mode-tab active" id="ketListenModeButton" type="button" data-mode="ketListen" aria-pressed="true">Listening</button>
+          <button class="mode-tab" id="englishSkillsModeButton" type="button" data-mode="englishSkills" aria-pressed="false">English</button>
+          <button class="mode-tab" id="phonicsModeButton" type="button" data-mode="phonics" aria-pressed="false">Phonics</button>
+          <button class="mode-tab" id="numberSenseModeButton" type="button" data-mode="numberSense" aria-pressed="false">Numbers</button>
+          <button class="mode-tab" id="mathReasoningModeButton" type="button" data-mode="mathReasoning" aria-pressed="false">Maths</button>
+          <button class="mode-tab" id="logicSpatialModeButton" type="button" data-mode="logicSpatial" aria-pressed="false">Shapes</button>
+          <button class="mode-tab" id="measureModeButton" type="button" data-mode="measure" aria-pressed="false">Measure</button>
+        </nav>
+
+        <div class="round-picker" aria-label="Question count">
+          <span class="round-picker-label">Rounds</span>
+          <button class="round-button" type="button" data-goal="6" aria-pressed="false">6</button>
+          <button class="round-button active" type="button" data-goal="10" aria-pressed="true">10</button>
+          <button class="round-button" type="button" data-goal="15" aria-pressed="false">15</button>
+        </div>
+
+        <div class="controls" aria-label="Game controls">
+          <button class="icon-button" id="speakButton" type="button" title="Hear it again">
+            <span class="button-icon" aria-hidden="true">
+              <svg viewBox="0 0 32 32">
+                <path d="M11 7 L24 16 L11 25 Z" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="sr-only">Hear it again</span>
+          </button>
+          <button class="icon-button" id="soundToggle" type="button" title="Sound" aria-pressed="true">
+            <span id="soundIcon" class="button-icon" aria-hidden="true"></span>
+            <span class="sr-only">Sound</span>
+          </button>
+          <button class="icon-button" id="restartButton" type="button" title="Restart">
+            <span class="button-icon" aria-hidden="true">
+              <svg viewBox="0 0 32 32">
+                <path d="M23 10 A9 9 0 1 0 25 19" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                <path d="M23 4 V10 H17" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="sr-only">Restart</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="play-space" aria-label="Game area">
+        <div class="garden-sky" aria-hidden="true">
+          <span class="cloud cloud-one"></span>
+          <span class="cloud cloud-two"></span>
+          <span class="sun"></span>
+        </div>
+
+        <section class="target-area" id="targetArea" aria-labelledby="promptText">
+          <div class="helper-character" aria-hidden="true">
+            <svg class="helper-svg" viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <ellipse cx="60" cy="132" rx="44" ry="6" fill="rgba(74, 50, 88, 0.18)"/>
+              <path d="M20 86 Q12 38 60 22 Q108 38 100 86 L100 120 Q60 138 20 120 Z" fill="#6b3f70"/>
+              <ellipse cx="60" cy="76" rx="30" ry="34" fill="#fbe3d2"/>
+              <path d="M30 60 Q44 30 60 38 Q76 30 90 60 Q72 50 60 56 Q48 50 30 60 Z" fill="#6b3f70"/>
+              <path d="M36 52 Q60 44 84 52 L82 58 Q60 52 38 58 Z" fill="#f0c463" stroke="#8c5d22" stroke-width="1.2"/>
+              <path d="M44 52 L48 40 L52 52 Z M58 52 L62 36 L66 52 Z M70 52 L74 40 L78 52 Z" fill="#f0c463" stroke="#8c5d22" stroke-width="1.2" stroke-linejoin="round"/>
+              <circle cx="62" cy="44" r="2.6" fill="#f29ec2" stroke="#8c5d22" stroke-width="0.9"/>
+              <ellipse cx="50" cy="80" rx="3" ry="4" fill="#2c2440"/>
+              <ellipse cx="72" cy="80" rx="3" ry="4" fill="#2c2440"/>
+              <circle cx="51" cy="78.5" r="0.9" fill="#ffffff"/>
+              <circle cx="73" cy="78.5" r="0.9" fill="#ffffff"/>
+              <circle cx="42" cy="90" r="3.4" fill="#f29ec2" opacity="0.55"/>
+              <circle cx="78" cy="90" r="3.4" fill="#f29ec2" opacity="0.55"/>
+              <path d="M53 96 Q60 101 67 96" fill="none" stroke="#a8493a" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M44 112 Q60 124 76 112 L84 134 Q60 142 36 134 Z" fill="#f29ec2"/>
+              <circle cx="60" cy="124" r="3" fill="#fff7e8" stroke="#8c5d22" stroke-width="0.9"/>
+            </svg>
+          </div>
+          <div class="target-copy">
+            <p id="promptText">Find the apple</p>
+            <p id="promptHint">Listen and pick the picture.</p>
+          </div>
+          <div id="targetToken" class="target-token" aria-label="Target"></div>
+        </section>
+
+        <div id="feedback" class="feedback" aria-live="polite">Ready?</div>
+
+        <section class="options" id="options" aria-label="Choices"></section>
+
+        <section class="progress-row" aria-label="Star progress">
+          <div id="stars" class="stars" aria-hidden="true"></div>
+          <p id="progressText">0 / 10</p>
+        </section>
+      </section>
+    </main>
+
+    <svg class="castle-scene" viewBox="0 0 1200 360" aria-hidden="true" preserveAspectRatio="xMidYMax meet">
+      <path d="M70 314 H1130" fill="none" stroke="#9ed392" stroke-width="14" stroke-linecap="round"/>
+      <path d="M160 118 H252 V316 H160 Z M948 118 H1040 V316 H948 Z" fill="#ffe1ee" stroke="#7b5477" stroke-width="8"/>
+      <path d="M130 126 L206 48 L282 126 Z M918 126 L994 48 L1070 126 Z" fill="#c0a7e8" stroke="#7b5477" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M332 92 H868 V316 H332 Z" fill="#fff0f7" stroke="#7b5477" stroke-width="8"/>
+      <path d="M302 102 L390 26 L478 102 Z M722 102 L810 26 L898 102 Z" fill="#c0a7e8" stroke="#7b5477" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M504 44 H696 V316 H504 Z" fill="#ffe1ee" stroke="#7b5477" stroke-width="8"/>
+      <path d="M474 54 L600 0 L726 54 Z" fill="#f29ec2" stroke="#7b5477" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M552 316 V232 C552 204 648 204 648 232 V316" fill="#9d8df1" stroke="#7b5477" stroke-width="8"/>
+      <path d="M376 152 H438 V218 H376 Z M762 152 H824 V218 H762 Z M568 96 H632 V164 H568 Z" fill="#fffaf0" stroke="#7b5477" stroke-width="7"/>
+      <path d="M160 118 H184 V82 H208 V118 H232 V82 H256 V118 M948 118 H972 V82 H996 V118 H1020 V82 H1044 V118 M332 92 H356 V56 H380 V92 H404 V56 H428 V92 M772 92 H796 V56 H820 V92 H844 V56 H868 V92" fill="none" stroke="#7b5477" stroke-width="8" stroke-linejoin="round"/>
+    </svg>
+
+    <div id="celebration" class="celebration" hidden>
+      <div class="celebration-scene" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+        <div class="confetti" aria-hidden="true"></div>
+        <div class="royal-badge" aria-hidden="true">
+          <span class="crown-point crown-left"></span>
+          <span class="crown-point crown-middle"></span>
+          <span class="crown-point crown-right"></span>
+          <span class="crown-band"></span>
+        </div>
+        <h2 id="winTitle">Quest complete, princess!</h2>
+        <p id="winText">You collected 10 sparkling gems.</p>
+        <div class="celebration-actions">
+          <button id="playAgainButton" class="primary-button" type="button">
+            <span class="button-icon" aria-hidden="true">
+              <svg viewBox="0 0 32 32">
+                <path d="M23 10 A9 9 0 1 0 25 19" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                <path d="M23 4 V10 H17" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Play again
+          </button>
+          <button id="chooseGameButton" class="secondary-button" type="button">Choose game</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="companion" class="companion" role="img" aria-label="Princess bunny">
+      <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+        <ellipse cx="40" cy="74" rx="22" ry="3" fill="rgba(74, 50, 88, 0.18)"/>
+        <g class="ear-group-left">
+          <path d="M28 20 Q26 4 32 6 Q34 16 32 28 Z" fill="#fdfdff" stroke="#7b5477" stroke-width="2"/>
+          <path d="M30 14 Q31 8 33 9 Q33 16 32 22 Z" fill="#f29ec2"/>
+        </g>
+        <g class="ear-group-right">
+          <path d="M52 20 Q54 4 48 6 Q46 16 48 28 Z" fill="#fdfdff" stroke="#7b5477" stroke-width="2"/>
+          <path d="M50 14 Q49 8 47 9 Q47 16 48 22 Z" fill="#f29ec2"/>
+        </g>
+        <g class="sleep-hearts">
+          <path d="M31 16 C28 12 22 12 22 17 C22 21 31 27 31 27 C31 27 40 21 40 17 C40 12 34 12 31 16 Z" fill="#f29ec2" opacity="0.86"/>
+          <path d="M52 12 C49 8 44 9 44 13 C44 17 52 22 52 22 C52 22 60 17 60 13 C60 9 55 8 52 12 Z" fill="#f0c463" opacity="0.84"/>
+        </g>
+        <path d="M30 18 Q40 14 50 18 L48 22 Q40 19 32 22 Z" fill="#f0c463" stroke="#8c5d22" stroke-width="1"/>
+        <path d="M40 12 L43 18 L37 18 Z" fill="#f0c463" stroke="#8c5d22" stroke-width="1" stroke-linejoin="round"/>
+        <ellipse cx="40" cy="50" rx="22" ry="22" fill="#fdfdff" stroke="#7b5477" stroke-width="2"/>
+        <ellipse class="foot foot-left" cx="30" cy="70" rx="6" ry="4" fill="#f29ec2" stroke="#7b5477" stroke-width="1.5"/>
+        <ellipse class="foot foot-right" cx="50" cy="70" rx="6" ry="4" fill="#f29ec2" stroke="#7b5477" stroke-width="1.5"/>
+        <circle cx="33" cy="46" r="2.5" fill="#2c2440"/>
+        <circle cx="47" cy="46" r="2.5" fill="#2c2440"/>
+        <circle cx="33.7" cy="45.3" r="0.7" fill="#fff"/>
+        <circle cx="47.7" cy="45.3" r="0.7" fill="#fff"/>
+        <circle cx="27" cy="52" r="2.2" fill="#f29ec2" opacity="0.6"/>
+        <circle cx="53" cy="52" r="2.2" fill="#f29ec2" opacity="0.6"/>
+        <path d="M38 53 Q40 55 42 53" fill="#f29ec2" stroke="#7b5477" stroke-width="1"/>
+        <path d="M40 55 Q40 60 36 60 M40 55 Q40 60 44 60" fill="none" stroke="#7b5477" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div id="pwaStatus" class="pwa-status" hidden>Offline ready</div>
+
+    <noscript>This game needs JavaScript.</noscript>
+    <script src="audio/audio-config.js"></script>
+    <script src="game.js"></script>
+  </body>
+</html>
