@@ -2160,6 +2160,21 @@ h1 {
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.16);
 }
 
+#scoreText {
+  min-width: 112px;
+  margin: 0;
+  padding: 7px 12px;
+  border: 3px solid rgba(74, 50, 88, 0.72);
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.9);
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 1000;
+  line-height: 1;
+  text-align: center;
+  box-shadow: 0 4px 0 rgba(74, 50, 88, 0.15);
+}
+
 .celebration {
   position: fixed;
   inset: 0;

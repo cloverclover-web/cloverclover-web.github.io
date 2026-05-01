@@ -1206,11 +1206,13 @@ const wrongReviewMs = {
   final: 2300
 };
 const assistedExplanationMs = 2300;
+const scoreByWrongAttempts = [10, 7, 4, 2];
 
 const state = {
   activeGame: "ketListen",
   questionGoal: defaultQuestionGoal,
   correctCount: 0,
+  score: 0,
   firstTryCount: 0,
   roundResults: [],
   round: 0,
@@ -1251,6 +1253,7 @@ const nodes = {
   options: document.querySelector("#options"),
   stars: document.querySelector("#stars"),
   progressText: document.querySelector("#progressText"),
+  scoreText: document.querySelector("#scoreText"),
   celebration: document.querySelector("#celebration"),
   winTitle: document.querySelector("#winTitle"),
   winText: document.querySelector("#winText"),
@@ -5243,6 +5246,7 @@ function renderStars() {
     nodes.stars.append(slot);
   }
   nodes.progressText.textContent = `${state.correctCount} / ${state.questionGoal}`;
+  nodes.scoreText.textContent = `Score ${state.score}`;
 }
 
 function choiceButtons() {
@@ -5634,8 +5638,11 @@ function speakFeedbackThenAdvance(text, minimumMs = 850) {
 
 function finishCorrectRound() {
   const firstTry = !state.hadIncorrectThisRound;
+  const earnedPoints = scoreByWrongAttempts[Math.min(state.wrongAttempts, scoreByWrongAttempts.length - 1)];
   state.roundResults[state.correctCount] = firstTry ? "first" : "assisted";
   if (firstTry) state.firstTryCount += 1;
+  state.score += earnedPoints;
+  nodes.feedback.textContent = `${earnedPoints} points. Total score ${state.score}.`;
   state.correctCount += 1;
   renderStars();
 
@@ -5671,7 +5678,7 @@ function showCelebration() {
   nodes.winTitle.textContent = state.firstTryCount === state.questionGoal
     ? "Perfect quest, princess!"
     : "Quest complete, princess!";
-  nodes.winText.textContent = `${winMessages[state.activeGame] || `You finished ${state.questionGoal} quests.`} First-try gems: ${state.firstTryCount} / ${state.questionGoal}.`;
+  nodes.winText.textContent = `${winMessages[state.activeGame] || `You finished ${state.questionGoal} quests.`} Score: ${state.score} / ${state.questionGoal * 10}. First-try gems: ${state.firstTryCount} / ${state.questionGoal}.`;
   playTone([523, 659, 784, 1046], 0.13, "triangle");
   speakEnglish(cheer);
   window.setTimeout(() => nodes.playAgainButton.focus(), 120);
@@ -5713,6 +5720,7 @@ function restartGame() {
   resetAllDecks();
   trimRecentTagsAcrossModes(5);
   state.correctCount = 0;
+  state.score = 0;
   state.firstTryCount = 0;
   state.roundResults = [];
   state.round = 0;
@@ -5734,6 +5742,7 @@ function chooseGame() {
   resetAllDecks();
   trimRecentTagsAcrossModes(5);
   state.correctCount = 0;
+  state.score = 0;
   state.firstTryCount = 0;
   state.roundResults = [];
   state.round = 0;

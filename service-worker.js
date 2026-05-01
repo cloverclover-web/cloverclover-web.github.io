@@ -1,4 +1,4 @@
-const CACHE_VERSION = "yoyo-study-2026-05-01-v2";
+const CACHE_VERSION = "yoyo-study-2026-05-01-v3";
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const AUDIO_CACHE = "yoyo-study-audio-v1";
 
