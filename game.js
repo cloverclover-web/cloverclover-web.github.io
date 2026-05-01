@@ -1195,14 +1195,29 @@ const measureBank = createMeasureBank(160);
 
 const defaultQuestionGoal = 10;
 const startingMathStage = 4;
+const answerDelayMs = {
+  listening: 1800,
+  language: 1100,
+  thinking: 650
+};
+const wrongReviewMs = {
+  first: 950,
+  second: 1500,
+  final: 2300
+};
+const assistedExplanationMs = 2300;
 
 const state = {
   activeGame: "ketListen",
   questionGoal: defaultQuestionGoal,
   correctCount: 0,
+  firstTryCount: 0,
+  roundResults: [],
   round: 0,
   soundOn: true,
   locked: false,
+  answerReady: false,
+  choiceUnlockTimer: null,
   wrongAttempts: 0,
   hadIncorrectThisRound: false,
   streak: 0,
@@ -1237,6 +1252,7 @@ const nodes = {
   stars: document.querySelector("#stars"),
   progressText: document.querySelector("#progressText"),
   celebration: document.querySelector("#celebration"),
+  winTitle: document.querySelector("#winTitle"),
   winText: document.querySelector("#winText"),
   playAgainButton: document.querySelector("#playAgainButton"),
   chooseGameButton: document.querySelector("#chooseGameButton"),
@@ -5212,18 +5228,81 @@ function renderStars() {
   const gemPalette = ["#f29ec2", "#c0a7e8", "#f0c463", "#9ee0c8"];
   for (let index = 0; index < state.questionGoal; index += 1) {
     const slot = document.createElement("span");
-    const filled = index < state.correctCount;
-    slot.className = `star${filled ? " filled" : ""}`;
-    const fillColor = filled ? gemPalette[index % gemPalette.length] : "transparent";
-    const strokeColor = filled ? "rgba(74, 50, 88, 0.9)" : "rgba(74, 50, 88, 0.45)";
+    const result = state.roundResults[index];
+    const filled = Boolean(result);
+    const assisted = result === "assisted";
+    slot.className = `star${filled ? " filled" : ""}${assisted ? " assisted" : ""}`;
+    slot.title = filled ? (assisted ? "Practice gem" : "First-try gem") : "Empty gem";
+    const fillColor = filled ? (assisted ? "#e5d8ef" : gemPalette[index % gemPalette.length]) : "transparent";
+    const strokeColor = filled ? (assisted ? "rgba(74, 50, 88, 0.62)" : "rgba(74, 50, 88, 0.9)") : "rgba(74, 50, 88, 0.45)";
     slot.innerHTML = `
       <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
         <path d="M16 3 L28 13 L16 29 L4 13 Z" fill="${fillColor}" stroke="${strokeColor}" stroke-width="2" stroke-linejoin="round"/>
-        ${filled ? '<path d="M16 3 L21 13 L16 29 L11 13 Z" fill="rgba(255,255,255,0.42)"/><path d="M16 3 L28 13 L21 13 Z" fill="rgba(255,255,255,0.62)"/>' : ""}
+        ${filled && !assisted ? '<path d="M16 3 L21 13 L16 29 L11 13 Z" fill="rgba(255,255,255,0.42)"/><path d="M16 3 L28 13 L21 13 Z" fill="rgba(255,255,255,0.62)"/>' : ""}
       </svg>`;
     nodes.stars.append(slot);
   }
   nodes.progressText.textContent = `${state.correctCount} / ${state.questionGoal}`;
+}
+
+function choiceButtons() {
+  if (typeof nodes.options?.querySelectorAll === "function") {
+    return [...nodes.options.querySelectorAll(".choice")];
+  }
+  return [...(nodes.options?.children || [])].filter((child) => child.classList?.contains("choice"));
+}
+
+function clearChoiceUnlockTimer() {
+  if (state.choiceUnlockTimer) {
+    window.clearTimeout(state.choiceUnlockTimer);
+    state.choiceUnlockTimer = null;
+  }
+}
+
+function shouldKeepChoiceDisabled(button) {
+  return button.classList.contains("wrong") || button.classList.contains("correct");
+}
+
+function setChoiceButtonsDisabled(disabled) {
+  choiceButtons().forEach((button) => {
+    button.disabled = disabled || shouldKeepChoiceDisabled(button);
+  });
+}
+
+function answerDelayForChallenge() {
+  if (state.activeGame === "ketListen") return answerDelayMs.listening;
+  if (["englishSkills", "phonics"].includes(state.activeGame)) return answerDelayMs.language;
+  return answerDelayMs.thinking;
+}
+
+function scheduleAnswerReady(delay = answerDelayForChallenge()) {
+  clearChoiceUnlockTimer();
+  state.answerReady = false;
+  setChoiceButtonsDisabled(true);
+  state.choiceUnlockTimer = window.setTimeout(() => {
+    state.choiceUnlockTimer = null;
+    state.answerReady = true;
+    if (!state.locked) setChoiceButtonsDisabled(false);
+  }, delay);
+}
+
+function pauseForWrongReview() {
+  clearChoiceUnlockTimer();
+  state.locked = true;
+  state.answerReady = false;
+  setChoiceButtonsDisabled(true);
+  const delay = state.wrongAttempts >= 3
+    ? wrongReviewMs.final
+    : state.wrongAttempts === 2
+      ? wrongReviewMs.second
+      : wrongReviewMs.first;
+
+  state.choiceUnlockTimer = window.setTimeout(() => {
+    state.choiceUnlockTimer = null;
+    state.locked = false;
+    state.answerReady = true;
+    setChoiceButtonsDisabled(false);
+  }, delay);
 }
 
 function setCompanionPaused(paused) {
@@ -5329,8 +5408,11 @@ function hintForWrongAttempt() {
 }
 
 function renderRound() {
+  clearChoiceUnlockTimer();
   buildRound();
   freezeCompanionForQuestion();
+  state.locked = false;
+  state.answerReady = false;
   state.wrongAttempts = 0;
   state.hadIncorrectThisRound = false;
   const modeTitle = modeTitles[state.activeGame] || "Learning";
@@ -5418,11 +5500,12 @@ function renderRound() {
   });
 
   renderStars();
+  scheduleAnswerReady();
   speakPrompt(false);
 }
 
 function handleChoice(button, option) {
-  if (state.locked) return;
+  if (state.locked || !state.answerReady || button.disabled) return;
 
   if (state.challenge.kind === "sequence") {
     handleSequenceChoice(button, option);
@@ -5436,19 +5519,24 @@ function handleChoice(button, option) {
     button.classList.remove("wrong");
     void button.offsetWidth;
     button.classList.add("wrong");
+    button.disabled = true;
     const hint = hintForWrongAttempt() || gentleHint(getCorrectLabel());
     nodes.feedback.textContent = hint;
     nodes.promptHint.textContent = hint;
     if (state.wrongAttempts >= 3) showTeachingExplanation();
     playTone([180, 140], 0.12, "sine");
     sadCompanion();
+    pauseForWrongReview();
     speakPrompt(true);
     return;
   }
 
   if (!state.hadIncorrectThisRound) recordLearningResult(true);
   state.locked = true;
+  state.answerReady = false;
+  clearChoiceUnlockTimer();
   button.classList.add("correct");
+  setChoiceButtonsDisabled(true);
   const helper = document.querySelector(".helper-character");
   if (helper) {
     helper.classList.remove("cheer");
@@ -5460,7 +5548,11 @@ function handleChoice(button, option) {
   nodes.feedback.textContent = option.type === "math" ? `${option.label}! ${cheer}` : `${option.label}. ${cheer}`;
   playTone([523, 659, 784], 0.11, "triangle");
   const showedExplanation = shouldShowCorrectExplanation() ? showTeachingExplanation() : false;
-  speakFeedbackThenAdvance(spokenTextForOption(option), showedExplanation ? state.challenge.explanationMinimumMs || 900 : 850);
+  const explanationText = state.challenge.explanation || finalHintFor(state.challenge);
+  const spokenFeedback = showedExplanation && explanationText
+    ? `${spokenTextForOption(option)}. ${explanationText}`
+    : spokenTextForOption(option);
+  speakFeedbackThenAdvance(spokenFeedback, showedExplanation ? state.challenge.explanationMinimumMs || assistedExplanationMs : 850);
 }
 
 function refreshSequenceTarget() {
@@ -5473,6 +5565,7 @@ function refreshSequenceTarget() {
 }
 
 function handleSequenceChoice(button, option) {
+  if (state.locked || !state.answerReady || button.disabled) return;
   if (option.done) return;
   const expected = state.challenge.sequence[state.challenge.sequenceIndex];
 
@@ -5483,6 +5576,7 @@ function handleSequenceChoice(button, option) {
     button.classList.remove("wrong");
     void button.offsetWidth;
     button.classList.add("wrong");
+    button.disabled = true;
     const sequenceHint = state.wrongAttempts >= 3
       ? `It is ${expected}. Tap ${expected} next.`
       : `Almost, princess. Tap ${expected} next.`;
@@ -5490,6 +5584,7 @@ function handleSequenceChoice(button, option) {
     nodes.promptHint.textContent = sequenceHint;
     playTone([180, 140], 0.12, "sine");
     sadCompanion();
+    pauseForWrongReview();
     speakPrompt(true);
     return;
   }
@@ -5511,6 +5606,9 @@ function handleSequenceChoice(button, option) {
 
   if (!state.hadIncorrectThisRound) recordLearningResult(true);
   state.locked = true;
+  state.answerReady = false;
+  clearChoiceUnlockTimer();
+  setChoiceButtonsDisabled(true);
   cheerCompanion();
   nodes.feedback.textContent = `Beautifully done, princess!`;
   speakFeedbackThenAdvance(spokenTextForOption(option));
@@ -5535,6 +5633,9 @@ function speakFeedbackThenAdvance(text, minimumMs = 850) {
 }
 
 function finishCorrectRound() {
+  const firstTry = !state.hadIncorrectThisRound;
+  state.roundResults[state.correctCount] = firstTry ? "first" : "assisted";
+  if (firstTry) state.firstTryCount += 1;
   state.correctCount += 1;
   renderStars();
 
@@ -5550,8 +5651,10 @@ function finishCorrectRound() {
 }
 
 function showCelebration() {
+  clearChoiceUnlockTimer();
   nodes.celebration.hidden = false;
   state.locked = false;
+  state.answerReady = false;
   resumeCompanionForFeedback();
   cheerCompanion();
   const cheer = pickFrom(PRINCESS_CELEBRATIONS);
@@ -5565,7 +5668,10 @@ function showCelebration() {
     logicSpatial: `You solved ${state.questionGoal} shape quests.`,
     measure: `You solved ${state.questionGoal} measure quests.`
   };
-  nodes.winText.textContent = winMessages[state.activeGame] || `You finished ${state.questionGoal} quests.`;
+  nodes.winTitle.textContent = state.firstTryCount === state.questionGoal
+    ? "Perfect quest, princess!"
+    : "Quest complete, princess!";
+  nodes.winText.textContent = `${winMessages[state.activeGame] || `You finished ${state.questionGoal} quests.`} First-try gems: ${state.firstTryCount} / ${state.questionGoal}.`;
   playTone([523, 659, 784, 1046], 0.13, "triangle");
   speakEnglish(cheer);
   window.setTimeout(() => nodes.playAgainButton.focus(), 120);
@@ -5599,6 +5705,7 @@ function setQuestionGoal(goal) {
 }
 
 function restartGame() {
+  clearChoiceUnlockTimer();
   stopSpeechAudio();
   if ("speechSynthesis" in window) {
     window.speechSynthesis.cancel();
@@ -5606,8 +5713,11 @@ function restartGame() {
   resetAllDecks();
   trimRecentTagsAcrossModes(5);
   state.correctCount = 0;
+  state.firstTryCount = 0;
+  state.roundResults = [];
   state.round = 0;
   state.locked = false;
+  state.answerReady = false;
   state.streak = 0;
   state.mathStage = startingMathStage;
   state.challenge = null;
@@ -5616,6 +5726,7 @@ function restartGame() {
 }
 
 function chooseGame() {
+  clearChoiceUnlockTimer();
   stopSpeechAudio();
   if ("speechSynthesis" in window) {
     window.speechSynthesis.cancel();
@@ -5623,8 +5734,11 @@ function chooseGame() {
   resetAllDecks();
   trimRecentTagsAcrossModes(5);
   state.correctCount = 0;
+  state.firstTryCount = 0;
+  state.roundResults = [];
   state.round = 0;
   state.locked = false;
+  state.answerReady = false;
   state.streak = 0;
   state.mathStage = startingMathStage;
   state.challenge = null;

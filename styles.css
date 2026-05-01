@@ -1948,6 +1948,16 @@ h1 {
   cursor: default;
 }
 
+.choice:disabled:not(.wrong):not(.correct) {
+  opacity: 0.64;
+  transform: translateY(0);
+  box-shadow: 0 7px 0 rgba(35, 48, 68, 0.14);
+}
+
+.choice.wrong:disabled {
+  opacity: 0.82;
+}
+
 .choice-art {
   width: min(158px, 82%);
   aspect-ratio: 1;
@@ -2134,6 +2144,11 @@ h1 {
 
 .star.filled svg {
   animation: gem-fill 380ms ease;
+}
+
+.star.assisted {
+  opacity: 0.72;
+  filter: saturate(0.75) drop-shadow(0 1px 0 rgba(74, 50, 88, 0.14));
 }
 
 #progressText {
