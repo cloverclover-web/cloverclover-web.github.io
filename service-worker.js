@@ -1,6 +1,7 @@
-const CACHE_VERSION = "yoyo-study-2026-05-01-v3";
+const CACHE_VERSION = "yoyo-study-2026-05-01-v4";
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const AUDIO_CACHE = "yoyo-study-audio-v1";
+const AUDIO_READY_URL = new URL("__offline-audio-ready.json", self.registration.scope).href;
 
 const CORE_ASSETS = [
   "./",
@@ -54,11 +55,53 @@ async function findCachedAudio(request, primaryCache) {
   return null;
 }
 
+function audioManifestSignature(manifest, files) {
+  const source = `${manifest.version || ""}\n${files.join("\n")}`;
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < source.length; index += 1) {
+    hash ^= source.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return `${manifest.version || "none"}:${files.length}:${(hash >>> 0).toString(16)}`;
+}
+
+async function readAudioReadyMeta(cache) {
+  const response = await cache.match(new Request(AUDIO_READY_URL));
+  if (!response) return null;
+  try {
+    return await response.json();
+  } catch {
+    return null;
+  }
+}
+
+async function writeAudioReadyMeta(cache, signature, total) {
+  const body = JSON.stringify({
+    signature,
+    total,
+    completedAt: new Date().toISOString()
+  });
+  await cache.put(new Request(AUDIO_READY_URL), new Response(body, {
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store"
+    }
+  }));
+}
+
 async function cacheAudioForOffline() {
   const manifestResponse = await fetch("./audio-manifest.json", { cache: "no-store" });
   const manifest = await manifestResponse.json();
   const files = Array.isArray(manifest.files) ? manifest.files : [];
   const cache = await caches.open(AUDIO_CACHE);
+  const signature = audioManifestSignature(manifest, files);
+  const readyMeta = await readAudioReadyMeta(cache);
+
+  if (readyMeta?.signature === signature && readyMeta?.total === files.length) {
+    postOfflineMessage({ type: "OFFLINE_READY", done: files.length, total: files.length, downloaded: 0, alreadyReady: true });
+    return;
+  }
+
   let done = 0;
   let downloaded = 0;
 
@@ -81,6 +124,7 @@ async function cacheAudioForOffline() {
     }
   }
 
+  await writeAudioReadyMeta(cache, signature, files.length);
   postOfflineMessage({ type: "OFFLINE_READY", done, total: files.length, downloaded });
 }
 
