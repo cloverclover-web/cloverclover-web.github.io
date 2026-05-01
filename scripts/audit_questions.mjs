@@ -134,6 +134,7 @@ function isYesNoRound(challenge) {
 function expectedOptionCounts(challenge) {
   if (challenge?.kind === "sequence") return [4];
   if (isYesNoRound(challenge)) return [2];
+  if (challenge?.level === "compare-two-digit") return [2];
   if (challenge?.level === "compare-symbol") return [3];
   return [4];
 }

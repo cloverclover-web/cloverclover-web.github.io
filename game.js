@@ -3334,35 +3334,12 @@ function makePlaceValueOptions(tens, ones) {
 
 function makeCompareTwoDigitOptions(left, right, ask) {
   const answer = ask === "bigger" ? Math.max(left, right) : Math.min(left, right);
-  const used = new Set([answer]);
-  const values = [answer];
-  const candidates = shuffle([
-    ask === "bigger" ? Math.min(left, right) : Math.max(left, right),
-    answer + 1,
-    answer - 1,
-    answer + 4,
-    answer - 4,
-    left + 10,
-    right - 10
-  ]);
-
-  for (const value of candidates) {
-    if (value >= 0 && value <= 60 && !used.has(value)) {
-      used.add(value);
-      values.push(value);
-    }
-    if (values.length === 4) break;
-  }
-
-  while (values.length < 4) {
-    const value = Math.max(0, answer + values.length * 2 + 1);
-    if (!used.has(value)) {
-      used.add(value);
-      values.push(value);
-    }
-  }
-
-  return shuffle(values.map((value) => ({ type: "math", value, label: String(value), correct: value === answer })));
+  return shuffle([left, right].map((value) => ({
+    type: "math",
+    value,
+    label: String(value),
+    correct: value === answer
+  })));
 }
 
 function makeBondDistractor(whole, used) {
