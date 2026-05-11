@@ -7,10 +7,10 @@ const source = "audio/violin-open-strings.mp3";
 const outputDir = "audio";
 
 const patterns = [
-  { id: "long-long", tokens: ["quarter", "quarter"] },
-  { id: "quick-quick-long", tokens: ["eighth-pair", "quarter"] },
-  { id: "long-quick-quick", tokens: ["quarter", "eighth-pair"] },
-  { id: "long-rest-long", tokens: ["quarter", "rest", "quarter"] },
+  { id: "long-long-quick-quick", tokens: ["quarter", "quarter", "eighth-pair"] },
+  { id: "quick-quick-long-long", tokens: ["eighth-pair", "quarter", "quarter"] },
+  { id: "long-quick-quick-long", tokens: ["quarter", "eighth-pair", "quarter"] },
+  { id: "long-rest-quick-quick", tokens: ["quarter", "rest", "eighth-pair"] },
   { id: "quick-quick-rest-long", tokens: ["eighth-pair", "rest", "quarter"] }
 ];
 

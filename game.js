@@ -3654,7 +3654,7 @@ function nextQuestionDeckItem(mode, bank) {
 
 function questionTagForItem(item) {
   if (!item) return "unknown";
-  if (item.type === "rhythm-pattern") return `${item.type}-${(item.offset + Math.floor(item.offset / 17)) % 5}`;
+  if (item.type === "rhythm-pattern") return `${item.type}-${(item.offset + Math.floor(item.offset / 17)) % rhythmPatterns.length}`;
   if (item.patternKind) return `${item.type}-${item.patternKind}`;
   if (item.compositionKind) return `${item.type}-${item.compositionKind}`;
   return item.type || item.id || "unknown";
@@ -5794,10 +5794,10 @@ const solfegeSpeech = {
   fa: "fah"
 };
 const rhythmPatterns = [
-  { id: "long-long", label: "long, long", tokens: ["quarter", "quarter"], file: "audio/music-rhythm-long-long.mp3" },
-  { id: "quick-quick-long", label: "quick quick, long", tokens: ["eighth-pair", "quarter"], file: "audio/music-rhythm-quick-quick-long.mp3" },
-  { id: "long-quick-quick", label: "long, quick quick", tokens: ["quarter", "eighth-pair"], file: "audio/music-rhythm-long-quick-quick.mp3" },
-  { id: "long-rest-long", label: "long, rest, long", tokens: ["quarter", "rest", "quarter"], file: "audio/music-rhythm-long-rest-long.mp3" },
+  { id: "long-long-quick-quick", label: "long, long, quick quick", tokens: ["quarter", "quarter", "eighth-pair"], file: "audio/music-rhythm-long-long-quick-quick.mp3" },
+  { id: "quick-quick-long-long", label: "quick quick, long, long", tokens: ["eighth-pair", "quarter", "quarter"], file: "audio/music-rhythm-quick-quick-long-long.mp3" },
+  { id: "long-quick-quick-long", label: "long, quick quick, long", tokens: ["quarter", "eighth-pair", "quarter"], file: "audio/music-rhythm-long-quick-quick-long.mp3" },
+  { id: "long-rest-quick-quick", label: "long, rest, quick quick", tokens: ["quarter", "rest", "eighth-pair"], file: "audio/music-rhythm-long-rest-quick-quick.mp3" },
   { id: "quick-quick-rest-long", label: "quick quick, rest, long", tokens: ["eighth-pair", "rest", "quarter"], file: "audio/music-rhythm-quick-quick-rest-long.mp3" }
 ];
 
@@ -5967,7 +5967,7 @@ function renderRhythmListenTarget() {
   return `
     <div class="math-token music-token">
       <span class="phonics-listen-icon music-listen-icon" aria-hidden="true">${drawGenericListenIcon()}</span>
-      <small>The rhythm plays twice. Listen for long, quick, and silent beats.</small>
+      <small>The rhythm plays one line twice. Match the rhythm you hear.</small>
     </div>
   `;
 }
@@ -6188,6 +6188,7 @@ function buildMusicRound() {
       game: "music",
       level: "rhythm-pattern",
       typeTag: "music:rhythm",
+      extraTypeTags: [`music:rhythm:${answerPattern.id}`],
       answer: answerPattern.label,
       key: item.id,
       prompt: "Which rhythm do you hear?",

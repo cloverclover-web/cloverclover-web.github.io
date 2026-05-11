@@ -301,7 +301,9 @@ function collectTexts(data) {
     if (item.type === "note-listen") {
       ["G", "D", "A", "E"].forEach((stringName) => add(`Listen on the ${stringName} string. Is it doh, ray, mee, or fah?`));
     }
-    if (item.type === "staff-note") add("Which note is on the staff?");
+    if (item.type === "staff-note") {
+      ["G", "D", "A", "E"].forEach((stringName) => add(`Look at the staff note on the ${stringName} string. Is it doh, ray, mee, or fah?`));
+    }
     if (item.type === "finger-note") {
       ["G", "D", "A", "E"].forEach((stringName) => add(`On the ${stringName} string, which finger plays this note?`));
     }
