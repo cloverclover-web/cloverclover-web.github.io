@@ -5784,6 +5784,13 @@ const uniqueMusicNoteLabels = violinBeginnerNotes.reduce((labels, note) => {
   if (!labels.some((item) => item.label === note.label)) labels.push({ label: note.label, spoken: note.spoken });
   return labels;
 }, []);
+const solfegeByFinger = ["do", "re", "mi", "fa"];
+const solfegeSpeech = {
+  do: "doh",
+  re: "ray",
+  mi: "mee",
+  fa: "fah"
+};
 const rhythmPatterns = [
   { id: "long-long", label: "long, long", tokens: ["quarter", "quarter"], hits: [0, 0.72] },
   { id: "quick-quick-long", label: "quick quick, long", tokens: ["eighth-pair", "quarter"], hits: [0, 0.32, 0.78] },
@@ -5855,6 +5862,23 @@ function renderMusicListenTarget(label = "Listen to the sound.") {
     <div class="math-token music-token">
       <span class="phonics-listen-icon music-listen-icon" aria-hidden="true">${drawGenericListenIcon()}</span>
       <small>${label}</small>
+    </div>
+  `;
+}
+
+function renderSolfegeListenTarget(noteInput) {
+  const note = getMusicNote(noteInput);
+  const syllables = solfegeByFinger.map((label, index) => `
+    <span>
+      <strong>${label}</strong>
+      <small>${index === 0 ? "open" : `${index}`}</small>
+    </span>
+  `).join("");
+  return `
+    <div class="math-token music-token solfege-token">
+      <span class="phonics-listen-icon music-listen-icon" aria-hidden="true">${drawGenericListenIcon()}</span>
+      <div class="solfege-string-label">${note.string} string</div>
+      <div class="solfege-row">${syllables}</div>
     </div>
   `;
 }
@@ -5961,6 +5985,12 @@ function fingerOptions(answerFinger) {
   )));
 }
 
+function solfegeOptions(answerLabel) {
+  return shuffle(solfegeByFinger.map((label) => (
+    withSpokenLabel(makeBigTextChoice(label, label === answerLabel, "letter-option solfege-option"), solfegeSpeech[label] || label)
+  )));
+}
+
 function makeRhythmOption(pattern, correct = false) {
   return {
     type: "listen",
@@ -5984,18 +6014,19 @@ function buildMusicRound() {
   if (item.type === "note-listen") {
     const noteName = musicListenNotes[item.offset % musicListenNotes.length];
     const note = getMusicNote(noteName);
+    const answer = solfegeByFinger[note.finger] || "do";
     return {
       game: "music",
       level: "note-listen",
       typeTag: "music:note-listen",
-      answer: note.label,
+      answer,
       key: item.id,
-      prompt: "Which note do you hear?",
-      spoken: "Listen to the note. Which note do you hear?",
-      hint: "Listen to the pitch, then choose the note name. It may be an open string or a finger note.",
-      targetHtml: renderMusicListenTarget("Listen to the note."),
-      musicCue: { sampleNotes: [note.id], fallbackNotes: [note.frequency], length: 1.8, type: "violin", afterSpeechDelayMs: 250 },
-      options: noteOptions(note.label)
+      prompt: "Which do-re-mi sound do you hear?",
+      spoken: `Listen on the ${note.string} string. Is it doh, ray, mee, or fah?`,
+      hint: "Open string is do. Then first finger is re, second finger is mi, and third finger is fa.",
+      targetHtml: renderSolfegeListenTarget(note),
+      musicCue: { sampleNotes: [note.id], fallbackNotes: [note.frequency], length: 2.35, type: "violin", afterSpeechDelayMs: 250 },
+      options: solfegeOptions(answer)
     };
   }
   if (item.type === "staff-note") {
@@ -6010,7 +6041,7 @@ function buildMusicRound() {
       spoken: "Which note is on the staff?",
       hint: "Look at the note head on the lines and spaces.",
       targetHtml: renderStaffNote(note),
-      musicCue: { sampleNotes: [note.id], fallbackNotes: [note.frequency], length: 1.8, type: "violin", afterSpeechDelayMs: 250 },
+      musicCue: { sampleNotes: [note.id], fallbackNotes: [note.frequency], length: 2.25, type: "violin", afterSpeechDelayMs: 250 },
       options: noteOptions(note.label)
     };
   }
@@ -6026,7 +6057,7 @@ function buildMusicRound() {
       spoken: `On the ${note.string} string, which finger plays this note?`,
       hint: "Open means no finger. Then first, second, and third fingers step up the string.",
       targetHtml: renderFingerNoteTarget(note),
-      musicCue: { sampleNotes: [note.id], fallbackNotes: [note.frequency], length: 1.8, type: "violin", afterSpeechDelayMs: 250 },
+      musicCue: { sampleNotes: [note.id], fallbackNotes: [note.frequency], length: 2.25, type: "violin", afterSpeechDelayMs: 250 },
       options: fingerOptions(note.finger)
     };
   }
@@ -6046,7 +6077,7 @@ function buildMusicRound() {
       spoken: "Listen to two notes. Does the second note go higher or lower?",
       hint: "The second sound may move up or down.",
       targetHtml: renderMusicListenTarget("Listen to two notes."),
-      musicCue: { sampleNotes: [first.id, second.id], fallbackNotes: [first.frequency, second.frequency], length: 0.85, type: "violin", afterSpeechDelayMs: 250 },
+      musicCue: { sampleNotes: [first.id, second.id], fallbackNotes: [first.frequency, second.frequency], length: 1.05, type: "violin", afterSpeechDelayMs: 250 },
       options: shuffle(["higher", "lower", "same"].map((label) => makeTextChoice(label, label === answer)))
     };
   }
@@ -6063,7 +6094,7 @@ function buildMusicRound() {
       spoken: "Listen to the violin string. Which open string do you hear?",
       hint: "Violin open strings are G, D, A, E.",
       targetHtml: renderMusicListenTarget("Listen to the open string."),
-      musicCue: { sampleNotes: [note.id], fallbackNotes: [note.frequency], length: 1.8, type: "violin", afterSpeechDelayMs: 250 },
+      musicCue: { sampleNotes: [note.id], fallbackNotes: [note.frequency], length: 2.35, type: "violin", afterSpeechDelayMs: 250 },
       options: shuffle(violinStrings.map((name) => makeBigTextChoice(name, name === answer, "letter-option")))
     };
   }
@@ -6848,7 +6879,7 @@ function playViolinSynthSequence(frequencies, length = 0.85) {
 function playViolinSampleSequence(noteNames, fallbackFrequencies = [], length = 1.0) {
   if (!state.soundOn || !noteNames?.length) return;
   let scheduled = 0;
-  const duration = Math.min(2.2, Math.max(1.2, length));
+  const duration = Math.min(2.6, Math.max(1.2, length));
 
   noteNames.forEach((noteName, index) => {
     const note = getMusicNote(noteName);

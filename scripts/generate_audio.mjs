@@ -298,7 +298,9 @@ function collectTexts(data) {
   });
 
   (data.musicBank || []).forEach((item) => {
-    if (item.type === "note-listen") add("Listen to the note. Which note do you hear?");
+    if (item.type === "note-listen") {
+      ["G", "D", "A", "E"].forEach((stringName) => add(`Listen on the ${stringName} string. Is it doh, ray, mee, or fah?`));
+    }
     if (item.type === "staff-note") add("Which note is on the staff?");
     if (item.type === "finger-note") {
       ["G", "D", "A", "E"].forEach((stringName) => add(`On the ${stringName} string, which finger plays this note?`));
@@ -341,6 +343,10 @@ function collectTexts(data) {
     "1st finger",
     "2nd finger",
     "3rd finger",
+    "doh",
+    "ray",
+    "mee",
+    "fah",
     "higher",
     "lower",
     "same",

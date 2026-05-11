@@ -1428,6 +1428,58 @@ h1 {
   width: min(190px, 78%);
 }
 
+.solfege-token {
+  gap: 14px;
+}
+
+.solfege-string-label {
+  display: inline-grid;
+  place-items: center;
+  min-width: 120px;
+  min-height: 42px;
+  padding: 6px 14px;
+  border: 3px solid var(--line);
+  border-radius: 8px;
+  background: #fffaf0;
+  color: var(--ink);
+  font-size: clamp(22px, 2.2vw, 30px);
+  font-weight: 1000;
+}
+
+.solfege-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(64px, 1fr));
+  gap: 10px;
+  width: min(420px, 94%);
+}
+
+.solfege-row span {
+  display: grid;
+  place-items: center;
+  min-height: 78px;
+  border: 3px solid rgba(35, 48, 68, 0.24);
+  border-radius: 8px;
+  background: linear-gradient(#fffaf0, #fff0f8);
+  color: var(--ink);
+  box-shadow: 0 5px 0 rgba(35, 48, 68, 0.1);
+}
+
+.solfege-row span.active {
+  border-color: var(--royal-gold);
+  background: linear-gradient(#fff8dd, #fff0d8);
+}
+
+.solfege-row strong {
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1;
+}
+
+.solfege-row small {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 1000;
+}
+
 .staff-note-svg {
   width: min(360px, 96%);
   height: auto;
