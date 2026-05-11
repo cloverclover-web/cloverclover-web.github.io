@@ -300,6 +300,9 @@ function collectTexts(data) {
   (data.musicBank || []).forEach((item) => {
     if (item.type === "note-listen") add("Listen to the note. Which note do you hear?");
     if (item.type === "staff-note") add("Which note is on the staff?");
+    if (item.type === "finger-note") {
+      ["G", "D", "A", "E"].forEach((stringName) => add(`On the ${stringName} string, which finger plays this note?`));
+    }
     if (item.type === "pitch-direction") add("Listen to two notes. Does the second note go higher or lower?");
     if (item.type === "string-listen") add("Listen to the violin string. Which open string do you hear?");
     if (item.type === "part-picture") add("Which violin part is this?");
@@ -312,7 +315,7 @@ function collectTexts(data) {
       add("Which violin string has the lowest sound?");
     }
     if (item.type === "string-name") add("The violin strings are G, D, A, E. Which string name is missing?");
-    if (item.type === "rhythm-count") add("How many rhythm sounds?");
+    if (item.type === "rhythm-pattern") add("Listen to the rhythm. Which rhythm do you hear?");
     if (item.type === "bow-job") add("What do you use to play the violin strings?");
   });
 
@@ -325,14 +328,27 @@ function collectTexts(data) {
     "scroll",
     "fingerboard",
     "C",
+    "B",
     "G",
     "F",
+    "F sharp",
+    "C sharp",
+    "G sharp",
     "D",
     "A",
     "E",
+    "open string",
+    "1st finger",
+    "2nd finger",
+    "3rd finger",
     "higher",
     "lower",
-    "same"
+    "same",
+    "long, long",
+    "quick quick, long",
+    "long, quick quick",
+    "long, rest, long",
+    "quick quick, rest, long"
   ].forEach(add);
 
   [
@@ -358,7 +374,6 @@ function collectTexts(data) {
     "Balance the scale.",
     "What number balances the scale?",
     "How many stars are left?",
-    "How many rhythm sounds?",
     "Two equal triangles can make which shape?",
     "Two squares side by side can make which shape?",
     "Which flat shape is on the face of a cube?",

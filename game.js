@@ -1510,10 +1510,10 @@ function createMeasureBank(target = 140) {
 
 function createMusicBank(target = 120) {
   const types = [
-    "staff-note", "pitch-direction", "string-listen", "rhythm-count",
-    "staff-note", "string-listen", "part-picture", "part-word",
-    "note-listen", "pitch-direction", "string-name", "rhythm-count",
-    "string-sound", "string-count", "bow-job"
+    "staff-note", "finger-note", "note-listen", "rhythm-pattern",
+    "staff-note", "pitch-direction", "finger-note", "string-listen",
+    "staff-note", "note-listen", "part-picture", "part-word",
+    "string-name", "rhythm-pattern", "string-sound", "string-count", "bow-job"
   ];
   return Array.from({ length: target }, (_, index) => ({ id: `mu-${types[index % types.length]}-${index}`, type: types[index % types.length], offset: index }));
 }
@@ -1650,6 +1650,9 @@ const modeTitles = {
 
 let audioContext = null;
 let currentSpeechAudio = null;
+let violinSampleBufferPromise = null;
+const currentMusicCueSources = [];
+const currentMusicCueTimers = [];
 let speechRunId = 0;
 const recordedAudioPlaybackRate = 0.9;
 
@@ -5739,20 +5742,55 @@ function buildMeasureRound() {
 
 const violinParts = ["violin", "bow", "string", "bridge", "tuning peg", "scroll", "fingerboard"];
 const violinStrings = ["G", "D", "A", "E"];
-const musicNotes = [
-  { name: "C", frequency: 261.63, staffY: 96, color: "#f29ec2", ledger: true },
-  { name: "D", frequency: 293.66, staffY: 90, color: "#ffd166" },
-  { name: "E", frequency: 329.63, staffY: 84, color: "#4ecdc4" },
-  { name: "F", frequency: 349.23, staffY: 78, color: "#9d8df1" },
-  { name: "G", frequency: 392.0, staffY: 72, color: "#65bd53" },
-  { name: "A", frequency: 440.0, staffY: 66, color: "#f29ec2" }
-];
 const violinStringPitches = {
   G: 196.0,
   D: 293.66,
   A: 440.0,
   E: 659.25
 };
+const violinStringSamples = {
+  G: { file: "audio/violin-open-strings.mp3", start: 0.55, duration: 2.5 },
+  D: { file: "audio/violin-open-strings.mp3", start: 4.75, duration: 2.5 },
+  A: { file: "audio/violin-open-strings.mp3", start: 8.95, duration: 2.5 },
+  E: { file: "audio/violin-open-strings.mp3", start: 13.15, duration: 2.5 }
+};
+const violinFingerLabels = ["open string", "1st finger", "2nd finger", "3rd finger"];
+const violinBeginnerNotes = [
+  { id: "G3", label: "G", spoken: "G", frequency: 196.0, string: "G", finger: 0, staffY: 114, ledgerLines: [96, 108], color: "#65bd53" },
+  { id: "A3", label: "A", spoken: "A", frequency: 220.0, string: "G", finger: 1, staffY: 108, ledgerLines: [96, 108], color: "#f29ec2" },
+  { id: "B3", label: "B", spoken: "B", frequency: 246.94, string: "G", finger: 2, staffY: 102, ledgerLines: [96], color: "#ffd166" },
+  { id: "C4", label: "C", spoken: "C", frequency: 261.63, string: "G", finger: 3, staffY: 96, ledgerLines: [96], color: "#4ecdc4" },
+  { id: "D4", label: "D", spoken: "D", frequency: 293.66, string: "D", finger: 0, staffY: 90, ledgerLines: [], color: "#ffd166" },
+  { id: "E4", label: "E", spoken: "E", frequency: 329.63, string: "D", finger: 1, staffY: 84, ledgerLines: [], color: "#4ecdc4" },
+  { id: "Fs4", label: "F#", spoken: "F sharp", frequency: 369.99, string: "D", finger: 2, staffY: 78, ledgerLines: [], accidental: "#", color: "#9d8df1" },
+  { id: "G4", label: "G", spoken: "G", frequency: 392.0, string: "D", finger: 3, staffY: 72, ledgerLines: [], color: "#65bd53" },
+  { id: "A4", label: "A", spoken: "A", frequency: 440.0, string: "A", finger: 0, staffY: 66, ledgerLines: [], color: "#f29ec2" },
+  { id: "B4", label: "B", spoken: "B", frequency: 493.88, string: "A", finger: 1, staffY: 60, ledgerLines: [], color: "#ffd166" },
+  { id: "Cs5", label: "C#", spoken: "C sharp", frequency: 554.37, string: "A", finger: 2, staffY: 54, ledgerLines: [], accidental: "#", color: "#4ecdc4" },
+  { id: "D5", label: "D", spoken: "D", frequency: 587.33, string: "A", finger: 3, staffY: 48, ledgerLines: [], color: "#ffd166" },
+  { id: "E5", label: "E", spoken: "E", frequency: 659.25, string: "E", finger: 0, staffY: 42, ledgerLines: [], color: "#4ecdc4" },
+  { id: "Fs5", label: "F#", spoken: "F sharp", frequency: 739.99, string: "E", finger: 1, staffY: 36, ledgerLines: [], accidental: "#", color: "#9d8df1" },
+  { id: "Gs5", label: "G#", spoken: "G sharp", frequency: 830.61, string: "E", finger: 2, staffY: 30, ledgerLines: [], accidental: "#", color: "#65bd53" },
+  { id: "A5", label: "A", spoken: "A", frequency: 880.0, string: "E", finger: 3, staffY: 24, ledgerLines: [24], color: "#f29ec2" }
+];
+const musicNotes = violinBeginnerNotes;
+const musicListenNotes = violinBeginnerNotes;
+const openStringNoteByString = Object.fromEntries(violinStrings.map((stringName) => {
+  const note = violinBeginnerNotes.find((item) => item.string === stringName && item.finger === 0);
+  return [stringName, note];
+}));
+const musicNoteById = Object.fromEntries(violinBeginnerNotes.map((note) => [note.id, note]));
+const uniqueMusicNoteLabels = violinBeginnerNotes.reduce((labels, note) => {
+  if (!labels.some((item) => item.label === note.label)) labels.push({ label: note.label, spoken: note.spoken });
+  return labels;
+}, []);
+const rhythmPatterns = [
+  { id: "long-long", label: "long, long", tokens: ["quarter", "quarter"], hits: [0, 0.72] },
+  { id: "quick-quick-long", label: "quick quick, long", tokens: ["eighth-pair", "quarter"], hits: [0, 0.32, 0.78] },
+  { id: "long-quick-quick", label: "long, quick quick", tokens: ["quarter", "eighth-pair"], hits: [0, 0.72, 1.04] },
+  { id: "long-rest-long", label: "long, rest, long", tokens: ["quarter", "rest", "quarter"], hits: [0, 1.28] },
+  { id: "quick-quick-rest-long", label: "quick quick, rest, long", tokens: ["eighth-pair", "rest", "quarter"], hits: [0, 0.32, 1.28] }
+];
 
 function drawMusicIcon(label) {
   const lower = String(label).toLowerCase();
@@ -5821,31 +5859,115 @@ function renderMusicListenTarget(label = "Listen to the sound.") {
   `;
 }
 
-function renderStaffNote(noteName) {
-  const note = musicNotes.find((item) => item.name === noteName) || musicNotes[0];
+function getMusicNote(noteInput) {
+  if (noteInput && typeof noteInput === "object") return noteInput;
+  const raw = String(noteInput || "");
+  return musicNoteById[raw]
+    || openStringNoteByString[raw]
+    || musicNotes.find((note) => note.label === raw)
+    || musicNotes[0];
+}
+
+function renderStaffNoteSvg(noteInput) {
+  const note = getMusicNote(noteInput);
   const lines = [36, 48, 60, 72, 84].map((y) => `<line x1="18" y1="${y}" x2="132" y2="${y}"></line>`).join("");
-  const ledger = note.ledger ? '<line class="ledger-line" x1="48" y1="96" x2="82" y2="96"></line>' : "";
+  const noteX = 84;
+  const ledger = (note.ledgerLines || []).map((y) => `<line class="ledger-line" x1="${noteX - 18}" y1="${y}" x2="${noteX + 18}" y2="${y}"></line>`).join("");
+  const accidental = note.accidental ? `<text class="staff-accidental" x="${noteX - 30}" y="${note.staffY + 7}">${note.accidental}</text>` : "";
+  const stemPath = note.staffY <= 48
+    ? `M${noteX - 10} ${note.staffY + 2} V${Math.min(96, note.staffY + 42)}`
+    : `M${noteX + 10} ${note.staffY - 2} V${Math.max(26, note.staffY - 42)}`;
+  return `
+    <svg class="staff-note-svg" viewBox="0 0 150 128" aria-hidden="true">
+      <g class="staff-lines">${lines}${ledger}</g>
+      <path class="treble-clef" d="M39 89 C24 78 48 64 40 51 C34 41 38 28 49 24 C62 22 65 37 56 49 C45 64 24 84 43 100 C57 113 82 96 63 77" fill="none"></path>
+      ${accidental}
+      <ellipse class="staff-note-head" cx="${noteX}" cy="${note.staffY}" rx="11" ry="8" transform="rotate(-18 ${noteX} ${note.staffY})" fill="${note.color}"></ellipse>
+      <path class="staff-note-stem" d="${stemPath}"></path>
+    </svg>
+  `;
+}
+
+function renderStaffNote(noteInput) {
   return `
     <div class="math-token music-token">
-      <svg class="staff-note-svg" viewBox="0 0 150 120" aria-hidden="true">
-        <g class="staff-lines">${lines}${ledger}</g>
-        <path class="treble-clef" d="M39 89 C24 78 48 64 40 51 C34 41 38 28 49 24 C62 22 65 37 56 49 C45 64 24 84 43 100 C57 113 82 96 63 77" fill="none"></path>
-        <ellipse class="staff-note-head" cx="64" cy="${note.staffY}" rx="11" ry="8" transform="rotate(-18 64 ${note.staffY})" fill="${note.color}"></ellipse>
-        <path class="staff-note-stem" d="M74 ${note.staffY - 2} V${Math.max(26, note.staffY - 42)}"></path>
-      </svg>
+      ${renderStaffNoteSvg(noteInput)}
     </div>
   `;
 }
 
-function renderRhythmToken(beats) {
-  const notes = Array.from({ length: beats }, () => "<span aria-hidden=\"true\"></span>").join("");
-  return `<div class="math-token music-token"><div class="rhythm-token">${notes}</div></div>`;
+function renderFingerboardCue(noteInput) {
+  const note = getMusicNote(noteInput);
+  const fingerSlots = ["0", "1", "2", "3"].map((label) => `<span>${label}</span>`).join("");
+  const rows = violinStrings.map((stringName) => `
+    <div class="${stringName === note.string ? "active" : ""}">
+      <strong>${stringName}</strong>
+      <i></i>
+    </div>
+  `).join("");
+  return `
+    <div class="fingerboard-cue">
+      <div class="fingerboard-fingers" aria-hidden="true">${fingerSlots}</div>
+      <div class="fingerboard-strings">${rows}</div>
+      <small>${note.string} string</small>
+    </div>
+  `;
 }
 
-function noteOptions(answerName) {
-  const answer = musicNotes.find((note) => note.name === answerName) || musicNotes[0];
-  const distractors = shuffle(musicNotes.filter((note) => note.name !== answer.name)).slice(0, 3);
-  return shuffle([answer, ...distractors].map((note) => makeBigTextChoice(note.name, note.name === answer.name, "letter-option")));
+function renderFingerNoteTarget(noteInput) {
+  const note = getMusicNote(noteInput);
+  return `
+    <div class="math-token music-token music-finger-token">
+      ${renderStaffNoteSvg(note)}
+      ${renderFingerboardCue(note)}
+    </div>
+  `;
+}
+
+function renderRhythmNotation(pattern) {
+  const tokenMarkup = pattern.tokens.map((token) => {
+    if (token === "quarter") {
+      return '<span class="rhythm-note quarter-note" aria-hidden="true"><i></i><b></b></span>';
+    }
+    if (token === "eighth-pair") {
+      return '<span class="rhythm-note eighth-pair" aria-hidden="true"><i></i><i></i><b></b></span>';
+    }
+    return '<span class="rhythm-note rest-note" aria-hidden="true"><i></i></span>';
+  }).join("");
+  return `<div class="rhythm-notation" aria-hidden="true">${tokenMarkup}</div>`;
+}
+
+function renderRhythmListenTarget() {
+  return `
+    <div class="math-token music-token">
+      <span class="phonics-listen-icon music-listen-icon" aria-hidden="true">${drawGenericListenIcon()}</span>
+      <small>Listen for long, quick, and silent beats.</small>
+    </div>
+  `;
+}
+
+function noteOptions(answerLabel, pool = uniqueMusicNoteLabels) {
+  const labels = pool.map((item) => typeof item === "string" ? { label: item, spoken: item } : item);
+  const answer = labels.find((item) => item.label === answerLabel) || labels[0];
+  const distractors = shuffle(labels.filter((item) => item.label !== answer.label)).slice(0, 3);
+  return shuffle([answer, ...distractors].map((item) => (
+    withSpokenLabel(makeBigTextChoice(item.label, item.label === answer.label, "letter-option"), item.spoken || item.label)
+  )));
+}
+
+function fingerOptions(answerFinger) {
+  return shuffle(violinFingerLabels.map((label, index) => (
+    makeBigTextChoice(label, index === answerFinger, "finger-label-option")
+  )));
+}
+
+function makeRhythmOption(pattern, correct = false) {
+  return {
+    type: "listen",
+    label: pattern.label,
+    correct,
+    artHtml: renderRhythmNotation(pattern)
+  };
 }
 
 function makeMusicOption(label, correct = false) {
@@ -5860,19 +5982,20 @@ function makeMusicOption(label, correct = false) {
 function buildMusicRound() {
   const item = nextQuestionDeckItem("music", musicBank);
   if (item.type === "note-listen") {
-    const note = musicNotes[item.offset % musicNotes.length];
+    const noteName = musicListenNotes[item.offset % musicListenNotes.length];
+    const note = getMusicNote(noteName);
     return {
       game: "music",
       level: "note-listen",
       typeTag: "music:note-listen",
-      answer: note.name,
+      answer: note.label,
       key: item.id,
       prompt: "Which note do you hear?",
       spoken: "Listen to the note. Which note do you hear?",
-      hint: "Listen to the pitch, then choose the note name.",
+      hint: "Listen to the pitch, then choose the note name. It may be an open string or a finger note.",
       targetHtml: renderMusicListenTarget("Listen to the note."),
-      musicCue: { notes: [note.frequency], length: 0.8, type: "sine", delayMs: 2400 },
-      options: noteOptions(note.name)
+      musicCue: { sampleNotes: [note.id], fallbackNotes: [note.frequency], length: 1.8, type: "violin", afterSpeechDelayMs: 250 },
+      options: noteOptions(note.label)
     };
   }
   if (item.type === "staff-note") {
@@ -5881,20 +6004,37 @@ function buildMusicRound() {
       game: "music",
       level: "staff-note",
       typeTag: "music:staff-note",
-      answer: note.name,
+      answer: note.label,
       key: item.id,
       prompt: "Which note is on the staff?",
       spoken: "Which note is on the staff?",
       hint: "Look at the note head on the lines and spaces.",
-      targetHtml: renderStaffNote(note.name),
-      options: noteOptions(note.name)
+      targetHtml: renderStaffNote(note),
+      musicCue: { sampleNotes: [note.id], fallbackNotes: [note.frequency], length: 1.8, type: "violin", afterSpeechDelayMs: 250 },
+      options: noteOptions(note.label)
+    };
+  }
+  if (item.type === "finger-note") {
+    const note = musicNotes[item.offset % musicNotes.length];
+    return {
+      game: "music",
+      level: "finger-note",
+      typeTag: "music:finger-note",
+      answer: violinFingerLabels[note.finger],
+      key: item.id,
+      prompt: `On the ${note.string} string, which finger plays this note?`,
+      spoken: `On the ${note.string} string, which finger plays this note?`,
+      hint: "Open means no finger. Then first, second, and third fingers step up the string.",
+      targetHtml: renderFingerNoteTarget(note),
+      musicCue: { sampleNotes: [note.id], fallbackNotes: [note.frequency], length: 1.8, type: "violin", afterSpeechDelayMs: 250 },
+      options: fingerOptions(note.finger)
     };
   }
   if (item.type === "pitch-direction") {
-    const startIndex = item.offset % (musicNotes.length - 1);
+    const startIndex = item.offset % (musicListenNotes.length - 1);
     const direction = item.offset % 3;
-    const first = musicNotes[startIndex + (direction === 1 ? 1 : 0)];
-    const second = direction === 0 ? musicNotes[startIndex + 1] : direction === 1 ? musicNotes[startIndex] : first;
+    const first = musicListenNotes[startIndex + (direction === 1 ? 1 : 0)];
+    const second = direction === 0 ? musicListenNotes[startIndex + 1] : direction === 1 ? musicListenNotes[startIndex] : first;
     const answer = direction === 0 ? "higher" : direction === 1 ? "lower" : "same";
     return {
       game: "music",
@@ -5906,12 +6046,13 @@ function buildMusicRound() {
       spoken: "Listen to two notes. Does the second note go higher or lower?",
       hint: "The second sound may move up or down.",
       targetHtml: renderMusicListenTarget("Listen to two notes."),
-      musicCue: { notes: [first.frequency, second.frequency], length: 0.55, type: "sine", delayMs: 3000 },
+      musicCue: { sampleNotes: [first.id, second.id], fallbackNotes: [first.frequency, second.frequency], length: 0.85, type: "violin", afterSpeechDelayMs: 250 },
       options: shuffle(["higher", "lower", "same"].map((label) => makeTextChoice(label, label === answer)))
     };
   }
   if (item.type === "string-listen") {
     const answer = violinStrings[item.offset % violinStrings.length];
+    const note = openStringNoteByString[answer];
     return {
       game: "music",
       level: "string-listen",
@@ -5922,7 +6063,7 @@ function buildMusicRound() {
       spoken: "Listen to the violin string. Which open string do you hear?",
       hint: "Violin open strings are G, D, A, E.",
       targetHtml: renderMusicListenTarget("Listen to the open string."),
-      musicCue: { notes: [violinStringPitches[answer]], length: 0.9, type: "sawtooth", delayMs: 2800 },
+      musicCue: { sampleNotes: [note.id], fallbackNotes: [note.frequency], length: 1.8, type: "violin", afterSpeechDelayMs: 250 },
       options: shuffle(violinStrings.map((name) => makeBigTextChoice(name, name === answer, "letter-option")))
     };
   }
@@ -6003,19 +6144,21 @@ function buildMusicRound() {
       options: shuffle(violinStrings.map((name) => makeBigTextChoice(name, name === answer, "letter-option")))
     };
   }
-  if (item.type === "rhythm-count") {
-    const answer = 2 + (item.offset % 4);
+  if (item.type === "rhythm-pattern") {
+    const answerPattern = rhythmPatterns[item.offset % rhythmPatterns.length];
+    const options = [answerPattern, ...shuffle(rhythmPatterns.filter((pattern) => pattern.id !== answerPattern.id)).slice(0, 3)];
     return {
       game: "music",
-      level: "rhythm-count",
+      level: "rhythm-pattern",
       typeTag: "music:rhythm",
-      answer,
+      answer: answerPattern.label,
       key: item.id,
-      prompt: "How many sounds?",
-      spoken: "How many rhythm sounds?",
-      hint: "Tap each sound once.",
-      targetHtml: renderRhythmToken(answer),
-      options: makeNumberOptions(answer)
+      prompt: "Which rhythm do you hear?",
+      spoken: "Listen to the rhythm. Which rhythm do you hear?",
+      hint: "Match the long notes, quick notes, and rests.",
+      targetHtml: renderRhythmListenTarget(),
+      musicCue: { rhythmHits: answerPattern.hits, afterSpeechDelayMs: 250 },
+      options: shuffle(options.map((pattern) => makeRhythmOption(pattern, pattern.id === answerPattern.id)))
     };
   }
   const answer = "bow";
@@ -6619,17 +6762,215 @@ function playTone(notes, length, type) {
   });
 }
 
-function playMusicCue(challenge = state.challenge) {
-  if (!state.soundOn || !challenge?.musicCue?.notes?.length) return;
+function rememberMusicSource(source) {
+  currentMusicCueSources.push(source);
+  source.addEventListener?.("ended", () => {
+    const index = currentMusicCueSources.indexOf(source);
+    if (index >= 0) currentMusicCueSources.splice(index, 1);
+  }, { once: true });
+}
+
+function stopMusicCue() {
+  while (currentMusicCueTimers.length) {
+    window.clearTimeout(currentMusicCueTimers.pop());
+  }
+  while (currentMusicCueSources.length) {
+    const source = currentMusicCueSources.pop();
+    try {
+      source.stop?.();
+      source.pause?.();
+      if ("currentTime" in source) source.currentTime = 0;
+    } catch {
+      // The source may already have ended.
+    }
+  }
+}
+
+function loadViolinSampleBuffer() {
+  const context = ensureAudio();
+  if (!context) return Promise.reject(new Error("AudioContext unavailable"));
+  if (!violinSampleBufferPromise) {
+    violinSampleBufferPromise = fetch("audio/violin-open-strings.mp3")
+      .then((response) => {
+        if (!response.ok) throw new Error(`violin sample ${response.status}`);
+        return response.arrayBuffer();
+      })
+      .then((buffer) => context.decodeAudioData(buffer));
+  }
+  return violinSampleBufferPromise;
+}
+
+function playViolinSynthSequence(frequencies, length = 0.85) {
+  if (!state.soundOn || !frequencies?.length) return;
+  const context = ensureAudio();
+  if (!context) return;
+
+  frequencies.forEach((frequency, index) => {
+    const start = context.currentTime + index * (length + 0.2);
+    const stop = start + length;
+    const saw = context.createOscillator();
+    const soft = context.createOscillator();
+    const vibrato = context.createOscillator();
+    const vibratoGain = context.createGain();
+    const filter = context.createBiquadFilter();
+    const gain = context.createGain();
+
+    saw.type = "sawtooth";
+    soft.type = "triangle";
+    vibrato.type = "sine";
+    saw.frequency.setValueAtTime(frequency, start);
+    soft.frequency.setValueAtTime(frequency * 2, start);
+    vibrato.frequency.setValueAtTime(5.8, start);
+    vibratoGain.gain.setValueAtTime(4.5, start);
+    vibrato.connect(vibratoGain);
+    vibratoGain.connect(saw.frequency);
+    vibratoGain.connect(soft.frequency);
+
+    filter.type = "bandpass";
+    filter.frequency.setValueAtTime(Math.max(900, frequency * 3.1), start);
+    filter.Q.setValueAtTime(2.2, start);
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(0.16, start + 0.08);
+    gain.gain.setValueAtTime(0.14, Math.max(start + 0.09, stop - 0.16));
+    gain.gain.exponentialRampToValueAtTime(0.0001, stop);
+
+    saw.connect(filter);
+    soft.connect(filter);
+    filter.connect(gain).connect(context.destination);
+    [saw, soft, vibrato].forEach((node) => {
+      rememberMusicSource(node);
+      node.start(start);
+      node.stop(stop + 0.04);
+    });
+  });
+}
+
+function playViolinSampleSequence(noteNames, fallbackFrequencies = [], length = 1.0) {
+  if (!state.soundOn || !noteNames?.length) return;
+  let scheduled = 0;
+  const duration = Math.min(2.2, Math.max(1.2, length));
+
+  noteNames.forEach((noteName, index) => {
+    const note = getMusicNote(noteName);
+    const stringName = note.string || noteName;
+    const segment = violinStringSamples[stringName];
+    if (!segment) {
+      scheduled += 1;
+      const fallbackTimer = window.setTimeout(() => {
+        playViolinSynthSequence([note.frequency], duration);
+      }, index * (duration + 0.28) * 1000);
+      currentMusicCueTimers.push(fallbackTimer);
+      return;
+    }
+    scheduled += 1;
+    const playbackRate = Math.max(0.5, Math.min(1.7, note.frequency / (violinStringPitches[stringName] || note.frequency || 1)));
+    const startTimer = window.setTimeout(() => {
+      const audio = new Audio(segment.file);
+      let started = false;
+      let fellBack = false;
+
+      audio.preload = "auto";
+      audio.volume = 0.96;
+      audio.playbackRate = playbackRate;
+      audio.preservesPitch = false;
+      audio.webkitPreservesPitch = false;
+      audio.mozPreservesPitch = false;
+      rememberMusicSource(audio);
+
+      const fallback = () => {
+        if (fellBack) return;
+        fellBack = true;
+        playViolinSynthSequence([note.frequency], duration);
+      };
+
+      const playSegment = () => {
+        if (started || fellBack) return;
+        started = true;
+        try {
+          audio.currentTime = segment.start;
+        } catch {
+          // Some browsers only allow currentTime after enough metadata is ready.
+        }
+        const playResult = audio.play();
+        if (playResult?.catch) playResult.catch(fallback);
+        const stopTimer = window.setTimeout(() => {
+          audio.pause();
+          try {
+            audio.currentTime = 0;
+          } catch {
+            // The audio may already be detached.
+          }
+        }, duration * 1000);
+        currentMusicCueTimers.push(stopTimer);
+      };
+
+      audio.addEventListener("error", fallback, { once: true });
+      audio.addEventListener("loadedmetadata", playSegment, { once: true });
+      if (audio.readyState >= 1) playSegment();
+      else audio.load();
+    }, index * (duration + 0.28) * 1000);
+    currentMusicCueTimers.push(startTimer);
+  });
+
+  if (!scheduled && fallbackFrequencies.length) {
+    playViolinSynthSequence(fallbackFrequencies, duration);
+  }
+}
+
+function playRhythmPattern(hits) {
+  if (!state.soundOn || !hits?.length) return;
+  const context = ensureAudio();
+  if (!context) return;
+
+  hits.forEach((hitAt) => {
+    const start = context.currentTime + hitAt;
+    const click = context.createOscillator();
+    const body = context.createOscillator();
+    const gain = context.createGain();
+    click.type = "square";
+    body.type = "triangle";
+    click.frequency.setValueAtTime(1050, start);
+    body.frequency.setValueAtTime(190, start);
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(0.18, start + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.13);
+    click.connect(gain);
+    body.connect(gain);
+    gain.connect(context.destination);
+    [click, body].forEach((node) => {
+      rememberMusicSource(node);
+      node.start(start);
+      node.stop(start + 0.14);
+    });
+  });
+}
+
+function playMusicCue(challenge = state.challenge, afterSpeech = false) {
+  if (!state.soundOn || !challenge?.musicCue) return;
   const cue = challenge.musicCue;
-  window.setTimeout(() => {
+  const timer = window.setTimeout(() => {
     if (state.challenge !== challenge) return;
-    playTone(cue.notes, cue.length || 0.55, cue.type || "sine");
-  }, cue.delayMs || 900);
+    stopMusicCue();
+    if (cue.rhythmHits) {
+      playRhythmPattern(cue.rhythmHits);
+      return;
+    }
+    if (cue.sampleNotes) {
+      playViolinSampleSequence(cue.sampleNotes, cue.fallbackNotes || cue.notes || [], cue.length || 1.0);
+      return;
+    }
+    if (cue.type === "violin") {
+      playViolinSynthSequence(cue.fallbackNotes || cue.notes || [], cue.length || 0.85);
+      return;
+    }
+    playTone(cue.notes || [], cue.length || 0.55, cue.type || "sine");
+  }, afterSpeech ? (cue.afterSpeechDelayMs ?? 450) : (cue.delayMs || cue.afterSpeechDelayMs || 900));
+  currentMusicCueTimers.push(timer);
 }
 
 function stopSpeechAudio() {
   speechRunId += 1;
+  stopMusicCue();
   if (currentSpeechAudio) {
     currentSpeechAudio.pause();
     currentSpeechAudio.currentTime = 0;
@@ -6733,8 +7074,11 @@ function speakEnglish(text, onEnd) {
   speakSingleText(text, runId, onEnd);
 }
 
-function speakSpeechItems(items) {
-  if (!state.soundOn) return;
+function speakSpeechItems(items, onEnd) {
+  if (!state.soundOn) {
+    onEnd?.();
+    return;
+  }
   stopSpeechAudio();
   if ("speechSynthesis" in window) {
     window.speechSynthesis.cancel();
@@ -6742,7 +7086,11 @@ function speakSpeechItems(items) {
   const runId = ++speechRunId;
   const queue = items.filter(Boolean);
   const playNext = () => {
-    if (runId !== speechRunId || !queue.length) return;
+    if (runId !== speechRunId) return;
+    if (!queue.length) {
+      onEnd?.();
+      return;
+    }
     speakSingleText(queue.shift(), runId, playNext);
   };
   playNext();
@@ -6750,8 +7098,15 @@ function speakSpeechItems(items) {
 
 function speakPrompt(force) {
   if (!force && !state.soundOn) return;
-  speakSpeechItems(state.challenge.speechSegments || [state.challenge.spoken]);
-  playMusicCue(state.challenge);
+  const challenge = state.challenge;
+  if (force && challenge.game === "music" && challenge.musicCue) {
+    stopSpeechAudio();
+    playMusicCue(challenge, true);
+    return;
+  }
+  speakSpeechItems(challenge.speechSegments || [challenge.spoken], () => {
+    if (state.challenge === challenge) playMusicCue(challenge, true);
+  });
 }
 
 function setupCompanion() {
