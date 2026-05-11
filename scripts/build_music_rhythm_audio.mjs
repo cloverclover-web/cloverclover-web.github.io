@@ -24,7 +24,7 @@ const timing = {
   repeatGap: 0.65,
   leadingSilence: 0.15,
   trailingSilence: 0.22,
-  repeats: 2
+  repeats: 1
 };
 
 function silencePiece(seconds) {

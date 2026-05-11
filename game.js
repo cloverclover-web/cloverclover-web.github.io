@@ -5967,7 +5967,7 @@ function renderRhythmListenTarget() {
   return `
     <div class="math-token music-token">
       <span class="phonics-listen-icon music-listen-icon" aria-hidden="true">${drawGenericListenIcon()}</span>
-      <small>The rhythm plays one line twice. Match the rhythm you hear.</small>
+      <small>The rhythm plays one line. Tap replay to hear it again.</small>
     </div>
   `;
 }
@@ -6195,7 +6195,7 @@ function buildMusicRound() {
       spoken: "Listen to the rhythm. Which rhythm do you hear?",
       hint: "Match the long notes, quick notes, and rests.",
       targetHtml: renderRhythmListenTarget(),
-      musicCue: { rhythmFile: answerPattern.file, rhythmTokens: answerPattern.tokens, rhythmNote: "A4", rhythmRepeat: 2, afterSpeechDelayMs: 250 },
+      musicCue: { rhythmFile: answerPattern.file, rhythmTokens: answerPattern.tokens, rhythmNote: "A4", rhythmRepeat: 1, afterSpeechDelayMs: 250 },
       options: shuffle(options.map((pattern) => makeRhythmOption(pattern, pattern.id === answerPattern.id)))
     };
   }

@@ -9,7 +9,7 @@ const audioFiles = readdirSync("audio")
 
 writeFileSync(
   "audio-manifest.json",
-  `${JSON.stringify({ version: "2026-05-01", files: audioFiles }, null, 2)}\n`
+  `${JSON.stringify({ version: "2026-05-11-v2", files: audioFiles }, null, 2)}\n`
 );
 
 const crcTable = new Uint32Array(256);
