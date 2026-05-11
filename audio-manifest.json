@@ -497,6 +497,7 @@
     "audio/2d0f4abe.mp3",
     "audio/2d1f1998.mp3",
     "audio/2d3c9aac.mp3",
+    "audio/2d4b9a29.mp3",
     "audio/2d505a99.mp3",
     "audio/2d58f716.mp3",
     "audio/2d900e07.mp3",
@@ -1175,6 +1176,7 @@
     "audio/6cf64cfd.mp3",
     "audio/6d338852.mp3",
     "audio/6d6282fb.mp3",
+    "audio/6d71d6e0.mp3",
     "audio/6d8b34d5.mp3",
     "audio/6d9542b8.mp3",
     "audio/6da14b04.mp3",
@@ -1655,6 +1657,7 @@
     "audio/9ab24378.mp3",
     "audio/9abf8531.mp3",
     "audio/9ada3665.mp3",
+    "audio/9af04fe4.mp3",
     "audio/9b178bf1.mp3",
     "audio/9b23ba7a.mp3",
     "audio/9b2ddd46.mp3",
@@ -2166,6 +2169,7 @@
     "audio/c33f7140.mp3",
     "audio/c346ae8c.mp3",
     "audio/c34af56d.mp3",
+    "audio/c3674c8a.mp3",
     "audio/c388b54d.mp3",
     "audio/c38ee53b.mp3",
     "audio/c39b30fb.mp3",
@@ -2907,6 +2911,11 @@
     "audio/ffd50def.mp3",
     "audio/ffda1ec2.mp3",
     "audio/ffed21f9.mp3",
+    "audio/music-rhythm-long-long.mp3",
+    "audio/music-rhythm-long-quick-quick.mp3",
+    "audio/music-rhythm-long-rest-long.mp3",
+    "audio/music-rhythm-quick-quick-long.mp3",
+    "audio/music-rhythm-quick-quick-rest-long.mp3",
     "audio/violin-open-strings.mp3"
   ]
 }

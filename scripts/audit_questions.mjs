@@ -185,8 +185,11 @@ function auditChallenge(mode, challenge, audioKeyForText, index) {
   });
 
   if (mode === "music" && challenge.musicCue) {
-    if (!challenge.musicCue.sampleNotes && !challenge.musicCue.rhythmTokens) {
-      issues.push("music cue must use violin sampleNotes or rhythmTokens");
+    if (!challenge.musicCue.sampleNotes && !challenge.musicCue.rhythmTokens && !challenge.musicCue.rhythmFile) {
+      issues.push("music cue must use violin sampleNotes, rhythmTokens, or rhythmFile");
+    }
+    if (challenge.musicCue.rhythmFile && !existsSync(resolve(projectRoot, challenge.musicCue.rhythmFile))) {
+      issues.push(`missing rhythm file: ${challenge.musicCue.rhythmFile}`);
     }
     if (challenge.musicCue.notes) {
       issues.push("music cue should not use generic notes");

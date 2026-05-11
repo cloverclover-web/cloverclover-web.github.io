@@ -1,4 +1,4 @@
-const CACHE_VERSION = "yoyo-study-2026-05-01-v15";
+const CACHE_VERSION = "yoyo-study-2026-05-01-v16";
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const AUDIO_CACHE = "yoyo-study-audio-v1";
 const AUDIO_READY_URL = new URL("__offline-audio-ready.json", self.registration.scope).href;
@@ -168,7 +168,7 @@ self.addEventListener("fetch", (event) => {
       if (cached) return cached;
       return fetch(request).then((response) => {
         const copy = response.clone();
-        const cacheName = url.pathname.endsWith(".mp3") ? AUDIO_CACHE : CORE_CACHE;
+        const cacheName = url.pathname.endsWith(".mp3") || url.pathname.endsWith(".wav") ? AUDIO_CACHE : CORE_CACHE;
         caches.open(cacheName).then((cache) => cache.put(request, copy));
         return response;
       });

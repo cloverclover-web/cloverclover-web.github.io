@@ -3,7 +3,7 @@ import { join } from "node:path";
 import zlib from "node:zlib";
 
 const audioFiles = readdirSync("audio")
-  .filter((file) => file.endsWith(".mp3"))
+  .filter((file) => file.endsWith(".mp3") || file.endsWith(".wav"))
   .sort()
   .map((file) => `audio/${file}`);
 
