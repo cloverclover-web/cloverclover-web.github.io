@@ -3653,6 +3653,7 @@ function nextQuestionDeckItem(mode, bank) {
 
 function questionTagForItem(item) {
   if (!item) return "unknown";
+  if (item.type === "rhythm-pattern") return `${item.type}-${(item.offset + Math.floor(item.offset / 17)) % 5}`;
   if (item.patternKind) return `${item.type}-${item.patternKind}`;
   if (item.compositionKind) return `${item.type}-${item.compositionKind}`;
   return item.type || item.id || "unknown";
@@ -5792,11 +5793,11 @@ const solfegeSpeech = {
   fa: "fah"
 };
 const rhythmPatterns = [
-  { id: "long-long", label: "long, long", tokens: ["quarter", "quarter"], hits: [0, 0.72] },
-  { id: "quick-quick-long", label: "quick quick, long", tokens: ["eighth-pair", "quarter"], hits: [0, 0.32, 0.78] },
-  { id: "long-quick-quick", label: "long, quick quick", tokens: ["quarter", "eighth-pair"], hits: [0, 0.72, 1.04] },
-  { id: "long-rest-long", label: "long, rest, long", tokens: ["quarter", "rest", "quarter"], hits: [0, 1.28] },
-  { id: "quick-quick-rest-long", label: "quick quick, rest, long", tokens: ["eighth-pair", "rest", "quarter"], hits: [0, 0.32, 1.28] }
+  { id: "long-long", label: "long, long", tokens: ["quarter", "quarter"] },
+  { id: "quick-quick-long", label: "quick quick, long", tokens: ["eighth-pair", "quarter"] },
+  { id: "long-quick-quick", label: "long, quick quick", tokens: ["quarter", "eighth-pair"] },
+  { id: "long-rest-long", label: "long, rest, long", tokens: ["quarter", "rest", "quarter"] },
+  { id: "quick-quick-rest-long", label: "quick quick, rest, long", tokens: ["eighth-pair", "rest", "quarter"] }
 ];
 
 function drawMusicIcon(label) {
@@ -6176,7 +6177,7 @@ function buildMusicRound() {
     };
   }
   if (item.type === "rhythm-pattern") {
-    const answerPattern = rhythmPatterns[item.offset % rhythmPatterns.length];
+    const answerPattern = rhythmPatterns[(item.offset + Math.floor(item.offset / 17)) % rhythmPatterns.length];
     const options = [answerPattern, ...shuffle(rhythmPatterns.filter((pattern) => pattern.id !== answerPattern.id)).slice(0, 3)];
     return {
       game: "music",
@@ -6188,7 +6189,7 @@ function buildMusicRound() {
       spoken: "Listen to the rhythm. Which rhythm do you hear?",
       hint: "Match the long notes, quick notes, and rests.",
       targetHtml: renderRhythmListenTarget(),
-      musicCue: { rhythmHits: answerPattern.hits, afterSpeechDelayMs: 250 },
+      musicCue: { rhythmTokens: answerPattern.tokens, rhythmNote: "A4", afterSpeechDelayMs: 250 },
       options: shuffle(options.map((pattern) => makeRhythmOption(pattern, pattern.id === answerPattern.id)))
     };
   }
@@ -6876,76 +6877,103 @@ function playViolinSynthSequence(frequencies, length = 0.85) {
   });
 }
 
+function playViolinSampleAt(noteInput, delaySeconds = 0, length = 1.0) {
+  if (!state.soundOn) return false;
+  const note = getMusicNote(noteInput);
+  const stringName = note.string || noteInput;
+  const segment = violinStringSamples[stringName];
+  const duration = Math.min(2.6, Math.max(0.18, length));
+  const delayMs = Math.max(0, delaySeconds * 1000);
+
+  if (!segment) {
+    const fallbackTimer = window.setTimeout(() => {
+      playViolinSynthSequence([note.frequency], duration);
+    }, delayMs);
+    currentMusicCueTimers.push(fallbackTimer);
+    return true;
+  }
+
+  const playbackRate = Math.max(0.5, Math.min(1.7, note.frequency / (violinStringPitches[stringName] || note.frequency || 1)));
+  const startTimer = window.setTimeout(() => {
+    const audio = new Audio(segment.file);
+    let started = false;
+    let fellBack = false;
+
+    audio.preload = "auto";
+    audio.volume = 0.96;
+    audio.playbackRate = playbackRate;
+    audio.preservesPitch = false;
+    audio.webkitPreservesPitch = false;
+    audio.mozPreservesPitch = false;
+    rememberMusicSource(audio);
+
+    const fallback = () => {
+      if (fellBack) return;
+      fellBack = true;
+      playViolinSynthSequence([note.frequency], duration);
+    };
+
+    const playSegment = () => {
+      if (started || fellBack) return;
+      started = true;
+      try {
+        audio.currentTime = segment.start;
+      } catch {
+        // Some browsers only allow currentTime after enough metadata is ready.
+      }
+      const playResult = audio.play();
+      if (playResult?.catch) playResult.catch(fallback);
+      const stopTimer = window.setTimeout(() => {
+        audio.pause();
+        try {
+          audio.currentTime = 0;
+        } catch {
+          // The audio may already be detached.
+        }
+      }, duration * 1000);
+      currentMusicCueTimers.push(stopTimer);
+    };
+
+    audio.addEventListener("error", fallback, { once: true });
+    audio.addEventListener("loadedmetadata", playSegment, { once: true });
+    if (audio.readyState >= 1) playSegment();
+    else audio.load();
+  }, delayMs);
+  currentMusicCueTimers.push(startTimer);
+  return true;
+}
+
 function playViolinSampleSequence(noteNames, fallbackFrequencies = [], length = 1.0) {
   if (!state.soundOn || !noteNames?.length) return;
-  let scheduled = 0;
   const duration = Math.min(2.6, Math.max(1.2, length));
+  let scheduled = 0;
 
   noteNames.forEach((noteName, index) => {
-    const note = getMusicNote(noteName);
-    const stringName = note.string || noteName;
-    const segment = violinStringSamples[stringName];
-    if (!segment) {
-      scheduled += 1;
-      const fallbackTimer = window.setTimeout(() => {
-        playViolinSynthSequence([note.frequency], duration);
-      }, index * (duration + 0.28) * 1000);
-      currentMusicCueTimers.push(fallbackTimer);
-      return;
-    }
-    scheduled += 1;
-    const playbackRate = Math.max(0.5, Math.min(1.7, note.frequency / (violinStringPitches[stringName] || note.frequency || 1)));
-    const startTimer = window.setTimeout(() => {
-      const audio = new Audio(segment.file);
-      let started = false;
-      let fellBack = false;
-
-      audio.preload = "auto";
-      audio.volume = 0.96;
-      audio.playbackRate = playbackRate;
-      audio.preservesPitch = false;
-      audio.webkitPreservesPitch = false;
-      audio.mozPreservesPitch = false;
-      rememberMusicSource(audio);
-
-      const fallback = () => {
-        if (fellBack) return;
-        fellBack = true;
-        playViolinSynthSequence([note.frequency], duration);
-      };
-
-      const playSegment = () => {
-        if (started || fellBack) return;
-        started = true;
-        try {
-          audio.currentTime = segment.start;
-        } catch {
-          // Some browsers only allow currentTime after enough metadata is ready.
-        }
-        const playResult = audio.play();
-        if (playResult?.catch) playResult.catch(fallback);
-        const stopTimer = window.setTimeout(() => {
-          audio.pause();
-          try {
-            audio.currentTime = 0;
-          } catch {
-            // The audio may already be detached.
-          }
-        }, duration * 1000);
-        currentMusicCueTimers.push(stopTimer);
-      };
-
-      audio.addEventListener("error", fallback, { once: true });
-      audio.addEventListener("loadedmetadata", playSegment, { once: true });
-      if (audio.readyState >= 1) playSegment();
-      else audio.load();
-    }, index * (duration + 0.28) * 1000);
-    currentMusicCueTimers.push(startTimer);
+    if (playViolinSampleAt(noteName, index * (duration + 0.28), duration)) scheduled += 1;
   });
 
   if (!scheduled && fallbackFrequencies.length) {
     playViolinSynthSequence(fallbackFrequencies, duration);
   }
+}
+
+function playViolinRhythmPattern(tokens, noteId = "A4") {
+  if (!state.soundOn || !tokens?.length) return;
+  let cursor = 0;
+  tokens.forEach((token) => {
+    if (token === "quarter") {
+      playViolinSampleAt(noteId, cursor, 0.78);
+      cursor += 1.0;
+      return;
+    }
+    if (token === "eighth-pair") {
+      playViolinSampleAt(noteId, cursor, 0.3);
+      playViolinSampleAt(noteId, cursor + 0.42, 0.3);
+      cursor += 1.0;
+      return;
+    }
+    cursor += 1.0;
+  });
 }
 
 function playRhythmPattern(hits) {
@@ -6982,6 +7010,10 @@ function playMusicCue(challenge = state.challenge, afterSpeech = false) {
   const timer = window.setTimeout(() => {
     if (state.challenge !== challenge) return;
     stopMusicCue();
+    if (cue.rhythmTokens) {
+      playViolinRhythmPattern(cue.rhythmTokens, cue.rhythmNote || "A4");
+      return;
+    }
     if (cue.rhythmHits) {
       playRhythmPattern(cue.rhythmHits);
       return;
