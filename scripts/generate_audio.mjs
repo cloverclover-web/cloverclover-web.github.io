@@ -298,6 +298,10 @@ function collectTexts(data) {
   });
 
   (data.musicBank || []).forEach((item) => {
+    if (item.type === "note-listen") add("Listen to the note. Which note do you hear?");
+    if (item.type === "staff-note") add("Which note is on the staff?");
+    if (item.type === "pitch-direction") add("Listen to two notes. Does the second note go higher or lower?");
+    if (item.type === "string-listen") add("Listen to the violin string. Which open string do you hear?");
     if (item.type === "part-picture") add("Which violin part is this?");
     if (item.type === "part-word") {
       ["violin", "bow", "string", "bridge", "tuning peg", "scroll", "fingerboard"].forEach((part) => add(`Tap the ${part}.`));
@@ -320,10 +324,15 @@ function collectTexts(data) {
     "tuning peg",
     "scroll",
     "fingerboard",
+    "C",
     "G",
+    "F",
     "D",
     "A",
-    "E"
+    "E",
+    "higher",
+    "lower",
+    "same"
   ].forEach(add);
 
   [

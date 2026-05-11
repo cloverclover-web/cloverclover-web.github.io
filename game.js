@@ -1118,6 +1118,93 @@ function expandKetListeningBank(baseItems, target = 100) {
     }, target);
   });
 
+  [
+    {
+      id: "ket-hand-after-lunch-grandma",
+      question: "What will they do after lunch?",
+      script: "Mum: First, we need to buy bread for lunch. After lunch, we will visit Grandma. Boy: I will bring my book for her.",
+      choices: ["visit Grandma", "buy bread", "read a book", "go to the park"],
+      answer: "visit Grandma"
+    },
+    {
+      id: "ket-hand-book-in-bag",
+      question: "What is in the girl's bag?",
+      script: "Girl: My blue hat is on the chair, but my book is already in my bag. Dad: Good, take the bag with you.",
+      choices: ["book", "blue hat", "green bag", "cake"],
+      answer: "book"
+    },
+    {
+      id: "ket-hand-red-shoes-rain",
+      question: "What should Tom wear?",
+      script: "Dad: It is not cold enough for a yellow coat. Tom, put on your red shoes because the ground is wet.",
+      choices: ["red shoes", "yellow coat", "blue hat", "green bag"],
+      answer: "red shoes"
+    },
+    {
+      id: "ket-hand-cat-under-table",
+      question: "Which animal is under the table?",
+      script: "The dog is next to the door. The cat is under the table, sleeping beside the chair.",
+      choices: ["cat", "dog", "fish", "bird"],
+      answer: "cat"
+    },
+    {
+      id: "ket-hand-swim-cake",
+      question: "What will they eat after swimming?",
+      script: "Girl: Can I have an apple before swimming? Mum: Yes. After swimming, Grandma has made a cake.",
+      choices: ["cake", "apple", "banana", "fish"],
+      answer: "cake"
+    },
+    {
+      id: "ket-hand-wait-bus-stop",
+      question: "Where should Anna wait?",
+      script: "Teacher: Do not wait in the shop, Anna. Wait at the bus stop and I will come there.",
+      choices: ["bus stop", "shop", "library", "school"],
+      answer: "bus stop"
+    },
+    {
+      id: "ket-hand-forgot-green-bag",
+      question: "What did Leo forget?",
+      script: "Leo has his book and his red shoes, but his green bag is still in the kitchen.",
+      choices: ["green bag", "book", "red shoes", "blue hat"],
+      answer: "green bag"
+    },
+    {
+      id: "ket-hand-rain-read",
+      question: "What will the child do because it is raining?",
+      script: "Boy: I wanted to play football outside. Mum: It is raining now, so read a book until it stops.",
+      choices: ["read a book", "play football", "ride a bike", "go to the park"],
+      answer: "read a book"
+    },
+    {
+      id: "ket-hand-sara-strawberry",
+      question: "Which ice cream does Sara choose?",
+      script: "Sara does not want vanilla today. She likes lemon, but she chooses strawberry ice cream for the party.",
+      choices: ["strawberry ice cream", "lemon ice cream", "vanilla ice cream", "chocolate ice cream"],
+      answer: "strawberry ice cream"
+    },
+    {
+      id: "ket-hand-music-six",
+      question: "What time is music class?",
+      script: "Art class is at four o'clock. Music class is after that, at six o'clock.",
+      choices: ["six o'clock", "four o'clock", "three o'clock", "ten o'clock"],
+      answer: "six o'clock"
+    },
+    {
+      id: "ket-hand-mum-blue-hat",
+      question: "What is Mum looking for?",
+      script: "Mum: I have the yellow coat and the red shoes. I still need the blue hat before we leave.",
+      choices: ["blue hat", "yellow coat", "red shoes", "green bag"],
+      answer: "blue hat"
+    },
+    {
+      id: "ket-hand-dad-kitchen",
+      question: "Where is Dad now?",
+      script: "Dad was in the garden, but he went inside to make lunch. He is in the kitchen now.",
+      choices: ["kitchen", "garden", "park", "cafe"],
+      answer: "kitchen"
+    }
+  ].forEach((item) => pushUniqueQuestion(items, item, target));
+
   let fillerIndex = 0;
   while (items.length < target) {
     const place = places[fillerIndex % places.length];
@@ -1422,7 +1509,12 @@ function createMeasureBank(target = 140) {
 }
 
 function createMusicBank(target = 120) {
-  const types = ["part-picture", "part-word", "string-sound", "string-name", "rhythm-count", "part-picture", "string-sound", "string-name", "rhythm-count", "string-count", "bow-job"];
+  const types = [
+    "staff-note", "pitch-direction", "string-listen", "rhythm-count",
+    "staff-note", "string-listen", "part-picture", "part-word",
+    "note-listen", "pitch-direction", "string-name", "rhythm-count",
+    "string-sound", "string-count", "bow-job"
+  ];
   return Array.from({ length: target }, (_, index) => ({ id: `mu-${types[index % types.length]}-${index}`, type: types[index % types.length], offset: index }));
 }
 
@@ -1450,6 +1542,36 @@ const wrongReviewMs = {
 };
 const assistedExplanationMs = 2300;
 const scoreByWrongAttempts = [10, 7, 4, 2];
+const recentQuestionStorageKey = "yoyo-recent-question-memory-v2";
+
+function loadRecentQuestionMemory() {
+  try {
+    const storage = globalThis.localStorage || globalThis.window?.localStorage;
+    if (!storage) return { tags: {}, keys: {} };
+    const parsed = JSON.parse(storage.getItem(recentQuestionStorageKey) || "{}");
+    return {
+      tags: parsed.tags && typeof parsed.tags === "object" ? parsed.tags : {},
+      keys: parsed.keys && typeof parsed.keys === "object" ? parsed.keys : {}
+    };
+  } catch {
+    return { tags: {}, keys: {} };
+  }
+}
+
+function saveRecentQuestionMemory() {
+  try {
+    const storage = globalThis.localStorage || globalThis.window?.localStorage;
+    if (!storage) return;
+    storage.setItem(recentQuestionStorageKey, JSON.stringify({
+      tags: state.recentQuestionTags,
+      keys: state.recentQuestionKeys
+    }));
+  } catch {
+    // Local storage can be blocked in private browsing; gameplay should still work.
+  }
+}
+
+const persistedRecentQuestionMemory = loadRecentQuestionMemory();
 
 const state = {
   activeGame: "ketListen",
@@ -1467,6 +1589,7 @@ const state = {
   hadIncorrectThisRound: false,
   streak: 0,
   mathStage: startingMathStage,
+  ketPartOffset: Math.floor(Math.random() * 4),
   challenge: null,
   options: [],
   listeningDecks: {
@@ -1484,7 +1607,8 @@ const state = {
     measure: [],
     music: []
   },
-  recentQuestionTags: {}
+  recentQuestionTags: persistedRecentQuestionMemory.tags,
+  recentQuestionKeys: persistedRecentQuestionMemory.keys
 };
 
 const nodes = {
@@ -2294,22 +2418,39 @@ function shuffle(list) {
   return copy;
 }
 
-const questionTagLimit = 18;
+const questionTagLimit = 28;
+const questionKeyLimit = 48;
 
 function recentTagsForMode(mode) {
   return state.recentQuestionTags[mode] || [];
+}
+
+function recentKeysForMode(mode) {
+  return state.recentQuestionKeys[mode] || [];
 }
 
 function rememberQuestionTag(mode, tag) {
   if (!mode || !tag) return;
   const current = recentTagsForMode(mode).filter((item) => item !== tag);
   state.recentQuestionTags[mode] = [tag, ...current].slice(0, questionTagLimit);
+  saveRecentQuestionMemory();
 }
 
-function trimRecentTagsAcrossModes(keepLast = 5) {
+function rememberQuestionKey(mode, key) {
+  if (!mode || !key) return;
+  const current = recentKeysForMode(mode).filter((item) => item !== key);
+  state.recentQuestionKeys[mode] = [key, ...current].slice(0, questionKeyLimit);
+  saveRecentQuestionMemory();
+}
+
+function trimRecentTagsAcrossModes(keepLast = 16) {
   Object.keys(state.recentQuestionTags).forEach((mode) => {
     state.recentQuestionTags[mode] = (state.recentQuestionTags[mode] || []).slice(0, keepLast);
   });
+  Object.keys(state.recentQuestionKeys).forEach((mode) => {
+    state.recentQuestionKeys[mode] = (state.recentQuestionKeys[mode] || []).slice(0, keepLast * 2);
+  });
+  saveRecentQuestionMemory();
 }
 
 function resetAllDecks() {
@@ -2328,12 +2469,18 @@ function resetAllDecks() {
 function pullDeckItemWithCooldown(deck, mode, tagForItem) {
   const previousKey = state.challenge?.key;
   const recentTags = recentTagsForMode(mode);
-  let selectedIndex = deck.findIndex((item) => item?.id !== previousKey && !recentTags.includes(tagForItem(item)));
+  const recentKeys = recentKeysForMode(mode);
+  let selectedIndex = deck.findIndex((item) => item?.id !== previousKey && !recentKeys.includes(item?.id) && !recentTags.includes(tagForItem(item)));
 
   if (selectedIndex === -1) {
-    selectedIndex = deck.findIndex((item) => item?.id !== previousKey);
+    selectedIndex = deck.findIndex((item) => item?.id !== previousKey && !recentTags.includes(tagForItem(item)));
   }
 
+  if (selectedIndex === -1) {
+    selectedIndex = deck.findIndex((item) => item?.id !== previousKey && !recentKeys.includes(item?.id));
+  }
+
+  if (selectedIndex === -1) selectedIndex = deck.findIndex((item) => item?.id !== previousKey);
   if (selectedIndex === -1) selectedIndex = 0;
   return deck.splice(selectedIndex, 1)[0];
 }
@@ -2342,7 +2489,10 @@ function choosePoolItemWithCooldown(pool, mode, tagForItem) {
   const options = shuffle(pool);
   const previousKey = state.challenge?.key;
   const recentTags = recentTagsForMode(mode);
-  return options.find((item) => item.id !== previousKey && !recentTags.includes(tagForItem(item)))
+  const recentKeys = recentKeysForMode(mode);
+  return options.find((item) => item.id !== previousKey && !recentKeys.includes(item.id) && !recentTags.includes(tagForItem(item)))
+    || options.find((item) => item.id !== previousKey && !recentTags.includes(tagForItem(item)))
+    || options.find((item) => item.id !== previousKey && !recentKeys.includes(item.id))
     || options.find((item) => item.id !== previousKey)
     || options[0];
 }
@@ -2816,7 +2966,7 @@ function buildListeningSequenceRound() {
 
 function buildKetListeningRound() {
   const partPlan = ["part1", "part3", "part2", "part4"];
-  const part = partPlan[state.correctCount % partPlan.length];
+  const part = partPlan[(state.correctCount + state.ketPartOffset) % partPlan.length];
   return part === "part2" ? buildListeningSequenceRound() : buildListeningRound("ketListen", part);
 }
 
@@ -5589,6 +5739,20 @@ function buildMeasureRound() {
 
 const violinParts = ["violin", "bow", "string", "bridge", "tuning peg", "scroll", "fingerboard"];
 const violinStrings = ["G", "D", "A", "E"];
+const musicNotes = [
+  { name: "C", frequency: 261.63, staffY: 96, color: "#f29ec2", ledger: true },
+  { name: "D", frequency: 293.66, staffY: 90, color: "#ffd166" },
+  { name: "E", frequency: 329.63, staffY: 84, color: "#4ecdc4" },
+  { name: "F", frequency: 349.23, staffY: 78, color: "#9d8df1" },
+  { name: "G", frequency: 392.0, staffY: 72, color: "#65bd53" },
+  { name: "A", frequency: 440.0, staffY: 66, color: "#f29ec2" }
+];
+const violinStringPitches = {
+  G: 196.0,
+  D: 293.66,
+  A: 440.0,
+  E: 659.25
+};
 
 function drawMusicIcon(label) {
   const lower = String(label).toLowerCase();
@@ -5648,9 +5812,40 @@ function renderViolinStringToken(highlight = null) {
   return `<div class="math-token music-token"><div class="string-guide">low sound to high sound</div><div class="violin-string-token">${rows}</div></div>`;
 }
 
+function renderMusicListenTarget(label = "Listen to the sound.") {
+  return `
+    <div class="math-token music-token">
+      <span class="phonics-listen-icon music-listen-icon" aria-hidden="true">${drawGenericListenIcon()}</span>
+      <small>${label}</small>
+    </div>
+  `;
+}
+
+function renderStaffNote(noteName) {
+  const note = musicNotes.find((item) => item.name === noteName) || musicNotes[0];
+  const lines = [36, 48, 60, 72, 84].map((y) => `<line x1="18" y1="${y}" x2="132" y2="${y}"></line>`).join("");
+  const ledger = note.ledger ? '<line class="ledger-line" x1="48" y1="96" x2="82" y2="96"></line>' : "";
+  return `
+    <div class="math-token music-token">
+      <svg class="staff-note-svg" viewBox="0 0 150 120" aria-hidden="true">
+        <g class="staff-lines">${lines}${ledger}</g>
+        <path class="treble-clef" d="M39 89 C24 78 48 64 40 51 C34 41 38 28 49 24 C62 22 65 37 56 49 C45 64 24 84 43 100 C57 113 82 96 63 77" fill="none"></path>
+        <ellipse class="staff-note-head" cx="64" cy="${note.staffY}" rx="11" ry="8" transform="rotate(-18 64 ${note.staffY})" fill="${note.color}"></ellipse>
+        <path class="staff-note-stem" d="M74 ${note.staffY - 2} V${Math.max(26, note.staffY - 42)}"></path>
+      </svg>
+    </div>
+  `;
+}
+
 function renderRhythmToken(beats) {
   const notes = Array.from({ length: beats }, () => "<span aria-hidden=\"true\"></span>").join("");
   return `<div class="math-token music-token"><div class="rhythm-token">${notes}</div></div>`;
+}
+
+function noteOptions(answerName) {
+  const answer = musicNotes.find((note) => note.name === answerName) || musicNotes[0];
+  const distractors = shuffle(musicNotes.filter((note) => note.name !== answer.name)).slice(0, 3);
+  return shuffle([answer, ...distractors].map((note) => makeBigTextChoice(note.name, note.name === answer.name, "letter-option")));
 }
 
 function makeMusicOption(label, correct = false) {
@@ -5664,6 +5859,73 @@ function makeMusicOption(label, correct = false) {
 
 function buildMusicRound() {
   const item = nextQuestionDeckItem("music", musicBank);
+  if (item.type === "note-listen") {
+    const note = musicNotes[item.offset % musicNotes.length];
+    return {
+      game: "music",
+      level: "note-listen",
+      typeTag: "music:note-listen",
+      answer: note.name,
+      key: item.id,
+      prompt: "Which note do you hear?",
+      spoken: "Listen to the note. Which note do you hear?",
+      hint: "Listen to the pitch, then choose the note name.",
+      targetHtml: renderMusicListenTarget("Listen to the note."),
+      musicCue: { notes: [note.frequency], length: 0.8, type: "sine", delayMs: 2400 },
+      options: noteOptions(note.name)
+    };
+  }
+  if (item.type === "staff-note") {
+    const note = musicNotes[item.offset % musicNotes.length];
+    return {
+      game: "music",
+      level: "staff-note",
+      typeTag: "music:staff-note",
+      answer: note.name,
+      key: item.id,
+      prompt: "Which note is on the staff?",
+      spoken: "Which note is on the staff?",
+      hint: "Look at the note head on the lines and spaces.",
+      targetHtml: renderStaffNote(note.name),
+      options: noteOptions(note.name)
+    };
+  }
+  if (item.type === "pitch-direction") {
+    const startIndex = item.offset % (musicNotes.length - 1);
+    const direction = item.offset % 3;
+    const first = musicNotes[startIndex + (direction === 1 ? 1 : 0)];
+    const second = direction === 0 ? musicNotes[startIndex + 1] : direction === 1 ? musicNotes[startIndex] : first;
+    const answer = direction === 0 ? "higher" : direction === 1 ? "lower" : "same";
+    return {
+      game: "music",
+      level: "pitch-direction",
+      typeTag: "music:pitch-direction",
+      answer,
+      key: item.id,
+      prompt: "Does the second note go higher or lower?",
+      spoken: "Listen to two notes. Does the second note go higher or lower?",
+      hint: "The second sound may move up or down.",
+      targetHtml: renderMusicListenTarget("Listen to two notes."),
+      musicCue: { notes: [first.frequency, second.frequency], length: 0.55, type: "sine", delayMs: 3000 },
+      options: shuffle(["higher", "lower", "same"].map((label) => makeTextChoice(label, label === answer)))
+    };
+  }
+  if (item.type === "string-listen") {
+    const answer = violinStrings[item.offset % violinStrings.length];
+    return {
+      game: "music",
+      level: "string-listen",
+      typeTag: "music:string-listen",
+      answer,
+      key: item.id,
+      prompt: "Which open string do you hear?",
+      spoken: "Listen to the violin string. Which open string do you hear?",
+      hint: "Violin open strings are G, D, A, E.",
+      targetHtml: renderMusicListenTarget("Listen to the open string."),
+      musicCue: { notes: [violinStringPitches[answer]], length: 0.9, type: "sawtooth", delayMs: 2800 },
+      options: shuffle(violinStrings.map((name) => makeBigTextChoice(name, name === answer, "letter-option")))
+    };
+  }
   if (item.type === "part-picture") {
     const answer = violinParts[item.offset % violinParts.length];
     const options = [answer, ...shuffle(violinParts.filter((part) => part !== answer)).slice(0, 3)];
@@ -5789,6 +6051,7 @@ function buildRound() {
     logic: buildLogicRound
   };
   state.challenge = (builders[state.activeGame] || buildKetListeningRound)();
+  rememberQuestionKey(state.activeGame, state.challenge.key);
   questionTagsForChallenge(state.challenge).forEach((tag) => rememberQuestionTag(state.activeGame, tag));
   state.options = state.challenge.options;
 }
@@ -6286,7 +6549,7 @@ function restartGame() {
     window.speechSynthesis.cancel();
   }
   resetAllDecks();
-  trimRecentTagsAcrossModes(5);
+  trimRecentTagsAcrossModes(16);
   state.correctCount = 0;
   state.score = 0;
   state.firstTryCount = 0;
@@ -6296,6 +6559,7 @@ function restartGame() {
   state.answerReady = false;
   state.streak = 0;
   state.mathStage = startingMathStage;
+  state.ketPartOffset = Math.floor(Math.random() * 4);
   state.challenge = null;
   nodes.celebration.hidden = true;
   renderRound();
@@ -6308,7 +6572,7 @@ function chooseGame() {
     window.speechSynthesis.cancel();
   }
   resetAllDecks();
-  trimRecentTagsAcrossModes(5);
+  trimRecentTagsAcrossModes(16);
   state.correctCount = 0;
   state.score = 0;
   state.firstTryCount = 0;
@@ -6318,6 +6582,7 @@ function chooseGame() {
   state.answerReady = false;
   state.streak = 0;
   state.mathStage = startingMathStage;
+  state.ketPartOffset = Math.floor(Math.random() * 4);
   state.challenge = null;
   nodes.celebration.hidden = true;
   renderRound();
@@ -6352,6 +6617,15 @@ function playTone(notes, length, type) {
     oscillator.start(start);
     oscillator.stop(start + length + 0.02);
   });
+}
+
+function playMusicCue(challenge = state.challenge) {
+  if (!state.soundOn || !challenge?.musicCue?.notes?.length) return;
+  const cue = challenge.musicCue;
+  window.setTimeout(() => {
+    if (state.challenge !== challenge) return;
+    playTone(cue.notes, cue.length || 0.55, cue.type || "sine");
+  }, cue.delayMs || 900);
 }
 
 function stopSpeechAudio() {
@@ -6477,6 +6751,7 @@ function speakSpeechItems(items) {
 function speakPrompt(force) {
   if (!force && !state.soundOn) return;
   speakSpeechItems(state.challenge.speechSegments || [state.challenge.spoken]);
+  playMusicCue(state.challenge);
 }
 
 function setupCompanion() {

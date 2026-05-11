@@ -1424,6 +1424,33 @@ h1 {
   height: auto;
 }
 
+.music-listen-icon svg {
+  width: min(190px, 78%);
+}
+
+.staff-note-svg {
+  width: min(360px, 96%);
+  height: auto;
+}
+
+.staff-lines line,
+.staff-note-stem,
+.ledger-line,
+.treble-clef {
+  stroke: var(--line);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.staff-note-head {
+  stroke: var(--line);
+  stroke-width: 5;
+}
+
+.treble-clef {
+  opacity: 0.62;
+}
+
 .violin-string-token {
   width: min(330px, 96%);
   display: grid;
