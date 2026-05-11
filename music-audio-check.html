@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YOYO Music Audio Check</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #253041;
+      --line: #4b3c59;
+      --paper: #fffaf0;
+      --rose: #f8d7e5;
+      --mint: #d8f3e8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-rounded, "Avenir Next", "Trebuchet MS", Arial, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #fff0f7 0%, #f5ecff 46%, #dcf6ea 100%);
+    }
+    main {
+      width: min(980px, calc(100vw - 48px));
+      margin: 32px auto;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+      letter-spacing: 0;
+    }
+    p {
+      margin: 0 0 20px;
+      font-size: 17px;
+      line-height: 1.45;
+      max-width: 760px;
+    }
+    section {
+      margin: 18px 0;
+      padding: 18px;
+      border: 3px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 250, 240, 0.92);
+      box-shadow: 0 10px 22px rgba(75, 60, 89, 0.14);
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 22px;
+    }
+    .audio-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    article {
+      min-height: 128px;
+      padding: 14px;
+      border: 2px solid rgba(75, 60, 89, 0.55);
+      border-radius: 8px;
+      background: linear-gradient(180deg, white, #fff7fb);
+    }
+    h3 {
+      margin: 0 0 6px;
+      font-size: 17px;
+    }
+    small {
+      display: block;
+      min-height: 34px;
+      margin-bottom: 10px;
+      line-height: 1.35;
+      color: #66556f;
+    }
+    audio {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>YOYO Music Audio Check</h1>
+    <p>
+      Use this page to compare the raw violin recording with the rhythm clips used in the game.
+      The rhythm clips should sound like one short line played twice.
+    </p>
+
+    <section>
+      <h2>Source Audio</h2>
+      <div class="audio-grid">
+        <article>
+          <h3>Full original violin sample</h3>
+          <small>Contains the open strings G, D, A, and E in one file.</small>
+          <audio controls preload="metadata" src="audio/violin-open-strings.mp3"></audio>
+        </article>
+        <article>
+          <h3>A string source clip</h3>
+          <small>This is the short A string section currently used to make the rhythm clips.</small>
+          <audio controls preload="metadata" src="audio/violin-a-string-source.mp3"></audio>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Current Rhythm Clips</h2>
+      <div class="audio-grid">
+        <article>
+          <h3>long, long, quick quick</h3>
+          <small>Long note, long note, two quick notes. The line repeats once.</small>
+          <audio controls preload="metadata" src="audio/music-rhythm-long-long-quick-quick.mp3"></audio>
+        </article>
+        <article>
+          <h3>quick quick, long, long</h3>
+          <small>Two quick notes, long note, long note. The line repeats once.</small>
+          <audio controls preload="metadata" src="audio/music-rhythm-quick-quick-long-long.mp3"></audio>
+        </article>
+        <article>
+          <h3>long, quick quick, long</h3>
+          <small>Long note, two quick notes, long note. The line repeats once.</small>
+          <audio controls preload="metadata" src="audio/music-rhythm-long-quick-quick-long.mp3"></audio>
+        </article>
+        <article>
+          <h3>long, rest, quick quick</h3>
+          <small>Long note, silence, two quick notes. The line repeats once.</small>
+          <audio controls preload="metadata" src="audio/music-rhythm-long-rest-quick-quick.mp3"></audio>
+        </article>
+        <article>
+          <h3>quick quick, rest, long</h3>
+          <small>Two quick notes, silence, long note. The line repeats once.</small>
+          <audio controls preload="metadata" src="audio/music-rhythm-quick-quick-rest-long.mp3"></audio>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

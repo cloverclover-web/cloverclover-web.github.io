@@ -15,15 +15,15 @@ const patterns = [
 ];
 
 const timing = {
-  sampleStart: 8.95,
+  sampleStart: 9.68,
   long: 1.12,
-  quick: 0.58,
-  quickGap: 0.22,
-  rest: 0.86,
+  quick: 0.36,
+  quickGap: 0.12,
+  rest: 0.9,
   beatGap: 0.22,
-  repeatGap: 0.52,
-  leadingSilence: 0.16,
-  trailingSilence: 0.24,
+  repeatGap: 0.65,
+  leadingSilence: 0.15,
+  trailingSilence: 0.22,
   repeats: 2
 };
 
@@ -79,7 +79,7 @@ function buildFilter(pieces) {
     if (piece.kind === "note") {
       filters.push(
         `[src${noteIndex}]atrim=start=${timing.sampleStart}:duration=${piece.seconds},asetpts=PTS-STARTPTS,` +
-        `afade=t=in:st=0:d=0.025,afade=t=out:st=${Math.max(0.04, piece.seconds - 0.055).toFixed(3)}:d=0.055,volume=1.08${label}`
+        `afade=t=in:st=0:d=0.012,afade=t=out:st=${Math.max(0.03, piece.seconds - 0.07).toFixed(3)}:d=0.07,volume=1.7,alimiter=limit=0.9${label}`
       );
       noteIndex += 1;
     } else {
