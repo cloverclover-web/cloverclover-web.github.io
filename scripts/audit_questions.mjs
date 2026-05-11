@@ -184,6 +184,18 @@ function auditChallenge(mode, challenge, audioKeyForText, index) {
     }
   });
 
+  if (mode === "music" && challenge.musicCue) {
+    if (!challenge.musicCue.sampleNotes && !challenge.musicCue.rhythmTokens) {
+      issues.push("music cue must use violin sampleNotes or rhythmTokens");
+    }
+    if (challenge.musicCue.notes) {
+      issues.push("music cue should not use generic notes");
+    }
+    if (challenge.musicCue.rhythmHits) {
+      issues.push("music cue should not use click rhythmHits");
+    }
+  }
+
   const audioTexts = new Set();
   if (challenge.spoken) audioTexts.add(challenge.spoken);
   (challenge.speechSegments || []).forEach((text) => audioTexts.add(text));

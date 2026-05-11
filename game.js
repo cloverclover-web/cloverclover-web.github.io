@@ -5966,7 +5966,7 @@ function renderRhythmListenTarget() {
   return `
     <div class="math-token music-token">
       <span class="phonics-listen-icon music-listen-icon" aria-hidden="true">${drawGenericListenIcon()}</span>
-      <small>Listen for long, quick, and silent beats.</small>
+      <small>The rhythm plays twice. Listen for long, quick, and silent beats.</small>
     </div>
   `;
 }
@@ -6192,7 +6192,7 @@ function buildMusicRound() {
       spoken: "Listen to the rhythm. Which rhythm do you hear?",
       hint: "Match the long notes, quick notes, and rests.",
       targetHtml: renderRhythmListenTarget(),
-      musicCue: { rhythmTokens: answerPattern.tokens, rhythmNote: "A4", afterSpeechDelayMs: 250 },
+      musicCue: { rhythmTokens: answerPattern.tokens, rhythmNote: "A4", rhythmRepeat: 2, afterSpeechDelayMs: 250 },
       options: shuffle(options.map((pattern) => makeRhythmOption(pattern, pattern.id === answerPattern.id)))
     };
   }
@@ -6536,7 +6536,7 @@ function handleChoice(button, option) {
     nodes.feedback.textContent = hint;
     nodes.promptHint.textContent = hint;
     if (state.wrongAttempts >= 3) showTeachingExplanation();
-    playTone([180, 140], 0.12, "sine");
+    playFeedbackTone([180, 140], 0.12, "sine", "wrong");
     sadCompanion();
     pauseForWrongReview();
     speakPrompt(true);
@@ -6558,7 +6558,7 @@ function handleChoice(button, option) {
   cheerCompanion();
   const cheer = pickFrom(PRINCESS_CHEERS);
   nodes.feedback.textContent = option.type === "math" ? `${option.label}! ${cheer}` : `${option.label}. ${cheer}`;
-  playTone([523, 659, 784], 0.11, "triangle");
+  playFeedbackTone([523, 659, 784], 0.11, "triangle", "correct");
   const showedExplanation = shouldShowCorrectExplanation() ? showTeachingExplanation() : false;
   const explanationText = state.challenge.explanation || finalHintFor(state.challenge);
   const spokenFeedback = showedExplanation && explanationText
@@ -6594,7 +6594,7 @@ function handleSequenceChoice(button, option) {
       : `Almost, princess. Tap ${expected} next.`;
     nodes.feedback.textContent = sequenceHint;
     nodes.promptHint.textContent = sequenceHint;
-    playTone([180, 140], 0.12, "sine");
+    playFeedbackTone([180, 140], 0.12, "sine", "wrong");
     sadCompanion();
     pauseForWrongReview();
     speakPrompt(true);
@@ -6606,7 +6606,7 @@ function handleSequenceChoice(button, option) {
   button.disabled = true;
   state.challenge.sequenceIndex += 1;
   refreshSequenceTarget();
-  playTone([523, 659], 0.1, "triangle");
+  playFeedbackTone([523, 659], 0.1, "triangle", "correct");
 
   if (state.challenge.sequenceIndex < state.challenge.sequence.length) {
     speakEnglish(spokenTextForOption(option));
@@ -6688,7 +6688,7 @@ function showCelebration() {
     ? "Perfect quest, princess!"
     : "Quest complete, princess!";
   nodes.winText.textContent = `${winMessages[state.activeGame] || `You finished ${state.questionGoal} quests.`} Score: ${state.score} / ${state.questionGoal * 10}. First-try gems: ${state.firstTryCount} / ${state.questionGoal}.`;
-  playTone([523, 659, 784, 1046], 0.13, "triangle");
+  playFeedbackTone([523, 659, 784, 1046], 0.13, "triangle", "celebrate");
   speakEnglish(cheer);
   window.setTimeout(() => nodes.playAgainButton.focus(), 120);
 }
@@ -6795,6 +6795,22 @@ function playTone(notes, length, type) {
     oscillator.start(start);
     oscillator.stop(start + length + 0.02);
   });
+}
+
+function playFeedbackTone(notes, length, type, kind = "correct") {
+  if (state.activeGame === "music") {
+    if (kind === "wrong") {
+      playViolinSampleAt("G3", 0, 0.55);
+      return;
+    }
+    if (kind === "celebrate") {
+      playViolinSampleSequence(["D4", "A4", "E5"], [], 0.55);
+      return;
+    }
+    playViolinSampleAt("A4", 0, 0.5);
+    return;
+  }
+  playTone(notes, length, type);
 }
 
 function rememberMusicSource(source) {
@@ -6960,51 +6976,38 @@ function playViolinSampleSequence(noteNames, fallbackFrequencies = [], length = 
   }
 }
 
-function playViolinRhythmPattern(tokens, noteId = "A4") {
+function playViolinRhythmPattern(tokens, noteId = "A4", repeat = 1) {
   if (!state.soundOn || !tokens?.length) return;
+  const longDuration = 1.0;
+  const quickDuration = 0.5;
+  const quickGap = 0.22;
+  const restDuration = 0.85;
+  const beatGap = 0.18;
+  const repeatGap = 0.42;
   let cursor = 0;
-  tokens.forEach((token) => {
-    if (token === "quarter") {
-      playViolinSampleAt(noteId, cursor, 0.78);
-      cursor += 1.0;
-      return;
-    }
-    if (token === "eighth-pair") {
-      playViolinSampleAt(noteId, cursor, 0.3);
-      playViolinSampleAt(noteId, cursor + 0.42, 0.3);
-      cursor += 1.0;
-      return;
-    }
-    cursor += 1.0;
-  });
+
+  for (let pass = 0; pass < repeat; pass += 1) {
+    tokens.forEach((token) => {
+      if (token === "quarter") {
+        playViolinSampleAt(noteId, cursor, longDuration);
+        cursor += longDuration + beatGap;
+        return;
+      }
+      if (token === "eighth-pair") {
+        playViolinSampleAt(noteId, cursor, quickDuration);
+        playViolinSampleAt(noteId, cursor + quickDuration + quickGap, quickDuration);
+        cursor += quickDuration * 2 + quickGap + beatGap;
+        return;
+      }
+      cursor += restDuration + beatGap;
+    });
+    if (pass < repeat - 1) cursor += repeatGap;
+  }
 }
 
 function playRhythmPattern(hits) {
   if (!state.soundOn || !hits?.length) return;
-  const context = ensureAudio();
-  if (!context) return;
-
-  hits.forEach((hitAt) => {
-    const start = context.currentTime + hitAt;
-    const click = context.createOscillator();
-    const body = context.createOscillator();
-    const gain = context.createGain();
-    click.type = "square";
-    body.type = "triangle";
-    click.frequency.setValueAtTime(1050, start);
-    body.frequency.setValueAtTime(190, start);
-    gain.gain.setValueAtTime(0.0001, start);
-    gain.gain.exponentialRampToValueAtTime(0.18, start + 0.012);
-    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.13);
-    click.connect(gain);
-    body.connect(gain);
-    gain.connect(context.destination);
-    [click, body].forEach((node) => {
-      rememberMusicSource(node);
-      node.start(start);
-      node.stop(start + 0.14);
-    });
-  });
+  hits.forEach((hitAt) => playViolinSampleAt("A4", hitAt, 0.5));
 }
 
 function playMusicCue(challenge = state.challenge, afterSpeech = false) {
@@ -7014,7 +7017,7 @@ function playMusicCue(challenge = state.challenge, afterSpeech = false) {
     if (state.challenge !== challenge) return;
     stopMusicCue();
     if (cue.rhythmTokens) {
-      playViolinRhythmPattern(cue.rhythmTokens, cue.rhythmNote || "A4");
+      playViolinRhythmPattern(cue.rhythmTokens, cue.rhythmNote || "A4", cue.rhythmRepeat || 1);
       return;
     }
     if (cue.rhythmHits) {
@@ -7027,6 +7030,10 @@ function playMusicCue(challenge = state.challenge, afterSpeech = false) {
     }
     if (cue.type === "violin") {
       playViolinSynthSequence(cue.fallbackNotes || cue.notes || [], cue.length || 0.85);
+      return;
+    }
+    if (challenge.game === "music") {
+      playViolinSampleSequence(["A4"], cue.notes || [], cue.length || 1.0);
       return;
     }
     playTone(cue.notes || [], cue.length || 0.55, cue.type || "sine");
@@ -7229,7 +7236,7 @@ function toggleSound() {
     stopSpeechAudio();
   }
   if (state.soundOn) {
-    playTone([523, 659], 0.1, "triangle");
+    playFeedbackTone([523, 659], 0.1, "triangle", "correct");
     speakPrompt(true);
   }
 }
