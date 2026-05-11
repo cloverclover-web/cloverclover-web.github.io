@@ -136,7 +136,7 @@ function expectedOptionCounts(challenge) {
   if (isYesNoRound(challenge)) return [2];
   if (challenge?.level === "compare-two-digit") return [2];
   if (challenge?.level === "compare-symbol") return [3];
-  if (challenge?.level === "pitch-direction") return [3];
+  if (challenge?.level === "pitch-direction") return [2];
   return [4];
 }
 

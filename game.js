@@ -6064,10 +6064,10 @@ function buildMusicRound() {
   }
   if (item.type === "pitch-direction") {
     const startIndex = item.offset % (musicListenNotes.length - 1);
-    const direction = item.offset % 3;
-    const first = musicListenNotes[startIndex + (direction === 1 ? 1 : 0)];
-    const second = direction === 0 ? musicListenNotes[startIndex + 1] : direction === 1 ? musicListenNotes[startIndex] : first;
-    const answer = direction === 0 ? "higher" : direction === 1 ? "lower" : "same";
+    const goesUp = item.offset % 2 === 0;
+    const first = goesUp ? musicListenNotes[startIndex] : musicListenNotes[startIndex + 1];
+    const second = goesUp ? musicListenNotes[startIndex + 1] : musicListenNotes[startIndex];
+    const answer = goesUp ? "higher" : "lower";
     return {
       game: "music",
       level: "pitch-direction",
@@ -6078,8 +6078,11 @@ function buildMusicRound() {
       spoken: "Listen to two notes. Does the second note go higher or lower?",
       hint: "The second sound may move up or down.",
       targetHtml: renderMusicListenTarget("Listen to two notes."),
-      musicCue: { sampleNotes: [first.id, second.id], fallbackNotes: [first.frequency, second.frequency], length: 1.05, type: "violin", afterSpeechDelayMs: 250 },
-      options: shuffle(["higher", "lower", "same"].map((label) => makeTextChoice(label, label === answer)))
+      musicCue: { sampleNotes: [first.id, second.id], fallbackNotes: [first.frequency, second.frequency], length: 1.2, type: "violin", afterSpeechDelayMs: 250 },
+      options: shuffle([
+        withSpokenLabel(makeTextChoice("higher ↑", answer === "higher"), "higher"),
+        withSpokenLabel(makeTextChoice("lower ↓", answer === "lower"), "lower")
+      ])
     };
   }
   if (item.type === "string-listen") {
@@ -6945,7 +6948,7 @@ function playViolinSampleAt(noteInput, delaySeconds = 0, length = 1.0) {
 
 function playViolinSampleSequence(noteNames, fallbackFrequencies = [], length = 1.0) {
   if (!state.soundOn || !noteNames?.length) return;
-  const duration = Math.min(2.6, Math.max(1.2, length));
+  const duration = Math.min(2.6, Math.max(0.35, length));
   let scheduled = 0;
 
   noteNames.forEach((noteName, index) => {
