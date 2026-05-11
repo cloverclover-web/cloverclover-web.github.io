@@ -5055,8 +5055,8 @@ function makeArtChoice(label, artHtml, correct = false) {
 
 function drawSymmetryHalf(kind, side = "left", variant = "correct") {
   const mirrored = side === "right";
-  const wrongShift = variant === "shifted" ? 8 : 0;
-  const colour = variant === "wrong-colour" ? "#9ee0c8" : "#f29ec2";
+  const wrongShift = variant === "shifted" ? 20 : 0;
+  const colour = variant === "wrong-colour" ? "#9ee0c8" : variant === "shifted" ? "#ffd166" : "#f29ec2";
   const transform = mirrored ? "translate(120 0) scale(-1 1)" : "";
   const shapes = {
     butterfly: `<path d="M60 60 C30 22 16 42 24 70 C30 96 52 88 60 64 Z" fill="${colour}"/><circle cx="58" cy="60" r="5" fill="#f0c463"/>`,
