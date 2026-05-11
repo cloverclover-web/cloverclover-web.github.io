@@ -508,6 +508,90 @@ const baseKetListeningBank = [
     script: "Teacher: We will read later. First, go to the playground and play football for ten minutes.",
     choices: ["play football", "read a book", "draw a picture", "watch a film"],
     answer: "play football"
+  },
+  {
+    id: "ket-blue-hat-later",
+    question: "What does the girl need now?",
+    script: "Girl: I have my red shoes and my green bag. Mum: Good. Please take your blue hat now, because it is windy outside.",
+    choices: ["blue hat", "red shoes", "green bag", "yellow coat"],
+    answer: "blue hat"
+  },
+  {
+    id: "ket-library-before-cafe",
+    question: "Where will they go first?",
+    script: "Boy: Can we go to the cafe now? Dad: After the library. We must return your book first.",
+    choices: ["library", "cafe", "shop", "park"],
+    answer: "library"
+  },
+  {
+    id: "ket-yellow-coat-not-hat",
+    question: "What will the boy wear?",
+    script: "Mum: You do not need your blue hat today. It is cold, so wear your yellow coat.",
+    choices: ["yellow coat", "blue hat", "red shoes", "green bag"],
+    answer: "yellow coat"
+  },
+  {
+    id: "ket-two-clubs-time",
+    question: "What time is art club?",
+    script: "Music club is at four o'clock. Art club is later, at six o'clock.",
+    choices: ["six o'clock", "four o'clock", "three o'clock", "ten o'clock"],
+    answer: "six o'clock"
+  },
+  {
+    id: "ket-shop-after-school",
+    question: "What will Emma do after school?",
+    script: "Emma says, I wanted to ride my bike, but Mum asked me to buy bread after school.",
+    choices: ["buy bread", "ride a bike", "read a book", "watch a film"],
+    answer: "buy bread"
+  },
+  {
+    id: "ket-dog-behind-box",
+    question: "Where is the dog?",
+    script: "The cat is next to the box. The dog is not next to it. The dog is behind the box.",
+    choices: ["behind the box", "next to the box", "on the box", "under the box"],
+    answer: "behind the box"
+  },
+  {
+    id: "ket-monday-not-friday",
+    question: "When is the school trip?",
+    script: "The school trip was on Friday last year. This year it is on Monday.",
+    choices: ["Monday", "Friday", "Saturday", "Sunday"],
+    answer: "Monday"
+  },
+  {
+    id: "ket-cake-for-grandma",
+    question: "What does Dad buy?",
+    script: "Dad buys apples for lunch, but he buys a cake for Grandma.",
+    choices: ["cake", "apple", "banana", "fish"],
+    answer: "cake"
+  },
+  {
+    id: "ket-garden-then-park",
+    question: "Where will the children play first?",
+    script: "The children will go to the park later. First, they will play in the garden.",
+    choices: ["garden", "park", "school", "library"],
+    answer: "garden"
+  },
+  {
+    id: "ket-read-not-film",
+    question: "What will Lily do tonight?",
+    script: "Lily says, I watched a film yesterday, so tonight I will read a book.",
+    choices: ["read a book", "watch a film", "draw a picture", "ride a bike"],
+    answer: "read a book"
+  },
+  {
+    id: "ket-chocolate-for-dad",
+    question: "Which ice cream is for Dad?",
+    script: "Maya has lemon ice cream. Dad does not want vanilla. He chooses chocolate ice cream.",
+    choices: ["chocolate ice cream", "lemon ice cream", "vanilla ice cream", "strawberry ice cream"],
+    answer: "chocolate ice cream"
+  },
+  {
+    id: "ket-green-bag-under-chair",
+    question: "What is under the chair?",
+    script: "The red shoes are by the door. The green bag is under the chair.",
+    choices: ["green bag", "red shoes", "blue hat", "yellow coat"],
+    answer: "green bag"
   }
 ];
 
@@ -775,6 +859,114 @@ const baseEnglishSkillBank = [
     hint: "Think about school things.",
     choices: ["green bag", "blue hat", "red shoes", "yellow coat"],
     answer: "green bag"
+  },
+  {
+    id: "windy-kite",
+    prompt: "Read and choose.",
+    text: "It is not an animal. You can fly it on a windy day.",
+    spoken: "It is not an animal. You can fly it on a windy day. Which picture matches?",
+    hint: "Use both clues.",
+    choices: ["kite", "bird", "ball", "car"],
+    answer: "kite"
+  },
+  {
+    id: "grandma-clue",
+    prompt: "Read and choose.",
+    text: "She is your mum's mother.",
+    spoken: "She is your mum's mother. Who is it?",
+    hint: "Think about family.",
+    choices: ["grandma", "mum", "sister", "baby"],
+    answer: "grandma"
+  },
+  {
+    id: "white-drink",
+    prompt: "Read and choose.",
+    text: "It is a white drink. Some children have it with breakfast.",
+    spoken: "It is a white drink. Some children have it with breakfast. Which one is it?",
+    hint: "Use the colour and drink clues.",
+    choices: ["milk", "juice", "rice", "cake"],
+    answer: "milk"
+  },
+  {
+    id: "wool-animal",
+    prompt: "Read and choose.",
+    text: "This animal has wool and says baa.",
+    spoken: "This animal has wool and says baa. Which animal is it?",
+    hint: "Listen for the animal sound.",
+    choices: ["sheep", "horse", "cow", "lion"],
+    answer: "sheep"
+  },
+  {
+    id: "cold-neck",
+    prompt: "Read and choose.",
+    text: "You wear it round your neck when it is cold.",
+    spoken: "You wear it round your neck when it is cold. Which picture matches?",
+    hint: "Think about winter clothes.",
+    choices: ["scarf", "shirt", "socks", "hat"],
+    answer: "scarf"
+  },
+  {
+    id: "night-sky-round",
+    prompt: "Read and choose.",
+    text: "You can see it in the sky at night. It looks round.",
+    spoken: "You can see it in the sky at night. It looks round. Which picture matches?",
+    hint: "Think about the night sky.",
+    choices: ["moon", "sun", "star", "tree"],
+    answer: "moon"
+  },
+  {
+    id: "between-days",
+    prompt: "Read and choose.",
+    text: "It comes after Monday and before Wednesday.",
+    spoken: "It comes after Monday and before Wednesday. Which day is it?",
+    hint: "Say the days in order.",
+    choices: ["Tuesday", "Monday", "Wednesday", "Friday"],
+    answer: "Tuesday"
+  },
+  {
+    id: "behind-not-under",
+    prompt: "Read and choose.",
+    text: "The ball is not under the box. It is behind the box.",
+    spoken: "The ball is not under the box. It is behind the box. Which picture matches?",
+    hint: "Use the second sentence.",
+    choices: ["behind the box", "under the box", "on the box", "next to the box"],
+    answer: "behind the box"
+  },
+  {
+    id: "six-side-shape",
+    prompt: "Read and choose.",
+    text: "It is a flat shape with six sides.",
+    spoken: "It is a flat shape with six sides. Which shape is it?",
+    hint: "Count the sides.",
+    choices: ["hexagon", "pentagon", "triangle", "square"],
+    answer: "hexagon"
+  },
+  {
+    id: "three-corners-shape",
+    prompt: "Read and choose.",
+    text: "It has three corners and three sides.",
+    spoken: "It has three corners and three sides. Which shape is it?",
+    hint: "Count the corners.",
+    choices: ["triangle", "square", "circle", "hexagon"],
+    answer: "triangle"
+  },
+  {
+    id: "same-end-rhyme",
+    prompt: "Read and choose.",
+    text: "It rhymes with cat and hat.",
+    spoken: "It rhymes with cat and hat. Which word is it?",
+    hint: "Listen to the ending sound.",
+    choices: ["mat", "dog", "sun", "pen"],
+    answer: "mat"
+  },
+  {
+    id: "two-clue-action",
+    prompt: "Read and choose.",
+    text: "You use your legs and a ball. You do this outside.",
+    spoken: "You use your legs and a ball. You do this outside. Which action is it?",
+    hint: "Use both clues.",
+    choices: ["play football", "read a book", "watch a film", "buy bread"],
+    answer: "play football"
   }
 ];
 
@@ -892,7 +1084,7 @@ function expandKetListeningBank(baseItems, target = 100) {
     };
     pushUniqueQuestion(items, {
       id: `ket-reason-${index + 1}`,
-      question: "Why is the child unhappy?",
+      question: "What was the problem?",
       script: scripts[answer],
       choices: uniqueChoiceSet(answer, reasons.slice(index + 1).concat(reasons)),
       answer
@@ -908,7 +1100,7 @@ function expandKetListeningBank(baseItems, target = 100) {
     };
     pushUniqueQuestion(items, {
       id: `ket-feeling-${index + 1}`,
-      question: "How did the child feel?",
+      question: "What does the child say?",
       script: scripts[answer],
       choices: uniqueChoiceSet(answer, feelings.slice(index + 1).concat(feelings)),
       answer
@@ -970,7 +1162,37 @@ function expandEnglishSkillBank(baseItems, target = 100) {
     ["It is round but flat.", "circle", ["circle", "sphere", "square", "diamond"]],
     ["It is a solid with two circles.", "cylinder", ["cylinder", "cone", "pyramid", "sphere"]],
     ["You can swim here.", "swimming pool", ["swimming pool", "library", "shop", "bedroom"]],
-    ["You wait here for a bus.", "bus stop", ["bus stop", "cafe", "garden", "kitchen"]]
+    ["You wait here for a bus.", "bus stop", ["bus stop", "cafe", "garden", "kitchen"]],
+    ["It is not an animal. You can fly it on a windy day.", "kite", ["kite", "bird", "ball", "car"]],
+    ["She is your mum's mother.", "grandma", ["grandma", "mum", "sister", "baby"]],
+    ["It is a white drink.", "milk", ["milk", "juice", "rice", "cake"]],
+    ["This animal has wool and says baa.", "sheep", ["sheep", "horse", "cow", "lion"]],
+    ["You wear it round your neck when it is cold.", "scarf", ["scarf", "shirt", "socks", "hat"]],
+    ["It comes after Monday and before Wednesday.", "Tuesday", ["Tuesday", "Monday", "Wednesday", "Friday"]],
+    ["It is in the sky at night and looks round.", "moon", ["moon", "sun", "star", "tree"]],
+    ["It has six sides.", "hexagon", ["hexagon", "pentagon", "triangle", "square"]],
+    ["It rhymes with cat and hat.", "mat", ["mat", "dog", "sun", "pen"]],
+    ["You use your legs and a ball. You do this outside.", "play football", ["play football", "read a book", "watch a film", "buy bread"]],
+    ["You kick this when you play football.", "ball", ["ball", "book", "cake", "hat"]],
+    ["It shines in the sky in the day.", "sun", ["sun", "moon", "star", "tree"]],
+    ["It is small and shines in the night sky.", "star", ["star", "sun", "car", "fish"]],
+    ["It grows tall and has leaves.", "tree", ["tree", "flower", "car", "book"]],
+    ["It has five sides.", "pentagon", ["pentagon", "hexagon", "triangle", "circle"]],
+    ["It is half of a circle.", "semicircle", ["semicircle", "circle", "oval", "rectangle"]],
+    ["This solid is like a box.", "rectangular prism", ["rectangular prism", "cube", "sphere", "cone"]],
+    ["This solid is like a can.", "cylinder", ["cylinder", "cone", "pyramid", "sphere"]],
+    ["This solid is like a tent.", "triangular prism", ["triangular prism", "cube", "sphere", "hemisphere"]],
+    ["It is half of a ball shape.", "hemisphere", ["hemisphere", "sphere", "cone", "cube"]],
+    ["You put this on your head.", "hat", ["hat", "shoes", "scarf", "bag"]],
+    ["You wear these on your feet.", "shoes", ["shoes", "hat", "shirt", "bag"]],
+    ["You put books and toys inside it.", "bag", ["bag", "hat", "cup", "tree"]],
+    ["This room has a bed.", "bedroom", ["bedroom", "kitchen", "garden", "school"]],
+    ["You cook food here.", "kitchen", ["kitchen", "bedroom", "library", "park"]],
+    ["You can see flowers and trees here.", "garden", ["garden", "kitchen", "cafe", "bus stop"]],
+    ["This is the day after Sunday.", "Monday", ["Monday", "Sunday", "Tuesday", "Friday"]],
+    ["This is the day before Friday.", "Thursday", ["Thursday", "Friday", "Wednesday", "Monday"]],
+    ["It is cold, white weather.", "snowy", ["snowy", "sunny", "windy", "rainy"]],
+    ["It is weather that can move a kite.", "windy", ["windy", "rainy", "cloudy", "snowy"]]
   ];
   const noticeItems = [
     ["Please do not talk. People are reading.", "library", ["library", "park", "shop", "bedroom"]],
@@ -1024,33 +1246,30 @@ function expandEnglishSkillBank(baseItems, target = 100) {
 
 function createNumberSenseBank(target = 100) {
   const buckets = [[], [], [], [], [], [], [], [], [], [], [], []];
-  for (let count = 1; count <= 10; count += 1) buckets[0].push({ id: `ns-subitise-${count}`, type: "subitise", count });
-  for (let filled = 1; filled <= 9; filled += 1) buckets[1].push({ id: `ns-ten-${filled}`, type: "make-ten", filled });
-  for (let whole = 5; whole <= 12; whole += 1) {
+  for (let filled = 3; filled <= 9; filled += 1) buckets[0].push({ id: `ns-ten-${filled}`, type: "make-ten", filled });
+  for (let whole = 8; whole <= 20; whole += 1) {
     for (let part = 1; part < whole; part += 1) buckets[2].push({ id: `ns-bond-${part}-${whole}`, type: "number-bond", part, whole });
   }
-  for (let number = 1; number <= 14; number += 1) buckets[3].push({ id: `ns-more-${number}`, type: "one-more", number });
-  for (let number = 2; number <= 15; number += 1) buckets[4].push({ id: `ns-less-${number}`, type: "one-less", number });
-  for (let start = 1; start <= 12; start += 1) buckets[5].push({ id: `ns-count-on-${start}`, type: "count-on", start, steps: 2 + (start % 3) });
-  for (let count = 3; count <= 20; count += 1) buckets[6].push({ id: `ns-odd-even-${count}`, type: "odd-even", count });
+  for (let start = 6; start <= 32; start += 1) buckets[5].push({ id: `ns-count-on-${start}`, type: "count-on", start, steps: 3 + (start % 3) });
+  for (let count = 9; count <= 30; count += 1) buckets[6].push({ id: `ns-odd-even-${count}`, type: "odd-even", count });
   [2, 5, 10].forEach((step) => {
-    const maxStart = step === 10 ? 20 : step === 5 ? 15 : 10;
+    const maxStart = step === 10 ? 60 : step === 5 ? 40 : 30;
     for (let start = step; start <= maxStart; start += step) {
       buckets[7].push({ id: `ns-skip-${step}-${start}`, type: "skip-count", start, step });
     }
   });
-  for (let number = 11; number <= 30; number += 1) buckets[8].push({ id: `ns-place-${number}`, type: "place-value", number });
-  for (let left = 11; left <= 30; left += 1) {
-    const right = left + 2;
+  for (let number = 21; number <= 60; number += 1) buckets[8].push({ id: `ns-place-${number}`, type: "place-value", number });
+  for (let left = 21; left <= 70; left += 2) {
+    const right = left + (left % 3 === 0 ? 5 : 3);
     buckets[9].push({ id: `ns-compare-big-${left}-${right}`, type: "compare-two-digit", left, right, ask: "bigger" });
     buckets[9].push({ id: `ns-compare-small-${left}-${right}`, type: "compare-two-digit", left, right, ask: "smaller" });
   }
-  for (let whole = 6; whole <= 12; whole += 1) {
+  for (let whole = 10; whole <= 20; whole += 1) {
     for (let part = 1; part <= Math.floor(whole / 2); part += 1) {
       buckets[10].push({ id: `ns-ways-${part}-${whole - part}-${whole}`, type: "bond-ways", whole, left: part, right: whole - part });
     }
   }
-  for (let target = 1; target <= 4; target += 1) buckets[11].push({ id: `ns-ordinal-${target}`, type: "ordinal", target });
+  for (let target = 3; target <= 6; target += 1) buckets[11].push({ id: `ns-ordinal-${target}`, type: "ordinal", target });
 
   const items = [];
   let index = 0;
@@ -1064,13 +1283,16 @@ function createNumberSenseBank(target = 100) {
 
 function createMathReasoningBank(target = 100) {
   const buckets = [[], [], [], [], [], [], [], [], [], [], []];
-  for (let left = 1; left <= 8; left += 1) {
-    for (let right = 1; right <= 8; right += 1) {
-      if (left + right <= 12) buckets[0].push({ id: `mr-add-${left}-${right}`, type: "add", left, right });
+  for (let left = 2; left <= 12; left += 1) {
+    for (let right = 2; right <= 12; right += 1) {
+      const total = left + right;
+      if (total >= 10 && total <= 20) buckets[0].push({ id: `mr-add-${left}-${right}`, type: "add", left, right });
     }
   }
-  for (let left = 3; left <= 14; left += 1) {
-    for (let right = 1; right < left && right <= 7; right += 1) buckets[1].push({ id: `mr-sub-${left}-${right}`, type: "subtract", left, right });
+  for (let left = 8; left <= 20; left += 1) {
+    for (let right = 2; right < left && right <= 10; right += 1) {
+      if (left - right >= 2) buckets[1].push({ id: `mr-sub-${left}-${right}`, type: "subtract", left, right });
+    }
   }
   for (let total = 6; total <= 15; total += 1) {
     for (let left = 1; left < total; left += 1) buckets[2].push({ id: `mr-balance-${left}-${total}`, type: "balance", left, total });
@@ -1123,10 +1345,11 @@ function createLogicSpatialBank(target = 100) {
   const patternKinds = ["abab", "aab", "abc", "abb", "abbc"];
   const compositionKinds = ["two-triangles-square", "two-squares-rectangle", "cube-face", "pyramid-face", "cylinder-face", "sphere-roll"];
   const geometryKinds = ["symmetry", "rotation", "attribute-2d", "attribute-3d", "real-world"];
+  const types = ["pattern", "pattern", "analogy", "analogy", "compose", "compose", ...geometryKinds];
   const items = [];
   let index = 0;
   while (items.length < target) {
-    const type = ["pattern", "odd", "same", "analogy", "compose", ...geometryKinds][index % 10];
+    const type = types[index % types.length];
     if (type === "pattern") {
       items.push({ id: `ls-pattern-${index}`, type, patternKind: patternKinds[index % patternKinds.length], offset: index });
     } else if (type === "compose") {
@@ -1143,55 +1366,75 @@ function createLogicSpatialBank(target = 100) {
 
 const phonicsWords = [
   { word: "ball", initial: "b", final: "l", vowel: "a", sounds: 3, group: "all" },
+  { word: "bag", initial: "b", final: "g", vowel: "a", sounds: 3, group: "ag" },
   { word: "bear", initial: "b", final: "r", vowel: "ea", sounds: 3, group: "air" },
   { word: "book", initial: "b", final: "k", vowel: "oo", sounds: 3, group: "ook" },
+  { word: "bread", initial: "b", final: "d", vowel: "e", sounds: 4, group: "ed" },
   { word: "cat", initial: "c", final: "t", vowel: "a", sounds: 3, group: "at" },
   { word: "cake", initial: "c", final: "k", vowel: "a-e", sounds: 3, group: "ake" },
   { word: "car", initial: "c", final: "r", vowel: "ar", sounds: 3, group: "ar" },
   { word: "cup", initial: "c", final: "p", vowel: "u", sounds: 3, group: "up" },
   { word: "dog", initial: "d", final: "g", vowel: "o", sounds: 3, group: "og" },
+  { word: "doll", initial: "d", final: "l", vowel: "o", sounds: 3, group: "oll" },
+  { word: "drum", initial: "d", final: "m", vowel: "u", sounds: 4, group: "um" },
   { word: "fish", initial: "f", final: "sh", vowel: "i", sounds: 3, group: "ish" },
+  { word: "flower", initial: "f", final: "r", vowel: "ow", sounds: 4, group: "ower" },
   { word: "fox", initial: "f", final: "x", vowel: "o", sounds: 3, group: "ox" },
   { word: "frog", initial: "f", final: "g", vowel: "o", sounds: 4, group: "og" },
   { word: "hat", initial: "h", final: "t", vowel: "a", sounds: 3, group: "at" },
   { word: "king", initial: "k", final: "ng", vowel: "i", sounds: 3, group: "ing" },
+  { word: "kite", initial: "k", final: "t", vowel: "i-e", sounds: 3, group: "ite" },
   { word: "lion", initial: "l", final: "n", vowel: "i", sounds: 4, group: "ion" },
   { word: "log", initial: "l", final: "g", vowel: "o", sounds: 3, group: "og" },
   { word: "mat", initial: "m", final: "t", vowel: "a", sounds: 3, group: "at" },
+  { word: "milk", initial: "m", final: "k", vowel: "i", sounds: 4, group: "ilk" },
   { word: "monkey", initial: "m", final: "y", vowel: "o", sounds: 5, group: "key" },
   { word: "moon", initial: "m", final: "n", vowel: "oo", sounds: 3, group: "oon" },
   { word: "nose", initial: "n", final: "z", vowel: "o-e", sounds: 3, group: "ose" },
   { word: "pen", initial: "p", final: "n", vowel: "e", sounds: 3, group: "en" },
   { word: "pig", initial: "p", final: "g", vowel: "i", sounds: 3, group: "ig" },
+  { word: "plant", initial: "p", final: "t", vowel: "a", sounds: 5, group: "ant" },
   { word: "rose", initial: "r", final: "z", vowel: "o-e", sounds: 3, group: "ose" },
   { word: "run", initial: "r", final: "n", vowel: "u", sounds: 3, group: "un" },
+  { word: "seed", initial: "s", final: "d", vowel: "ee", sounds: 3, group: "eed" },
   { word: "snake", initial: "s", final: "k", vowel: "a-e", sounds: 4, group: "ake" },
+  { word: "socks", initial: "s", final: "s", vowel: "o", sounds: 4, group: "ocks" },
   { word: "star", initial: "s", final: "r", vowel: "ar", sounds: 4, group: "ar" },
   { word: "sun", initial: "s", final: "n", vowel: "u", sounds: 3, group: "un" },
   { word: "tree", initial: "t", final: "ee", vowel: "ee", sounds: 3, group: "ee" },
   { word: "wig", initial: "w", final: "g", vowel: "i", sounds: 3, group: "ig" }
 ];
 
-const sightWords = ["a", "and", "away", "big", "blue", "can", "come", "down", "find", "for", "funny", "go"];
+const sightWords = [
+  "a", "and", "away", "big", "blue", "can", "come", "down", "find", "for", "funny", "go",
+  "help", "here", "I", "in", "is", "it", "like", "little", "look", "my", "not", "one",
+  "play", "red", "said", "see", "the", "to", "two", "up", "we", "you"
+];
 
 function createPhonicsBank(target = 140) {
-  const types = ["initial", "final", "short-vowel", "rhyme", "cvc-blend", "segment", "case-match", "letter-sound", "alphabet-order", "sight-word"];
+  const types = ["cvc-blend", "short-vowel", "rhyme", "segment", "initial", "final", "cvc-blend", "short-vowel", "rhyme", "sight-word", "letter-sound"];
   return Array.from({ length: target }, (_, index) => ({ id: `ph-${types[index % types.length]}-${index}`, type: types[index % types.length], offset: index }));
 }
 
 function createMeasureBank(target = 140) {
-  const types = ["length", "height", "weight", "capacity", "non-standard", "picture-graph", "tally", "coin", "clock", "day-order", "weather"];
+  const types = ["picture-graph", "tally", "weight", "capacity", "length", "height", "coin", "clock", "non-standard", "picture-graph", "tally", "day-order", "weather"];
   return Array.from({ length: target }, (_, index) => ({ id: `me-${types[index % types.length]}-${index}`, type: types[index % types.length], offset: index }));
 }
 
-const ketListeningBank = expandKetListeningBank(baseKetListeningBank, 100);
+function createMusicBank(target = 120) {
+  const types = ["part-picture", "part-word", "string-sound", "string-name", "rhythm-count", "part-picture", "string-sound", "string-name", "rhythm-count", "string-count", "bow-job"];
+  return Array.from({ length: target }, (_, index) => ({ id: `mu-${types[index % types.length]}-${index}`, type: types[index % types.length], offset: index }));
+}
+
+const ketListeningBank = expandKetListeningBank(baseKetListeningBank, 160);
 const petListeningBank = filterListeningBankForAge(b1ListeningBank);
-const englishSkillBank = expandEnglishSkillBank(baseEnglishSkillBank, 100);
+const englishSkillBank = expandEnglishSkillBank(baseEnglishSkillBank, 160);
 const numberSenseBank = createNumberSenseBank(180);
 const mathReasoningBank = createMathReasoningBank(180);
 const logicSpatialBank = createLogicSpatialBank(100);
-const phonicsBank = createPhonicsBank(160);
+const phonicsBank = createPhonicsBank(220);
 const measureBank = createMeasureBank(160);
+const musicBank = createMusicBank(140);
 
 const defaultQuestionGoal = 10;
 const startingMathStage = 4;
@@ -1238,7 +1481,8 @@ const state = {
     mathReasoning: [],
     logicSpatial: [],
     phonics: [],
-    measure: []
+    measure: [],
+    music: []
   },
   recentQuestionTags: {}
 };
@@ -1276,7 +1520,8 @@ const modeTitles = {
   numberSense: "Numbers",
   mathReasoning: "Maths",
   logicSpatial: "Shapes",
-  measure: "Measure"
+  measure: "Measure",
+  music: "Music"
 };
 
 let audioContext = null;
@@ -1550,6 +1795,20 @@ function drawPlaceIcon(place) {
       <rect x="20" y="48" width="80" height="34" rx="5" fill="#9d8df1"/>
       <rect x="24" y="36" width="32" height="20" rx="5" fill="#fffaf0"/>
       <path d="M20 82 V94 M100 82 V94 M20 64 H100" fill="none"/>
+    `,
+    bathroom: `
+      <rect x="28" y="54" width="64" height="34" rx="12" fill="#fffaf0"/>
+      <path d="M36 54 V40 H58 M58 40 V54 M32 88 V98 M88 88 V98" fill="none"/>
+      <path d="M72 42 C72 30 88 30 88 42 V54" fill="none"/>
+      <circle cx="86" cy="58" r="5" fill="#8fd7ff" stroke="none"/>
+      <path d="M46 94 H82" fill="none"/>
+    `,
+    "living room": `
+      <rect x="24" y="58" width="72" height="30" rx="8" fill="#c0a7e8"/>
+      <rect x="34" y="44" width="52" height="22" rx="7" fill="#fffaf0"/>
+      <path d="M28 88 V98 M92 88 V98 M34 74 H86" fill="none"/>
+      <rect x="76" y="26" width="20" height="18" rx="4" fill="#ffd166"/>
+      <path d="M86 44 V58" fill="none"/>
     `,
     park: `
       <path d="M18 92 H102" fill="none"/>
@@ -1827,42 +2086,109 @@ function drawGenericListenIcon() {
   `;
 }
 
+function drawAnimalIcon(label) {
+  const lower = String(label).toLowerCase();
+  const animals = {
+    cow: `
+      <path d="M24 62 C24 42 42 34 64 36 C88 38 100 50 96 72 C92 92 70 98 46 92 C30 88 22 78 24 62 Z" fill="#fffaf0"/>
+      <path d="M40 44 C48 36 60 42 54 52 C48 58 38 54 40 44 Z M72 54 C82 46 94 54 88 66 C82 76 68 68 72 54 Z" fill="#253041" stroke="none"/>
+      <path d="M32 38 L22 24 M88 40 L100 26" fill="none"/>
+      <circle cx="48" cy="60" r="4" fill="#253041" stroke="none"/>
+      <circle cx="68" cy="60" r="4" fill="#253041" stroke="none"/>
+      <ellipse cx="58" cy="76" rx="15" ry="10" fill="#f29ec2"/>
+      <path d="M52 76 H64" fill="none"/>
+    `,
+    pig: `
+      <path d="M30 74 C24 52 40 36 62 36 C84 36 100 52 94 74 C88 96 36 96 30 74 Z" fill="#f29ec2"/>
+      <path d="M36 44 L28 28 L50 38 M84 44 L96 28 L74 38" fill="#f29ec2"/>
+      <circle cx="50" cy="58" r="4" fill="#253041" stroke="none"/>
+      <circle cx="74" cy="58" r="4" fill="#253041" stroke="none"/>
+      <ellipse cx="62" cy="72" rx="16" ry="11" fill="#ffc0d9"/>
+      <circle cx="56" cy="72" r="2.8" fill="#253041" stroke="none"/>
+      <circle cx="68" cy="72" r="2.8" fill="#253041" stroke="none"/>
+      <path d="M94 66 C108 62 106 82 94 78" fill="none"/>
+    `,
+    horse: `
+      <path d="M28 76 C30 50 54 42 78 48 C94 52 102 68 94 84 C84 104 42 100 30 88 Z" fill="#b57345"/>
+      <path d="M70 46 C72 30 88 26 96 40 C104 54 94 70 82 68 Z" fill="#d69f67"/>
+      <path d="M72 46 C62 44 56 52 54 66" fill="none"/>
+      <path d="M78 34 C68 40 70 54 78 64" fill="#253041"/>
+      <circle cx="88" cy="48" r="3.6" fill="#253041" stroke="none"/>
+      <path d="M38 90 V104 M70 90 V104 M32 62 C16 56 18 42 30 48" fill="none"/>
+    `,
+    sheep: `
+      <circle cx="38" cy="58" r="15" fill="#fffaf0"/>
+      <circle cx="54" cy="48" r="18" fill="#fffaf0"/>
+      <circle cx="72" cy="52" r="17" fill="#fffaf0"/>
+      <circle cx="84" cy="66" r="15" fill="#fffaf0"/>
+      <circle cx="58" cy="70" r="22" fill="#fffaf0"/>
+      <ellipse cx="60" cy="64" rx="18" ry="22" fill="#d8c6b4"/>
+      <circle cx="53" cy="60" r="3" fill="#253041" stroke="none"/>
+      <circle cx="67" cy="60" r="3" fill="#253041" stroke="none"/>
+      <path d="M54 72 Q60 77 66 72 M44 88 V104 M76 88 V104" fill="none"/>
+    `,
+    lion: `
+      <circle cx="60" cy="62" r="42" fill="#f77f00"/>
+      <circle cx="60" cy="62" r="28" fill="#ffd166"/>
+      <path d="M32 52 L18 42 M88 52 L102 42 M36 84 L24 96 M84 84 L96 96" fill="none"/>
+      <circle cx="50" cy="58" r="4" fill="#253041" stroke="none"/>
+      <circle cx="70" cy="58" r="4" fill="#253041" stroke="none"/>
+      <path d="M55 72 Q60 78 65 72 M60 66 V74" fill="none"/>
+    `,
+    monkey: `
+      <path d="M34 72 C18 62 28 36 48 46 C54 28 82 28 88 46 C108 36 116 62 96 72 C94 94 76 104 60 104 C44 104 26 94 34 72 Z" fill="#8a5a44"/>
+      <ellipse cx="60" cy="66" rx="27" ry="30" fill="#d69f67"/>
+      <circle cx="50" cy="58" r="4" fill="#253041" stroke="none"/>
+      <circle cx="70" cy="58" r="4" fill="#253041" stroke="none"/>
+      <path d="M50 76 Q60 84 70 76 M92 84 C110 96 92 110 82 96" fill="none"/>
+    `,
+    bear: `
+      <circle cx="38" cy="38" r="13" fill="#8a5a44"/>
+      <circle cx="82" cy="38" r="13" fill="#8a5a44"/>
+      <circle cx="60" cy="62" r="36" fill="#c28f61"/>
+      <ellipse cx="60" cy="76" rx="18" ry="13" fill="#fff0d8"/>
+      <circle cx="50" cy="58" r="4" fill="#253041" stroke="none"/>
+      <circle cx="70" cy="58" r="4" fill="#253041" stroke="none"/>
+      <path d="M54 76 Q60 82 66 76" fill="none"/>
+    `,
+    frog: `
+      <ellipse cx="60" cy="70" rx="38" ry="28" fill="#65bd53"/>
+      <circle cx="42" cy="42" r="14" fill="#65bd53"/>
+      <circle cx="78" cy="42" r="14" fill="#65bd53"/>
+      <circle cx="42" cy="42" r="5" fill="#253041" stroke="none"/>
+      <circle cx="78" cy="42" r="5" fill="#253041" stroke="none"/>
+      <path d="M44 76 Q60 90 76 76 M28 88 L18 100 M92 88 L102 100" fill="none"/>
+    `,
+    fox: `
+      <path d="M28 42 L44 20 L54 42 M66 42 L82 20 L92 42" fill="#f77f00"/>
+      <path d="M30 50 C40 30 80 30 90 50 C96 70 78 92 60 96 C42 92 24 70 30 50 Z" fill="#f77f00"/>
+      <path d="M46 72 L60 96 L74 72 Z" fill="#fffaf0"/>
+      <circle cx="50" cy="56" r="4" fill="#253041" stroke="none"/>
+      <circle cx="70" cy="56" r="4" fill="#253041" stroke="none"/>
+      <path d="M84 74 C102 66 110 84 94 92" fill="#f77f00"/>
+    `,
+    bird: `
+      <path d="M32 70 C32 44 58 32 78 46 C98 60 86 92 58 92 C42 92 32 84 32 70 Z" fill="#8fd7ff"/>
+      <path d="M76 54 L100 62 L76 70 Z" fill="#ffd166"/>
+      <path d="M50 64 C60 52 76 58 78 76 C66 74 56 72 50 64 Z" fill="#4ecdc4"/>
+      <circle cx="64" cy="54" r="4" fill="#253041" stroke="none"/>
+      <path d="M52 92 V104 M68 92 V104" fill="none"/>
+    `
+  };
+  const markup = animals[lower];
+  if (!markup) return "";
+  return `
+    <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+      <g stroke="#253041" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round">
+        ${markup}
+      </g>
+    </svg>
+  `;
+}
+
 function drawSimpleObjectIcon(label) {
   const lower = label.toLowerCase();
-  const animalFill = {
-    bear: "#c28f61",
-    lion: "#ffd166",
-    monkey: "#b57345",
-    pig: "#f29ec2",
-    frog: "#65bd53",
-    fox: "#f77f00",
-    cow: "#fffaf0",
-    horse: "#b57345",
-    sheep: "#fffaf0",
-    bird: "#8fd7ff"
-  };
-  if (animalFill[lower]) {
-    const extra = lower === "frog"
-      ? '<circle cx="44" cy="36" r="10" fill="#65bd53"/><circle cx="76" cy="36" r="10" fill="#65bd53"/>'
-      : lower === "fox"
-        ? '<path d="M26 40 L42 58 L32 72 Z M94 40 L78 58 L88 72 Z" fill="#f77f00"/>'
-        : lower === "cow"
-          ? '<path d="M32 36 L22 22 M88 36 L98 22" fill="none"/><path d="M44 48 C50 40 58 52 50 58" fill="#253041" stroke="none"/>'
-          : lower === "sheep"
-            ? '<circle cx="38" cy="38" r="10" fill="#fff"/><circle cx="58" cy="30" r="11" fill="#fff"/><circle cx="78" cy="38" r="10" fill="#fff"/>'
-            : '<path d="M34 42 L24 28 M86 42 L96 28" fill="none"/>';
-    return `
-      <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
-        <g stroke="#253041" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
-          ${extra}
-          <circle cx="60" cy="62" r="34" fill="${animalFill[lower]}"/>
-          <circle cx="48" cy="56" r="4" fill="#253041" stroke="none"/>
-          <circle cx="72" cy="56" r="4" fill="#253041" stroke="none"/>
-          <path d="M50 72 Q60 80 70 72" fill="none"/>
-        </g>
-      </svg>
-    `;
-  }
+  if (["bear", "lion", "monkey", "pig", "frog", "fox", "cow", "horse", "sheep", "bird"].includes(lower)) return drawAnimalIcon(lower);
 
   const objects = {
     cup: '<path d="M36 36 H78 L72 92 H42 Z" fill="#fffaf0"/><path d="M78 48 H92 C104 48 104 72 78 72" fill="none"/><path d="M44 50 H72" fill="none"/>',
@@ -1902,6 +2228,8 @@ function drawSimpleObjectIcon(label) {
     seed: '<ellipse cx="60" cy="62" rx="18" ry="28" fill="#b57345" transform="rotate(-20 60 62)"/>',
     plant: '<path d="M60 92 V48" fill="none" stroke="#65bd53"/><path d="M60 62 C42 48 36 70 56 72 M62 54 C82 38 90 64 66 66" fill="#65bd53"/><rect x="40" y="88" width="40" height="14" fill="#b57345"/>',
     flower: '<path d="M60 94 V62" fill="none" stroke="#65bd53"/><circle cx="60" cy="48" r="10" fill="#ffd166"/><circle cx="46" cy="48" r="11" fill="#f29ec2"/><circle cx="74" cy="48" r="11" fill="#f29ec2"/><circle cx="60" cy="34" r="11" fill="#f29ec2"/><circle cx="60" cy="62" r="11" fill="#f29ec2"/>',
+    grass: '<path d="M18 94 H102" fill="none" stroke="#65bd53"/><path d="M28 94 C30 74 38 70 42 94 M44 94 C48 66 58 70 58 94 M62 94 C66 70 76 66 78 94 M84 94 C88 76 96 74 98 94" fill="none" stroke="#65bd53"/>',
+    sky: '<rect x="18" y="20" width="84" height="78" rx="12" fill="#d6ecff"/><circle cx="84" cy="36" r="10" fill="#ffd166"/><path d="M30 58 C36 44 52 44 58 58 C66 52 78 58 78 70 H28 C22 66 24 60 30 58 Z" fill="#fffaf0"/>',
     sleeping: '<circle cx="60" cy="46" r="15" fill="#fff0d8"/><path d="M28 84 H92 V100 H28 Z" fill="#9d8df1"/><path d="M82 28 H98 M90 20 H106" fill="none"/>'
   };
 
@@ -1920,6 +2248,7 @@ function listeningArtForLabel(label) {
   const lower = label.toLowerCase();
   const withoutArticle = lower.replace(/^the\s+/, "");
   if (withoutArticle !== lower) return listeningArtForLabel(withoutArticle);
+  if (["mum", "dad", "sister", "brother", "baby", "grandma", "grandpa"].includes(lower)) return drawFamilyIcon(lower);
   const vocabularyItem = vocabulary.find((item) => item.word === lower);
   if (vocabularyItem) return vocabularyItem.draw(vocabularyItem.base);
   const simpleObject = drawSimpleObjectIcon(lower);
@@ -1943,7 +2272,9 @@ function listeningArtForLabel(label) {
   if (["sunny", "rainy", "cloudy", "windy", "snowy"].includes(lower)) return drawWeatherIcon(lower);
   if (lower.endsWith(" ice cream")) return drawIceCreamIcon(lower.replace(" ice cream", ""));
   if (["strawberry", "chocolate", "lemon", "vanilla"].includes(lower)) return drawIceCreamIcon(lower);
-  if (["he lost his bag.", "the bus was late.", "he missed lunch.", "it was raining."].includes(lower)) return drawReasonIcon(label);
+  if (["he lost his bag.", "the bus was late.", "bus was late.", "he missed lunch.", "it was raining."].includes(lower)) {
+    return drawReasonIcon(lower === "bus was late." ? "The bus was late." : label);
+  }
   if (["liked it", "hated it", "fell asleep", "did not understand it"].includes(lower)) return drawFeelingIcon(label);
   if (["on the box", "under the box", "next to the box", "behind the box"].includes(lower)) return drawPositionIcon(label);
 
@@ -1989,7 +2320,8 @@ function resetAllDecks() {
     mathReasoning: [],
     logicSpatial: [],
     phonics: [],
-    measure: []
+    measure: [],
+    music: []
   };
 }
 
@@ -2556,6 +2888,30 @@ function buildEnglishDefinitionRound() {
       text: "It has one circle and one point.",
       answer: "cone",
       choices: ["cone", "cylinder", "sphere", "rectangular prism"]
+    },
+    {
+      id: "hexagon",
+      text: "It is flat and has six sides.",
+      answer: "hexagon",
+      choices: ["hexagon", "pentagon", "triangle", "circle"]
+    },
+    {
+      id: "triangular-prism",
+      text: "It is a solid shape with triangle faces.",
+      answer: "triangular prism",
+      choices: ["triangular prism", "cube", "sphere", "cylinder"]
+    },
+    {
+      id: "hemisphere",
+      text: "It is half of a sphere.",
+      answer: "hemisphere",
+      choices: ["hemisphere", "sphere", "cone", "cube"]
+    },
+    {
+      id: "semicircle",
+      text: "It is half of a circle.",
+      answer: "semicircle",
+      choices: ["semicircle", "circle", "oval", "rectangle"]
     }
   ];
   const item = sample(items);
@@ -2591,6 +2947,56 @@ function drawSimplePerson(kind = "girl", action = "stand") {
   `;
 }
 
+function drawFamilyIcon(label) {
+  const lower = String(label).toLowerCase();
+  const profiles = {
+    mum: { hair: "#6b3f70", clothes: "#f29ec2", height: 82, face: 30, y: 37, extras: '<path d="M42 42 Q60 22 78 42" fill="none" stroke="#6b3f70" stroke-width="8"/>' },
+    dad: { hair: "#8a5a44", clothes: "#4ecdc4", height: 86, face: 30, y: 36, extras: '<path d="M46 32 Q60 20 74 32" fill="#8a5a44" stroke="none"/>' },
+    sister: { hair: "#6b3f70", clothes: "#c0a7e8", height: 72, face: 25, y: 43, extras: '<circle cx="82" cy="40" r="7" fill="#f29ec2" stroke="none"/>' },
+    brother: { hair: "#8a5a44", clothes: "#ffd166", height: 72, face: 25, y: 43, extras: '<path d="M48 38 Q60 28 72 38" fill="#8a5a44" stroke="none"/>' },
+    baby: { hair: "#f0c463", clothes: "#9ee0c8", height: 58, face: 22, y: 49, extras: '<circle cx="60" cy="30" r="4" fill="#f0c463" stroke="none"/>' },
+    grandma: { hair: "#f7f0ff", clothes: "#9d8df1", height: 78, face: 28, y: 39, extras: '<path d="M38 42 Q60 18 82 42" fill="#f7f0ff" stroke="#253041" stroke-width="5"/><circle cx="49" cy="48" r="4" fill="#253041" stroke="none"/><circle cx="71" cy="48" r="4" fill="#253041" stroke="none"/>' },
+    grandpa: { hair: "#f7f0ff", clothes: "#6ec6ff", height: 80, face: 28, y: 39, extras: '<path d="M44 34 H76" fill="none" stroke="#f7f0ff" stroke-width="9"/><path d="M50 58 Q60 64 70 58" fill="none" stroke="#8a5a44" stroke-width="4"/>' }
+  };
+  const profile = profiles[lower] || profiles.mum;
+  const bodyTop = 48 + (86 - profile.height) * 0.18;
+  const bodyBottom = 98;
+  return `
+    <svg viewBox="0 0 120 120" aria-hidden="true">
+      <g stroke="#253041" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="60" cy="${profile.y}" r="${profile.face}" fill="#fff0d8"/>
+        ${profile.extras}
+        <path d="M38 ${bodyBottom} L46 ${bodyTop} H74 L82 ${bodyBottom} Z" fill="${profile.clothes}"/>
+        <circle cx="50" cy="${profile.y + 1}" r="3.5" fill="#253041" stroke="none"/>
+        <circle cx="70" cy="${profile.y + 1}" r="3.5" fill="#253041" stroke="none"/>
+        <path d="M52 ${profile.y + 16} Q60 ${profile.y + 21} 68 ${profile.y + 16}" fill="none"/>
+      </g>
+    </svg>
+  `;
+}
+
+function drawBodyPartIcon(label) {
+  const lower = String(label).toLowerCase();
+  const icons = {
+    head: '<circle cx="60" cy="54" r="32" fill="#fff0d8"/><path d="M40 34 C50 18 72 18 82 34" fill="none" stroke="#6b3f70"/><circle cx="50" cy="52" r="4" fill="#253041" stroke="none"/><circle cx="70" cy="52" r="4" fill="#253041" stroke="none"/><path d="M52 68 Q60 74 68 68" fill="none"/>',
+    eye: '<path d="M22 60 C42 34 78 34 98 60 C78 86 42 86 22 60 Z" fill="#fffaf0"/><circle cx="60" cy="60" r="18" fill="#8fd7ff"/><circle cx="60" cy="60" r="8" fill="#253041" stroke="none"/><circle cx="66" cy="54" r="4" fill="#fff" stroke="none"/>',
+    ear: '<path d="M62 22 C90 28 96 58 80 76 C70 88 72 98 58 98 C42 98 34 80 38 60 C42 40 48 24 62 22 Z" fill="#fff0d8"/><path d="M62 42 C78 48 78 62 66 70 C58 76 58 84 66 88" fill="none"/>',
+    nose: '<circle cx="60" cy="54" r="32" fill="#fff0d8"/><path d="M60 36 C50 56 54 74 68 72" fill="none"/><circle cx="54" cy="78" r="3" fill="#253041" stroke="none"/><circle cx="68" cy="78" r="3" fill="#253041" stroke="none"/>',
+    mouth: '<circle cx="60" cy="54" r="32" fill="#fff0d8"/><path d="M36 62 Q60 86 84 62" fill="none" stroke="#ef476f" stroke-width="7"/><path d="M42 72 H78" fill="none" stroke="#fff" stroke-width="3"/>',
+    hand: '<path d="M42 92 V52 C42 42 54 42 54 52 V70 M54 70 V42 C54 32 66 32 66 42 V70 M66 70 V48 C66 38 78 38 78 48 V74 M42 66 L34 58 C28 52 20 60 26 68 L44 94 C50 104 78 102 86 88 L94 70 C98 60 86 56 82 66" fill="#fff0d8"/>',
+    foot: '<path d="M36 42 C54 44 58 56 58 72 V82 H86 C100 82 104 96 92 102 H42 C28 102 24 92 30 82 C34 74 32 56 36 42 Z" fill="#fff0d8"/><path d="M60 82 H92" fill="none"/>'
+  };
+  const markup = icons[lower];
+  if (!markup) return "";
+  return `
+    <svg viewBox="0 0 120 120" aria-hidden="true">
+      <g stroke="#253041" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+        ${markup}
+      </g>
+    </svg>
+  `;
+}
+
 function drawThemeIcon(label) {
   const lower = label.toLowerCase();
   const withoutArticle = lower.replace(/^the\s+/, "");
@@ -2599,22 +3005,16 @@ function drawThemeIcon(label) {
   if (vocab) return vocab.draw(vocab.base);
   const simpleObject = drawSimpleObjectIcon(lower);
   if (simpleObject) return simpleObject;
-  if (["mum", "dad", "sister", "brother", "baby", "grandma", "grandpa"].includes(lower)) return drawSimplePerson(lower === "dad" || lower === "brother" || lower === "grandpa" ? "boy" : lower === "baby" ? "baby" : "girl");
-  if (["head", "eye", "ear", "nose", "mouth", "hand", "foot"].includes(lower)) {
-    return `<svg viewBox="0 0 120 120" aria-hidden="true"><g stroke="#253041" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="52" r="30" fill="#fff0d8"/><circle cx="50" cy="48" r="4" fill="#253041"/><circle cx="70" cy="48" r="4" fill="#253041"/><path d="M54 66 Q60 72 66 66" fill="none"/><text x="60" y="106" text-anchor="middle" font-size="18" font-weight="900" fill="#253041" stroke="none">${lower}</text></g></svg>`;
-  }
+  if (["mum", "dad", "sister", "brother", "baby", "grandma", "grandpa"].includes(lower)) return drawFamilyIcon(lower);
+  if (["head", "eye", "ear", "nose", "mouth", "hand", "foot"].includes(lower)) return drawBodyPartIcon(lower);
   if (["bread", "rice", "milk", "juice", "cake", "ice cream"].includes(lower)) {
     if (lower === "cake") return drawCake();
     if (lower === "ice cream") return drawIceCreamIcon("vanilla");
     return `<svg viewBox="0 0 120 120" aria-hidden="true"><g stroke="#253041" stroke-width="6" stroke-linejoin="round"><rect x="32" y="34" width="56" height="58" rx="8" fill="#fffaf0"/><text x="60" y="68" text-anchor="middle" font-size="18" font-weight="900" fill="#253041" stroke="none">${lower}</text></g></svg>`;
   }
-  if (["cow", "pig", "horse", "sheep", "lion", "monkey", "bear", "frog"].includes(lower)) {
-    return `<svg viewBox="0 0 120 120" aria-hidden="true"><g stroke="#253041" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="58" r="34" fill="#ffd166"/><circle cx="48" cy="54" r="4" fill="#253041"/><circle cx="72" cy="54" r="4" fill="#253041"/><path d="M50 70 Q60 78 70 70" fill="none"/><text x="60" y="108" text-anchor="middle" font-size="17" font-weight="900" fill="#253041" stroke="none">${lower}</text></g></svg>`;
-  }
+  if (["cow", "pig", "horse", "sheep", "lion", "monkey", "bear", "frog"].includes(lower)) return drawAnimalIcon(lower);
   if (["hat", "coat", "raincoat", "shoes", "dress", "shirt", "socks", "scarf", "bag"].includes(lower)) return drawClothingIcon(lower);
-  if (["kitchen", "bathroom", "bedroom", "living room", "garden", "park", "library", "school", "cafe", "swimming pool", "bus stop", "shop"].includes(lower)) {
-    return drawPlaceIcon(lower === "bathroom" || lower === "living room" ? "bedroom" : lower);
-  }
+  if (["kitchen", "bathroom", "bedroom", "living room", "garden", "park", "library", "school", "cafe", "swimming pool", "bus stop", "shop"].includes(lower)) return drawPlaceIcon(lower);
   if (["on the box", "under the box", "next to the box", "behind the box"].includes(lower)) return drawPositionIcon(lower);
   if (["sunny", "rainy", "cloudy", "windy", "snowy"].includes(lower)) return drawWeatherIcon(lower);
   if (["sunday", "saturday", "friday", "monday", "tuesday", "wednesday", "thursday"].includes(lower)) return drawCalendarIcon(label);
@@ -2734,7 +3134,11 @@ function buildWhQuestionRound() {
   const cases = [
     { question: "Where is the ball?", answer: "under the box", art: drawPositionIcon("under the box"), options: ["on the box", "under the box", "next to the box", "behind the box"] },
     { question: "What is blue?", answer: "car", art: drawCar("#118ab2"), options: ["car", "cat", "fish", "tree"] },
-    { question: "Who has the book?", answer: "Mum", art: drawSimplePerson("girl"), options: ["Mum", "Dad", "the dog", "the cat"] }
+    { question: "Who has the book?", answer: "Mum", art: `<div class="mini-picture-row"><span class="mini-picture">${drawFamilyIcon("mum")}</span><span class="mini-picture">${drawSimpleObjectIcon("book")}</span></div>`, options: ["Mum", "Dad", "the dog", "the cat"] },
+    { question: "What white drink can you have with breakfast?", answer: "milk", art: drawThemeIcon("milk"), options: ["milk", "bread", "cake", "rice"] },
+    { question: "What looks round in the night sky?", answer: "moon", art: drawThemeIcon("moon"), options: ["moon", "sun", "tree", "ball"] },
+    { question: "Which animal says baa?", answer: "sheep", art: drawThemeIcon("sheep"), options: ["sheep", "cow", "horse", "lion"] },
+    { question: "Where do you sleep?", answer: "bedroom", art: drawPlaceIcon("bedroom"), options: ["bedroom", "kitchen", "garden", "school"] }
   ];
   const selected = sample(cases);
   return {
@@ -2847,7 +3251,12 @@ function buildSentencePictureMatchRound() {
     { sentence: "The cat is on the box.", answer: "on the box", options: ["on the box", "under the box", "next to the box", "behind the box"] },
     { sentence: "The ball is under the box.", answer: "under the box", options: ["on the box", "under the box", "next to the box", "behind the box"] },
     { sentence: "The dog is next to the box.", answer: "next to the box", options: ["on the box", "under the box", "next to the box", "behind the box"] },
-    { sentence: "The ball is behind the box.", answer: "behind the box", options: ["on the box", "under the box", "next to the box", "behind the box"] }
+    { sentence: "The ball is behind the box.", answer: "behind the box", options: ["on the box", "under the box", "next to the box", "behind the box"] },
+    { sentence: "Mum is reading a book.", answer: "read a book", options: ["read a book", "ride a bike", "watch a film", "draw a picture"] },
+    { sentence: "Dad buys bread before going to the park.", answer: "buy bread", options: ["buy bread", "go to the park", "play football", "read a book"] },
+    { sentence: "The animal has wool and says baa.", answer: "sheep", options: ["sheep", "lion", "cow", "horse"] },
+    { sentence: "The moon is in the night sky.", answer: "moon", options: ["moon", "sun", "tree", "ball"] },
+    { sentence: "The girl wears a scarf because it is cold.", answer: "scarf", options: ["scarf", "shirt", "socks", "hat"] }
   ];
   const selected = sample(cases);
   return {
@@ -3104,45 +3513,43 @@ function nextAdaptiveQuestionItem(mode, bank, allowItem) {
 
 function allowNumberSenseItem(item, stage) {
   if (stage <= 0) {
-    if (item.type === "subitise") return item.count <= 5;
-    if (item.type === "one-more") return item.number <= 5;
-    if (item.type === "one-less") return item.number <= 6;
-    if (item.type === "ordinal") return item.target <= 3;
-    if (item.type === "odd-even") return item.count <= 8;
+    if (item.type === "make-ten") return true;
+    if (item.type === "number-bond") return item.whole <= 10;
+    if (item.type === "count-on") return item.start <= 12;
+    if (item.type === "odd-even") return item.count <= 14;
+    if (item.type === "ordinal") return item.target <= 4;
     return false;
   }
   if (stage === 1) {
-    if (item.type === "subitise") return item.count <= 10;
-    if (item.type === "one-more" || item.type === "one-less") return item.number <= 10;
-    if (item.type === "count-on") return item.start <= 6;
-    if (item.type === "odd-even") return item.count <= 12;
+    if (item.type === "make-ten") return true;
+    if (item.type === "number-bond") return item.whole <= 12;
+    if (item.type === "count-on") return item.start <= 18;
+    if (item.type === "odd-even") return item.count <= 18;
+    if (item.type === "skip-count") return item.step <= 5;
     if (item.type === "ordinal") return item.target <= 5;
     return false;
   }
   if (stage === 2) {
     if (item.type === "make-ten" || item.type === "count-on" || item.type === "odd-even" || item.type === "ordinal") return true;
     if (item.type === "skip-count") return item.step <= 5;
-    if (item.type === "place-value") return item.number <= 20;
-    if (item.type === "compare-two-digit") return Math.max(item.left, item.right) <= 20;
-    if (item.type === "bond-ways") return item.whole <= 10;
-    if (item.type === "number-bond") return item.whole <= 8;
-    if (item.type === "one-more" || item.type === "one-less") return item.number <= 14;
+    if (item.type === "place-value") return item.number <= 40;
+    if (item.type === "compare-two-digit") return Math.max(item.left, item.right) <= 45;
+    if (item.type === "bond-ways") return item.whole <= 14;
+    if (item.type === "number-bond") return item.whole <= 14;
     return false;
   }
   if (stage === 3) {
-    if (item.type === "number-bond") return item.whole <= 12;
-    if (item.type === "place-value") return item.number <= 30;
+    if (item.type === "number-bond") return item.whole <= 16;
+    if (item.type === "place-value") return item.number <= 50;
     if (item.type === "compare-two-digit" || item.type === "skip-count" || item.type === "bond-ways") return true;
-    return ["make-ten", "count-on", "one-more", "one-less", "subitise", "odd-even", "ordinal"].includes(item.type);
+    return ["make-ten", "count-on", "odd-even", "ordinal"].includes(item.type);
   }
-  if (item.type === "subitise") return item.count >= 9;
-  if (item.type === "one-more" || item.type === "one-less") return item.number >= 12;
-  if (item.type === "count-on") return item.start >= 8;
-  if (item.type === "odd-even") return item.count >= 10;
-  if (item.type === "place-value") return item.number >= 18;
-  if (item.type === "number-bond") return item.whole >= 10;
-  if (item.type === "bond-ways") return item.whole >= 10;
-  if (item.type === "ordinal") return item.target >= 3;
+  if (item.type === "count-on") return item.start >= 12;
+  if (item.type === "odd-even") return item.count >= 15;
+  if (item.type === "place-value") return item.number >= 30;
+  if (item.type === "number-bond") return item.whole >= 12;
+  if (item.type === "bond-ways") return item.whole >= 12;
+  if (item.type === "ordinal") return item.target >= 4;
   return ["make-ten", "skip-count", "compare-two-digit"].includes(item.type);
 }
 
@@ -3378,11 +3785,11 @@ function renderCompareNumberToken(left, right) {
 }
 
 function ordinalWord(number) {
-  return ["first", "second", "third", "fourth", "fifth"][number - 1] || `${number}th`;
+  return ["first", "second", "third", "fourth", "fifth", "sixth"][number - 1] || `${number}th`;
 }
 
 function renderOrdinalToken(target) {
-  const cards = Array.from({ length: 4 }, (_, index) => {
+  const cards = Array.from({ length: 6 }, (_, index) => {
     const number = index + 1;
     return `<span class="ordinal-card${number === target ? " target" : ""}"><span class="ordinal-crown"></span><strong>${number}</strong></span>`;
   }).join("");
@@ -3601,7 +4008,7 @@ function buildNumberSenseChallenge(item) {
 
   if (item.type === "ordinal") {
     const answer = ordinalWord(item.target);
-    const labels = [1, 2, 3, 4].map(ordinalWord);
+    const labels = [1, 2, 3, 4, 5, 6].map(ordinalWord);
     return {
       game: "numberSense",
       level: "ordinal",
@@ -3612,7 +4019,7 @@ function buildNumberSenseChallenge(item) {
       spoken: `Who is ${answer}?`,
       hint: "Count from the front of the line.",
       targetHtml: renderOrdinalToken(item.target),
-      options: labels.map((label) => makeTextChoice(label, label === answer))
+      options: shuffle(labels.filter((label) => label === answer || Math.abs(labels.indexOf(label) - labels.indexOf(answer)) <= 3).slice(0, 4).map((label) => makeTextChoice(label, label === answer)))
     };
   }
 
@@ -4197,11 +4604,11 @@ function buildShapeCompositionRound() {
   const cases = [
     {
       id: "two-triangles-square",
-      prompt: "Two triangles can make...",
-      spoken: "Two triangles can make which shape?",
-      hint: "Imagine the pieces turning and touching.",
+      prompt: "Two equal triangles can make...",
+      spoken: "Two equal triangles can make which shape?",
+      hint: "Put the long sides together to make a square.",
       pieces: ["triangle", "triangle"],
-      answerShape: diamond
+      answerShape: square
     },
     {
       id: "two-squares-rectangle",
@@ -4221,8 +4628,8 @@ function buildShapeCompositionRound() {
     },
     {
       id: "prism-face",
-      prompt: "A triangular prism has this face.",
-      spoken: "Which flat shape is on a triangular prism?",
+      prompt: "A triangular prism has this side face.",
+      spoken: "Which flat shape is on the side face of a triangular prism?",
       hint: "Look for the triangle face.",
       pieces: ["triangular-prism"],
       answerShape: shapeSet.find((shape) => shape.id === "triangle")
@@ -4409,11 +4816,11 @@ function buildCompositionRecipeRound(item) {
   const findShape = (id) => shapeSet.find((shape) => shape.id === id);
   const cases = {
     "two-triangles-square": {
-      prompt: "Two triangles can make...",
-      spoken: "Two triangles can make which shape?",
-      hint: "Imagine the pieces turning and touching.",
+      prompt: "Two equal triangles can make...",
+      spoken: "Two equal triangles can make which shape?",
+      hint: "Put the long sides together to make a square.",
       pieces: ["triangle", "triangle"],
-      answerShape: findShape("diamond")
+      answerShape: findShape("square")
     },
     "two-squares-rectangle": {
       prompt: "Two squares can make...",
@@ -4430,8 +4837,8 @@ function buildCompositionRecipeRound(item) {
       answerShape: findShape("square")
     },
     "pyramid-face": {
-      prompt: "A pyramid can have this face.",
-      spoken: "Which flat shape can be on a pyramid?",
+      prompt: "A pyramid has this side face.",
+      spoken: "Which flat shape is on the side face of a pyramid?",
       hint: "Look for the triangle face.",
       pieces: ["pyramid"],
       answerShape: findShape("triangle")
@@ -4583,36 +4990,30 @@ function buildRotationRound(item) {
 }
 
 const flatShapeAttributes = {
-  circle: { sides: 0, corners: 0 },
   square: { sides: 4, corners: 4 },
   triangle: { sides: 3, corners: 3 },
   rectangle: { sides: 4, corners: 4 },
   diamond: { sides: 4, corners: 4 },
-  oval: { sides: 0, corners: 0 },
   pentagon: { sides: 5, corners: 5 },
-  hexagon: { sides: 6, corners: 6 },
-  "shape-star": { sides: 10, corners: 10 },
-  heart: { sides: 0, corners: 1 },
-  semicircle: { sides: 1, corners: 2 }
+  hexagon: { sides: 6, corners: 6 }
 };
 
 const solidShapeAttributes = {
   cube: { faces: 6, edges: 12, corners: 8 },
-  sphere: { faces: 0, edges: 0, corners: 0 },
-  cone: { faces: 1, edges: 1, corners: 1 },
-  cylinder: { faces: 2, edges: 2, corners: 0 },
   pyramid: { faces: 5, edges: 8, corners: 5 },
   "rectangular-prism": { faces: 6, edges: 12, corners: 8 },
-  "triangular-prism": { faces: 5, edges: 9, corners: 6 },
-  hemisphere: { faces: 1, edges: 1, corners: 0 }
+  "triangular-prism": { faces: 5, edges: 9, corners: 6 }
 };
 
 function buildShapeAttributeRound(item) {
   const solid = item.type === "attribute-3d";
-  const pool = solid ? solidShapeSet : flatShapeSet.filter((shape) => !["shape-star", "heart"].includes(shape.id));
+  const pool = solid
+    ? solidShapeSet.filter((shape) => solidShapeAttributes[shape.id])
+    : flatShapeSet.filter((shape) => flatShapeAttributes[shape.id]);
   const shape = pool[item.offset % pool.length];
   const attributes = solid ? solidShapeAttributes[shape.id] : flatShapeAttributes[shape.id];
   const property = solid ? sample(["faces", "edges", "corners"]) : sample(["sides", "corners"]);
+  const label = property === "faces" ? "flat faces" : property;
   const answer = attributes[property];
   return {
     game: "logicSpatial",
@@ -4620,8 +5021,8 @@ function buildShapeAttributeRound(item) {
     typeTag: solid ? "logic:3d-attribute" : "logic:2d-attribute",
     answer,
     key: item.id,
-    prompt: `How many ${property}?`,
-    spoken: `How many ${property} does this shape have?`,
+    prompt: `How many ${label}?`,
+    spoken: `How many ${label} does this shape have?`,
     hint: property === "corners" ? "Count the points." : property === "edges" ? "Count where faces meet." : "Count carefully.",
     targetHtml: `<div class="math-token geometry-token"><span class="composition-piece">${drawShape(shape, solid ? "#9d8df1" : "#4ecdc4")}</span></div>`,
     options: makeNumberOptions(answer)
@@ -4706,17 +5107,21 @@ function buildLogicRound() {
 function buildEnglishSkillsRound() {
   return chooseRoundBuilderWithCooldown("englishSkills", [
     { tag: "reading-picture", build: buildReadingPictureRound },
-    { tag: "preposition", build: buildPrepositionRound },
+    { tag: "reading-picture", build: buildReadingPictureRound },
     { tag: "definition", build: buildEnglishDefinitionRound },
+    { tag: "definition", build: buildEnglishDefinitionRound },
+    { tag: "sentence-picture", build: buildSentencePictureMatchRound },
+    { tag: "sentence-picture", build: buildSentencePictureMatchRound },
+    { tag: "story-sequence", build: buildStorySequenceRound },
+    { tag: "story-sequence", build: buildStorySequenceRound },
+    { tag: "wh-question", build: buildWhQuestionRound },
+    { tag: "opposites", build: buildOppositeRound },
+    { tag: "verb-ing", build: buildVerbIngRound },
+    { tag: "preposition", build: buildPrepositionRound },
     { tag: "vocab-theme", build: buildVocabThemeRound },
     { tag: "plural", build: buildPluralRound },
     { tag: "pronoun", build: buildPronounRound },
-    { tag: "wh-question", build: buildWhQuestionRound },
-    { tag: "yes-no", build: buildYesNoRound },
-    { tag: "verb-ing", build: buildVerbIngRound },
-    { tag: "opposites", build: buildOppositeRound },
-    { tag: "story-sequence", build: buildStorySequenceRound },
-    { tag: "sentence-picture", build: buildSentencePictureMatchRound }
+    { tag: "yes-no", build: buildYesNoRound }
   ]);
 }
 
@@ -4807,7 +5212,7 @@ function buildFinalSoundRound(item) {
 }
 
 function buildShortVowelRound(item) {
-  const cvcWords = phonicsWords.filter((word) => ["a", "e", "i", "o", "u"].includes(word.vowel));
+  const cvcWords = phonicsWords.filter((word) => word.word.length === 3 && ["a", "e", "i", "o", "u"].includes(word.vowel));
   const { ref, correct } = choosePhonicsMatch(cvcWords, item.offset, (word) => word.vowel);
   return {
     game: "phonics",
@@ -4865,10 +5270,10 @@ function buildSegmentRound(item) {
     typeTag: "phonics:segment",
     answer: answer.sounds,
     key: item.id,
-    prompt: `How many sounds in ${answer.word}?`,
+    prompt: `How many sounds can you hear in ${answer.word}?`,
     spoken: `How many sounds can you hear in ${answer.word}?`,
     hint: "Say the word slowly.",
-    targetHtml: phonicsTargetWord(answer.word, "Count the sounds."),
+    targetHtml: phonicsTargetWord(answer.word, "Say it slowly."),
     options: makeNumberOptions(answer.sounds)
   };
 }
@@ -5182,6 +5587,190 @@ function buildMeasureRound() {
   return { game: "measure", level: "weather", typeTag: "measure:weather", answer, key: item.id, prompt: "What is the weather?", spoken: "What is the weather?", hint: "Look at the sky.", targetHtml: `<div class="math-token measure-token">${drawWeatherIcon(answer)}</div>`, options: shuffle([answer, ...shuffle(weather.filter((label) => label !== answer)).slice(0, 3)].map((label) => makeVisualChoice(label, drawWeatherIcon(label), label === answer))) };
 }
 
+const violinParts = ["violin", "bow", "string", "bridge", "tuning peg", "scroll", "fingerboard"];
+const violinStrings = ["G", "D", "A", "E"];
+
+function drawMusicIcon(label) {
+  const lower = String(label).toLowerCase();
+  let part = lower.replace(/^the\s+/, "");
+  if (part === "tuning peg") part = "peg";
+  const icons = {
+    violin: `
+      <path d="M55 20 C42 28 44 44 54 50 C40 58 36 82 54 92 C60 96 66 96 72 92 C90 82 86 58 72 50 C82 44 84 28 70 20 C64 16 60 26 62 40 C60 26 60 26 55 20 Z" fill="#d69f67"/>
+      <path d="M62 16 V100 M54 20 C58 30 58 86 54 96 M70 20 C66 30 66 86 70 96" fill="none" stroke-width="3"/>
+      <path d="M50 54 H74 M50 64 H74" fill="none" stroke-width="4"/>
+      <circle cx="52" cy="72" r="5" fill="#253041" stroke="none"/>
+      <circle cx="72" cy="72" r="5" fill="#253041" stroke="none"/>
+    `,
+    bow: `
+      <path d="M24 96 L94 22" fill="none" stroke="#8a5a44" stroke-width="7"/>
+      <path d="M32 98 C52 82 74 54 92 20" fill="none" stroke="#253041" stroke-width="2.5"/>
+      <rect x="20" y="91" width="18" height="10" rx="3" fill="#253041"/>
+    `,
+    string: `
+      <path d="M38 18 V102 M52 18 V102 M68 18 V102 M82 18 V102" fill="none" stroke-width="4"/>
+      <path d="M28 28 H92 M28 92 H92" fill="none" stroke-width="5"/>
+    `,
+    bridge: `
+      <path d="M34 94 C38 56 48 42 60 42 C72 42 82 56 86 94 Z" fill="#f0c463"/>
+      <path d="M48 94 C48 70 72 70 72 94 M50 58 H70" fill="none" stroke-width="4"/>
+    `,
+    peg: `
+      <path d="M60 24 V96" fill="none"/>
+      <circle cx="44" cy="34" r="11" fill="#8a5a44"/>
+      <circle cx="76" cy="46" r="11" fill="#8a5a44"/>
+      <circle cx="44" cy="58" r="11" fill="#8a5a44"/>
+      <circle cx="76" cy="70" r="11" fill="#8a5a44"/>
+    `,
+    scroll: `
+      <path d="M68 30 C46 22 32 42 44 58 C56 74 84 66 78 48 C74 36 56 38 56 50 C56 58 66 60 70 54" fill="none" stroke-width="7"/>
+      <path d="M60 66 V98" fill="none"/>
+    `,
+    fingerboard: `
+      <path d="M54 18 H70 L78 100 H46 Z" fill="#253041"/>
+      <path d="M58 20 V98 M66 20 V98" fill="none" stroke="#fffaf0" stroke-width="2.2" opacity="0.55"/>
+    `
+  };
+  return `
+    <svg viewBox="0 0 120 120" aria-hidden="true">
+      <g stroke="#253041" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+        ${icons[part] || icons.violin}
+      </g>
+    </svg>
+  `;
+}
+
+function renderViolinStringToken(highlight = null) {
+  const rows = violinStrings.map((name, index) => {
+    const guide = index === 0 ? "low" : index === violinStrings.length - 1 ? "high" : "";
+    return `<span class="${name === highlight ? "active" : ""}" style="--string-width:${8 - index}px"><strong>${name}</strong><i></i><em>${guide}</em></span>`;
+  }).join("");
+  return `<div class="math-token music-token"><div class="string-guide">low sound to high sound</div><div class="violin-string-token">${rows}</div></div>`;
+}
+
+function renderRhythmToken(beats) {
+  const notes = Array.from({ length: beats }, () => "<span aria-hidden=\"true\"></span>").join("");
+  return `<div class="math-token music-token"><div class="rhythm-token">${notes}</div></div>`;
+}
+
+function makeMusicOption(label, correct = false) {
+  return {
+    type: "listen",
+    label,
+    correct,
+    artHtml: violinParts.includes(String(label).toLowerCase()) ? drawMusicIcon(label) : drawGenericListenIcon()
+  };
+}
+
+function buildMusicRound() {
+  const item = nextQuestionDeckItem("music", musicBank);
+  if (item.type === "part-picture") {
+    const answer = violinParts[item.offset % violinParts.length];
+    const options = [answer, ...shuffle(violinParts.filter((part) => part !== answer)).slice(0, 3)];
+    return {
+      game: "music",
+      level: "violin-part",
+      typeTag: "music:part-picture",
+      answer,
+      key: item.id,
+      prompt: "Which violin part is this?",
+      spoken: "Which violin part is this?",
+      hint: "Look at the violin picture.",
+      targetHtml: `<div class="math-token music-token">${drawMusicIcon(answer)}</div>`,
+      options: shuffle(options.map((label) => makeTextChoice(label, label === answer)))
+    };
+  }
+  if (item.type === "part-word") {
+    const answer = violinParts[item.offset % violinParts.length];
+    const options = [answer, ...shuffle(violinParts.filter((part) => part !== answer)).slice(0, 3)];
+    return {
+      game: "music",
+      level: "violin-word",
+      typeTag: "music:part-word",
+      answer,
+      key: item.id,
+      prompt: "Tap the part you hear.",
+      spoken: `Tap the ${answer}.`,
+      hint: "Listen to the violin word.",
+      targetHtml: phonicsAudioTarget("Listen for the violin part."),
+      options: shuffle(options.map((label) => makeMusicOption(label, label === answer)))
+    };
+  }
+  if (item.type === "string-count") {
+    return {
+      game: "music",
+      level: "string-count",
+      typeTag: "music:string-count",
+      answer: 4,
+      key: item.id,
+      prompt: "How many strings does a violin have?",
+      spoken: "How many strings does a violin have?",
+      hint: "Count the long strings.",
+      targetHtml: renderViolinStringToken(),
+      options: makeNumberOptions(4)
+    };
+  }
+  if (item.type === "string-sound") {
+    const askHigh = item.offset % 2 === 0;
+    const answer = askHigh ? "E" : "G";
+    return {
+      game: "music",
+      level: "string-sound",
+      typeTag: "music:string-sound",
+      answer,
+      key: item.id,
+      prompt: askHigh ? "Which string is the highest?" : "Which string is the lowest?",
+      spoken: askHigh ? "Which violin string has the highest sound?" : "Which violin string has the lowest sound?",
+      hint: "Violin strings go from low G to high E.",
+      targetHtml: renderViolinStringToken(),
+      options: shuffle(violinStrings.map((name) => makeBigTextChoice(name, name === answer, "letter-option")))
+    };
+  }
+  if (item.type === "string-name") {
+    const answer = violinStrings[item.offset % violinStrings.length];
+    return {
+      game: "music",
+      level: "string-name",
+      typeTag: "music:string-name",
+      answer,
+      key: item.id,
+      prompt: "Which string name is missing?",
+      spoken: "The violin strings are G, D, A, E. Which string name is missing?",
+      hint: "Say G, D, A, E in order.",
+      targetHtml: `<div class="math-token music-token"><div class="phonics-letter-row">${violinStrings.map((name) => `<span>${name === answer ? "?" : name}</span>`).join("")}</div></div>`,
+      options: shuffle(violinStrings.map((name) => makeBigTextChoice(name, name === answer, "letter-option")))
+    };
+  }
+  if (item.type === "rhythm-count") {
+    const answer = 2 + (item.offset % 4);
+    return {
+      game: "music",
+      level: "rhythm-count",
+      typeTag: "music:rhythm",
+      answer,
+      key: item.id,
+      prompt: "How many sounds?",
+      spoken: "How many rhythm sounds?",
+      hint: "Tap each sound once.",
+      targetHtml: renderRhythmToken(answer),
+      options: makeNumberOptions(answer)
+    };
+  }
+  const answer = "bow";
+  return {
+    game: "music",
+    level: "bow-job",
+    typeTag: "music:bow",
+    answer,
+    key: item.id,
+    prompt: "What do you use to play the strings?",
+    spoken: "What do you use to play the violin strings?",
+    hint: "The bow moves on the strings.",
+    targetHtml: `<div class="math-token music-token">${drawMusicIcon("violin")}</div>`,
+    options: shuffle(["bow", "tuning peg", "scroll", "bridge"].map((label) => makeMusicOption(label, label === answer)))
+  };
+}
+
 function buildRound() {
   const builders = {
     ketListen: buildKetListeningRound,
@@ -5191,6 +5780,7 @@ function buildRound() {
     mathReasoning: buildMathReasoningRound,
     logicSpatial: buildLogicSpatialRound,
     measure: buildMeasureRound,
+    music: buildMusicRound,
     words: buildWordRound,
     shapes: buildShapeRound,
     patterns: buildPatternRound,
@@ -5252,7 +5842,7 @@ function setChoiceButtonsDisabled(disabled) {
 
 function answerDelayForChallenge() {
   if (state.activeGame === "ketListen") return answerDelayMs.listening;
-  if (["englishSkills", "phonics"].includes(state.activeGame)) return answerDelayMs.language;
+  if (["englishSkills", "phonics", "music"].includes(state.activeGame)) return answerDelayMs.language;
   return answerDelayMs.thinking;
 }
 
@@ -5650,7 +6240,8 @@ function showCelebration() {
     numberSense: `You solved ${state.questionGoal} number quests.`,
     mathReasoning: `You solved ${state.questionGoal} maths quests.`,
     logicSpatial: `You solved ${state.questionGoal} shape quests.`,
-    measure: `You solved ${state.questionGoal} measure quests.`
+    measure: `You solved ${state.questionGoal} measure quests.`,
+    music: `You completed ${state.questionGoal} music quests.`
   };
   nodes.winTitle.textContent = state.firstTryCount === state.questionGoal
     ? "Perfect quest, princess!"

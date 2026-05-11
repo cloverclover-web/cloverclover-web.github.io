@@ -130,7 +130,7 @@ async function loadGameData() {
     (() => {
       ${drawStubs}
       ${dataSource}
-      return { vocabulary, colorWords, sizeWords, shapeSet, a2ListeningBank, ketListeningBank, b1ListeningBank, englishSkillBank, numberSenseBank, mathReasoningBank, logicSpatialBank, phonicsWords, sightWords };
+      return { vocabulary, colorWords, sizeWords, shapeSet, a2ListeningBank, ketListeningBank, b1ListeningBank, englishSkillBank, numberSenseBank, mathReasoningBank, logicSpatialBank, phonicsWords, sightWords, musicBank };
     })()
   `);
 }
@@ -245,7 +245,14 @@ function collectTexts(data) {
     if (item.type === "count-on") add(`Count forward from ${item.start}. What number is missing?`);
     if (item.type === "odd-even") add(`Is ${item.count} odd or even?`);
     if (item.type === "skip-count") add(`Count by ${item.step}s. What comes next?`);
-    if (item.type === "place-value") add(`How many tens and ones are in ${item.number}?`);
+    if (item.type === "place-value") {
+      const tens = Math.floor(item.number / 10);
+      const ones = item.number % 10;
+      const tenText = tens === 1 ? "ten" : "tens";
+      const oneText = ones === 1 ? "one" : "ones";
+      add(`${item.number}. How many tens and ones?`);
+      add(`${tens} ${tenText}, ${ones} ${oneText}`);
+    }
     if (item.type === "compare-two-digit") add("Which number is bigger?");
     if (item.type === "bond-ways") add(`Which two numbers make ${item.whole}?`);
     if (item.type === "ordinal") add(`Which one is number ${item.target}?`);
@@ -280,15 +287,44 @@ function collectTexts(data) {
     if (item.type === "analogy") add("Complete the rule.");
     if (item.type === "compose") {
       [
-        "Two triangles can make which shape?",
+        "Two equal triangles can make which shape?",
         "Two squares side by side can make which shape?",
         "Which flat shape is on the face of a cube?",
-        "Which flat shape can be on a pyramid?",
+        "Which flat shape is on the side face of a pyramid?",
         "Which flat shape is on the top of a cylinder?",
         "Which solid rolls every way?"
       ].forEach(add);
     }
   });
+
+  (data.musicBank || []).forEach((item) => {
+    if (item.type === "part-picture") add("Which violin part is this?");
+    if (item.type === "part-word") {
+      ["violin", "bow", "string", "bridge", "tuning peg", "scroll", "fingerboard"].forEach((part) => add(`Tap the ${part}.`));
+    }
+    if (item.type === "string-count") add("How many strings does a violin have?");
+    if (item.type === "string-sound") {
+      add("Which violin string has the highest sound?");
+      add("Which violin string has the lowest sound?");
+    }
+    if (item.type === "string-name") add("The violin strings are G, D, A, E. Which string name is missing?");
+    if (item.type === "rhythm-count") add("How many rhythm sounds?");
+    if (item.type === "bow-job") add("What do you use to play the violin strings?");
+  });
+
+  [
+    "violin",
+    "bow",
+    "string",
+    "bridge",
+    "tuning peg",
+    "scroll",
+    "fingerboard",
+    "G",
+    "D",
+    "A",
+    "E"
+  ].forEach(add);
 
   [
     "Listen and get ready. First, put on the blue hat. Then take the yellow coat. Last, pick up the green bag. Tap the pictures in order.",
@@ -313,7 +349,8 @@ function collectTexts(data) {
     "Balance the scale.",
     "What number balances the scale?",
     "How many stars are left?",
-    "Two triangles can make which shape?",
+    "How many rhythm sounds?",
+    "Two equal triangles can make which shape?",
     "Two squares side by side can make which shape?",
     "Which flat shape is on the face of a cube?",
     "Where is the ball?",
@@ -341,7 +378,7 @@ function collectTexts(data) {
     add(`${number}.`);
   }
 
-  for (let number = 11; number <= 30; number += 1) {
+  for (let number = 11; number <= 60; number += 1) {
     const tens = Math.floor(number / 10);
     const ones = number % 10;
     const tenText = tens === 1 ? "ten" : "tens";
@@ -621,7 +658,7 @@ async function collectRuntimeTexts(sampleCount = Number(process.env.YOYO_RUNTIME
   vm.runInContext(`${source}\n${exportSource}`, context, { filename: gamePath });
 
   const game = context.__yoyoAudioCollect;
-  const modes = ["ketListen", "englishSkills", "phonics", "numberSense", "mathReasoning", "logicSpatial", "measure"];
+  const modes = ["ketListen", "englishSkills", "phonics", "numberSense", "mathReasoning", "logicSpatial", "measure", "music"];
   const texts = new Set();
   const add = (text) => {
     const clean = String(text || "").trim();

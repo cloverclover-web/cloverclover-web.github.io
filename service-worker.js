@@ -1,4 +1,4 @@
-const CACHE_VERSION = "yoyo-study-2026-05-01-v5";
+const CACHE_VERSION = "yoyo-study-2026-05-01-v6";
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const AUDIO_CACHE = "yoyo-study-audio-v1";
 const AUDIO_READY_URL = new URL("__offline-audio-ready.json", self.registration.scope).href;

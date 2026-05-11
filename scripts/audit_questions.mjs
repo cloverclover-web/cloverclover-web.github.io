@@ -162,6 +162,7 @@ function auditChallenge(mode, challenge, audioKeyForText, index) {
     if (correctCount !== 1) issues.push(`correct-count expected 1 got ${correctCount}`);
   }
 
+  const artSignatures = new Map();
   options.forEach((option) => {
     const label = textOf(option.label);
     const art = String(option.artHtml || "");
@@ -170,6 +171,15 @@ function auditChallenge(mode, challenge, audioKeyForText, index) {
     }
     if (option.type === "group" && !art && label.length > 8) {
       issues.push(`long text option without art: ${label}`);
+    }
+    if (art && !art.includes("text-option-token") && !art.includes("single-letter-card")) {
+      const signature = art.replace(/\s+/g, " ").trim();
+      const previous = artSignatures.get(signature);
+      if (previous && previous !== label) {
+        issues.push(`duplicate-art options: ${previous} / ${label}`);
+      } else {
+        artSignatures.set(signature, label);
+      }
     }
   });
 
@@ -194,7 +204,7 @@ function auditChallenge(mode, challenge, audioKeyForText, index) {
   };
 }
 
-const modes = ["ketListen", "englishSkills", "phonics", "numberSense", "mathReasoning", "logicSpatial", "measure"];
+const modes = ["ketListen", "englishSkills", "phonics", "numberSense", "mathReasoning", "logicSpatial", "measure", "music"];
 const game = loadGame();
 const failures = [];
 const missingAudio = new Map();
@@ -237,4 +247,4 @@ const report = {
 
 console.log(JSON.stringify(report, null, 2));
 
-if (failures.length) process.exitCode = 1;
+if (failures.length || missingAudio.size) process.exitCode = 1;
