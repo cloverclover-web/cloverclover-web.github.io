@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#faf3e8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Bunny's Picnic">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Bunny's Birthday Picnic</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <!-- ?v= is the version of the app these files belong to. A worker still
+         running the previous version matches on the full URL, misses, and goes
+         to the network, so the first render after an update is already the new
+         code. service-worker.js strips the query before it touches the cache,
+         so offline still finds the precached copy. -->
+    <link rel="stylesheet" href="story.css?v=2026-09-09-picnic-reader-r3">
+    <!-- The picnic's arithmetic. It is the accepted prediction-and-check
+         experience, now part of the delivered book rather than a staged
+         candidate beside it. -->
+    <link rel="stylesheet" href="story-maths.css?v=2026-09-09-picnic-reader-r3">
+    <!-- The shared reader: the same few controls, in the same places, in
+         every book. It styles only its own .reader-* classes. -->
+    <link rel="stylesheet" href="story-reader.css?v=2026-09-09-picnic-reader-r3">
+    <link rel="stylesheet" href="picnic-reader.css?v=2026-09-09-picnic-reader-r3">
+    <!-- Loaded before the app so a stale story.js can never block its own
+         replacement. See sw-bootstrap.js. -->
+    <script src="sw-bootstrap.js?v=2026-09-09-picnic-reader-r3"></script>
+  </head>
+  <body>
+    <svg class="art-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs id="yoyoArtDefs"></defs>
+    </svg>
+
+    <div class="book">
+
+      <!-- ============ HOME ============ -->
+      <section class="screen home is-active" data-screen="home" aria-label="Home">
+        <svg class="home-crest" viewBox="0 0 80 60" aria-hidden="true">
+          <path d="M12 46 L22 20 L32 34 L40 12 L48 34 L58 20 L68 46 Z"
+                fill="#e3b96b" stroke="#b98f42" stroke-width="2.4" stroke-linejoin="round"/>
+          <path d="M12 46 H68 V52 H12 Z" fill="#d9ab57" stroke="#b98f42" stroke-width="2.4" stroke-linejoin="round"/>
+          <circle cx="22" cy="20" r="3" fill="#e8a0b4" stroke="#b98f42" stroke-width="1.2"/>
+          <circle cx="40" cy="12" r="3.6" fill="#a3b89a" stroke="#b98f42" stroke-width="1.2"/>
+          <circle cx="58" cy="20" r="3" fill="#e8a0b4" stroke="#b98f42" stroke-width="1.2"/>
+        </svg>
+
+        <h1 class="home-title">Bunny's Birthday Picnic</h1>
+        <p class="home-sub">A picnic in the garden, a shower of rain, and a basket of strawberries to count.</p>
+
+        <div class="home-cover" id="homeCover"></div>
+
+        <div class="home-actions">
+          <!-- One clear way in, under the cover picture, the same in every book: it
+               opens the story AND starts reading it. Just listen is still here
+               beside it, quieter - the listening-only way of reading this book
+               has not been taken away, only made the second choice. -->
+          <button class="btn btn-primary reader-start" id="startPlay" type="button">Read with me</button>
+          <button class="btn btn-secondary" id="startListen" type="button">Just listen</button>
+        </div>
+
+        <!-- This book is now opened from the library, so the way back to the
+             shelf sits with the other small links. My Stories has its own
+             category there and is not repeated here. The older practice games
+             belong to the previous version and are reached through For
+             grown-ups. -->
+        <div class="home-footer">
+          <a class="btn btn-quiet" href="index.html">Back to the library</a>
+          <button class="btn btn-quiet" id="homeDraw" type="button">Draw a picture</button>
+          <button class="btn btn-quiet" id="homeParent" type="button">For grown-ups</button>
+        </div>
+      </section>
+
+      <!-- ============ STORY ============ -->
+      <section class="screen stage" data-screen="story" aria-label="Story">
+        <!-- The reader's top row, the same in every book: the way back to the
+             shelf, and the one control for this page's sound. It is above the
+             picture, so a child looking for either never has to scroll past
+             the story to find it. The title keeps its own line underneath and
+             is not squeezed between two controls. -->
+        <div class="stage-top">
+          <div class="reader-toolbar">
+            <a class="btn btn-quiet reader-home" href="index.html">Back to the library</a>
+            <div class="reader-audio">
+              <button class="btn btn-secondary reader-audio-btn" id="playBtn" type="button"
+                      aria-label="Listen" aria-pressed="false">Listen</button>
+              <button class="btn btn-quiet reader-retry" id="retryAudioBtn" type="button"
+                      hidden>Try the sound again</button>
+            </div>
+          </div>
+          <p class="reader-status" id="audioStatus" aria-live="polite"></p>
+          <h2 class="stage-title" id="stageTitle">The Story</h2>
+          <div class="page-dots" id="dots" aria-hidden="true"></div>
+        </div>
+
+        <div class="stage-main">
+          <div class="plate" id="plate"></div>
+          <!-- The half-made bunting, present from the first page so that
+               hanging it at the end finishes a plan the child has been
+               watching rather than arriving from nowhere. -->
+          <div class="page-props" id="pageProps"></div>
+          <p class="caption" id="caption"></p>
+          <div id="taskArea"></div>
+        </div>
+
+        <!-- Under the story: Back and the next real thing to do, then
+             everything else folded away. The four icons that used to sit in
+             two clusters under the picture are all still here, with the same
+             ids and the same behaviour, inside More controls - and so is the
+             way back to this book's own cover. -->
+        <div class="stage-controls reader-bar">
+          <div class="reader-nav">
+            <button class="btn btn-quiet reader-back" id="prevBtn" type="button"
+                    aria-label="Page before">Back</button>
+            <button class="btn btn-primary reader-primary" id="nextBtn" type="button"
+                    aria-label="Next page">Next page</button>
+          </div>
+
+          <details class="reader-more" id="moreControls">
+            <summary>More controls</summary>
+            <div class="reader-more-body">
+              <button class="btn btn-quiet" id="exitBtn" type="button"
+                      aria-label="Back to the cover">Back to the cover</button>
+              <button class="btn btn-quiet" id="replayLineBtn" type="button"
+                      aria-label="Say this line again">Say this line again</button>
+              <button class="btn btn-quiet" id="replayPageBtn" type="button"
+                      aria-label="Read this page again">Read this page again</button>
+              <button class="btn btn-quiet is-on" id="captionBtn" type="button"
+                      aria-label="Show the words" aria-pressed="true">Show the words</button>
+              <button class="btn btn-quiet" id="modeBtn" type="button"
+                      aria-label="Just listen" aria-pressed="false">Listen and play</button>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ============ HANGING THE BUNTING ============ -->
+      <section class="screen party" data-screen="party" aria-label="Hanging the bunting">
+        <div class="stage-top">
+          <button class="btn btn-icon" id="partyBack" type="button" aria-label="Go back">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <path d="M20 6 L10 16 L20 26" fill="none" stroke="currentColor"
+                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <h2 class="stage-title" id="partyTitle">Up it goes</h2>
+          <span style="width:56px"></span>
+        </div>
+
+        <div class="party-scene" id="partyScene">
+          <img id="partyBackdrop" alt="" decoding="async">
+          <svg id="partyBunting" viewBox="0 0 1000 667" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+        </div>
+
+        <p class="party-line" id="partyLine"></p>
+        <div class="party-actions" id="partyActions"></div>
+      </section>
+
+      <!-- ============ DRAWING ============ -->
+      <section class="screen studio" data-screen="studio" aria-label="Drawing">
+        <div class="stage-top">
+          <button class="btn btn-icon" id="studioBack" type="button" aria-label="Go back">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <path d="M20 6 L10 16 L20 26" fill="none" stroke="currentColor"
+                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <h2 class="stage-title">Draw the picnic</h2>
+          <div class="control-cluster">
+            <button class="btn btn-icon" id="undoBtn" type="button" aria-label="Undo">
+              <svg viewBox="0 0 32 32" aria-hidden="true">
+                <path d="M9 15 A8 8 0 1 1 10 23" fill="none" stroke="currentColor"
+                      stroke-width="2.8" stroke-linecap="round"/>
+                <path d="M9 9 V15 H15" fill="none" stroke="currentColor"
+                      stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="btn btn-icon" id="clearBtn" type="button" aria-label="Start again">
+              <svg viewBox="0 0 32 32" aria-hidden="true">
+                <path d="M8 11 H24 M12 11 V8 H20 V11 M10 11 L11 26 H21 L22 11"
+                      fill="none" stroke="currentColor" stroke-width="2.6"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="btn btn-icon" id="saveBtn" type="button" aria-label="Save the picture">
+              <svg viewBox="0 0 32 32" aria-hidden="true">
+                <path d="M6 6 H22 L26 10 V26 H6 Z" fill="none" stroke="currentColor"
+                      stroke-width="2.6" stroke-linejoin="round"/>
+                <path d="M11 6 V13 H21 V6 M10 26 V19 H22 V26" fill="none"
+                      stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="canvas-wrap"><canvas id="drawCanvas"></canvas></div>
+
+        <div>
+          <div class="palette" id="palette"></div>
+          <div class="sticker-row" id="stickerRow" style="margin-top:10px"></div>
+        </div>
+      </section>
+
+      <!-- ============ PARENT ============ -->
+      <section class="screen parent" data-screen="parent" aria-label="For grown-ups">
+        <div class="stage-top">
+          <button class="btn btn-icon" id="parentBack" type="button" aria-label="Go back">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <path d="M20 6 L10 16 L20 26" fill="none" stroke="currentColor"
+                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <h2 class="stage-title">For grown-ups</h2>
+          <span style="width:56px"></span>
+        </div>
+
+        <h2>Practice notes</h2>
+        <p class="note">
+          These are practice notes, not a test or a score. They only show whether a task was
+          finished straight away or after a hint, and how often a page was replayed. Everything
+          is kept on this device.
+        </p>
+        <div id="records"></div>
+
+      </section>
+
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <div class="sheet" id="clearSheet" role="dialog" aria-modal="true" aria-labelledby="clearTitle">
+      <div class="sheet-card">
+        <h3 id="clearTitle">Start the picture again?</h3>
+        <p>This will rub out everything on the paper.</p>
+        <div class="sheet-actions">
+          <button class="btn btn-secondary" id="clearCancel" type="button">Keep drawing</button>
+          <button class="btn btn-primary" id="clearConfirm" type="button">Start again</button>
+        </div>
+      </div>
+    </div>
+
+    <noscript>This storybook needs JavaScript.</noscript>
+    <script src="story-audio.js?v=2026-09-09-picnic-reader-r3"></script>
+    <script src="story-art.js?v=2026-09-09-picnic-reader-r3"></script>
+    <script src="story-variants.js?v=2026-09-09-picnic-reader-r3"></script>
+    <script src="story-data.js?v=2026-09-09-picnic-reader-r3"></script>
+    <!-- Loaded before the engine, which uses it when it is there. -->
+    <script src="story-maths.js?v=2026-09-09-picnic-reader-r3"></script>
+    <script src="story.js?v=2026-09-09-picnic-reader-r3"></script>
+  </body>
+</html>

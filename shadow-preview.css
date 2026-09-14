@@ -1,0 +1,468 @@
+/* The Shadow Theatre sample.
+
+   story.css supplies the paper, the serif and the large quiet buttons. Only
+   this page's own pieces are here, and every rule is scoped so that adding
+   this stylesheet cannot change any other page.
+
+   Nothing waits for an animation: the result of a move is simply there. */
+
+/* A hidden element is hidden. .stage-side and .stage-front are grids, and a
+   display rule beats the hidden attribute, so the backstage view stayed on
+   screen during the performance even though the engine had hidden it. */
+.shadow [hidden] { display: none !important; }
+
+.shadow {
+  min-height: 100dvh;
+  display: grid;
+  gap: clamp(10px, 1.8vw, 18px);
+  align-content: start;
+  padding: clamp(12px, 2.4vw, 28px);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.shadow-top { display: grid; gap: 6px; justify-items: center; text-align: center; }
+/* The top row takes the shared reader's shape: the way back on the left, and
+   what the sound is doing on the right. Only the frame is shared; nothing
+   about the rehearsal below it changes. */
+.shadow-top .reader-toolbar { text-align: left; width: 100%; }
+.shadow-top .reader-note { text-align: right; }
+/* What the sound is doing, in its own reserved space, so a message appearing
+   never pushes the story or a control out from under a finger. */
+.shadow-top .reader-status { text-align: center; }
+.shadow-home { text-decoration: none; min-height: 44px; }
+.shadow-foot.reader-nav { justify-content: center; }
+
+.shadow .preview-tag {
+  margin: 0;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  background: var(--sage-wash);
+  color: var(--ink-soft);
+  font-size: clamp(13px, 1.7vw, 16px);
+  line-height: 1.5;
+  max-width: 60ch;
+}
+.shadow-title { margin: 2px 0 0; font-size: clamp(24px, 3.6vw, 34px); }
+.shadow-progress { margin: 0; font-size: clamp(12px, 1.5vw, 15px); color: var(--ink-soft); }
+
+/* A height reservation belongs below the content, never between its controls. */
+.shadow-beat { display: grid; gap: clamp(10px, 1.8vw, 16px); justify-items: center; align-content: start; }
+.beat-heading {
+  margin: 0;
+  font-size: clamp(19px, 2.6vw, 25px);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ---------- the pages that are only a story ---------- */
+
+/* The same frame as the rehearsal's picture, so the book looks like one book,
+   but with nothing drawn over it: these paintings carry no measurement. */
+.story-scene {
+  margin: 0;
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  max-width: 760px;
+}
+/* The picture's box is reserved before the picture arrives. Without this the
+   figure is nothing until the file has loaded, everything under it sits high
+   up the page, and then the whole story jumps down the moment it appears -
+   which also cut the ending off the bottom of a full-page screenshot taken
+   while it was still loading. Both delivered paintings are 1536 x 1024, the
+   same 3:2 as the rehearsal frame above; a painting of another shape would
+   need its own reserved shape here rather than being squeezed into this
+   one. */
+.story-art {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  display: block;
+  border-radius: var(--radius-lg);
+  background: var(--paper-deep);
+  box-shadow: var(--shadow-lift);
+}
+.story-caption {
+  margin: 0;
+  font-size: clamp(12px, 1.6vw, 15px);
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* What is written but not built, said plainly. */
+.later-note {
+  margin: 0;
+  padding: 8px 14px;
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--radius);
+  background: var(--paper-deep);
+  color: var(--ink-soft);
+  font-size: clamp(13px, 1.7vw, 15px);
+  line-height: 1.45;
+  max-width: 52ch;
+  text-align: center;
+}
+
+.word-notes { max-width: 62ch; }
+.word-list { flex-direction: column; align-items: center; }
+.word-note { margin: 0; font-size: clamp(14px, 1.8vw, 16px); color: var(--ink-soft); }
+
+/* ---------- the stage: both sides of one theatre ---------- */
+
+/* Front and back are meant to be seen together while the child is working,
+   so they sit side by side as soon as there is room, and stack on a phone
+   with the screen first. */
+.stage { display: grid; gap: clamp(10px, 1.6vw, 18px); width: 100%; }
+@media (min-width: 860px) {
+  /* Two columns only while both sides are really on screen. When one of them
+     is hidden the other takes the whole width, instead of sitting in half a
+     row beside an empty column. */
+  .stage:not(.is-single) { grid-template-columns: 1.35fr 1fr; align-items: start; }
+}
+.stage.is-hidden { display: none; }
+.stage.is-single { grid-template-columns: 1fr; justify-items: center; }
+.stage.is-single .stage-front { max-width: 760px; width: 100%; }
+.stage.is-single .stage-side { max-width: 760px; width: 100%; }
+
+.scene-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--paper-deep);
+  box-shadow: var(--shadow-lift);
+}
+.scene-art { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+/* The measured screen inside the painting. The engine sets its position in
+   pixels against the CONTAINED picture, so it stays on the cloth when the
+   frame is letterboxed. */
+.screen-layer { position: absolute; }
+.shadow-screen-art { width: 100%; height: 100%; display: block; }
+
+/* Two lines' worth of room, always. The caption has a longer and a shorter
+   wording, and it sits ABOVE the strip the child is holding: letting the
+   taller one push the strip down would move the holder out from under a
+   finger the moment the finger arrived. */
+.scene-caption {
+  margin: 6px 0 0;
+  min-height: 2.9em;
+  line-height: 1.45;
+  font-size: clamp(12px, 1.6vw, 15px);
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* ---------- the strip the child slides ---------- */
+
+/* Under the screen, so the hand and the shadow it changes are one glance
+   apart. Its height is reserved, so nothing below it moves when the words
+   above or below change; it is in the normal flow, never sticky, because a
+   panel that floats over the page is a panel that covers the button under a
+   finger. */
+.slide-track {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  margin-top: 8px;
+}
+.slide-title,
+.slide-scale {
+  margin: 0;
+  text-align: center;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+.slide-title { font-size: clamp(14px, 1.9vw, 17px); }
+.slide-scale { font-size: clamp(12px, 1.5vw, 14px); }
+
+/* The lane is the travel: 0% of it is the 15 cm mark and 100% is the 30 cm
+   mark. The holder is centred on its position, so the lane is inset by half a
+   holder at each end and the holder never leaves the strip. */
+.slide-lane {
+  position: relative;
+  height: 84px;
+  margin: 0 34px;
+}
+.slide-rail {
+  position: absolute;
+  inset: 0;
+}
+.slide-rail .rail-bar {
+  position: absolute;
+  left: -30px;
+  right: -30px;
+  top: 24px;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #d8b57f 0%, #c79f65 55%, #b08a52 100%);
+  box-shadow: inset 0 -1px 0 rgba(90, 62, 30, 0.35);
+}
+/* The tick crosses the rail; its number sits BELOW the holder, so the holder
+   passing over a mark never covers the number that names it. */
+.slide-rail .rail-mark {
+  position: absolute;
+  top: 18px;
+  transform: translateX(-50%);
+  display: grid;
+  justify-items: center;
+  gap: 24px;
+}
+.slide-rail .rail-tick {
+  width: 3px;
+  height: 20px;
+  border-radius: 2px;
+  background: #8a6a3a;
+  opacity: 0.75;
+}
+.slide-rail .rail-number {
+  font-size: clamp(13px, 1.7vw, 16px);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.slide-rail .rail-mark.is-here .rail-number { font-weight: 700; color: var(--ink-strong, #4a4038); }
+.slide-rail .rail-mark.is-here .rail-tick { opacity: 1; }
+
+/* A real target, not a few pixels of paper edge: 56px square, which is above
+   the 44px minimum rather than at it. Making the handle big does not make the
+   paper puppet big - the side view keeps the true scale, and says so. */
+.slide-grip {
+  position: absolute;
+  top: 2px;
+  width: 56px;
+  height: 56px;
+  margin: 0;
+  padding: 2px;
+  transform: translateX(-50%);
+  border: 2px solid #8a6a3a;
+  border-radius: 14px;
+  background: #fdf7ec;
+  box-shadow: 0 2px 6px rgba(90, 62, 30, 0.25);
+  cursor: grab;
+  /* the holder takes the gesture; the rest of the page still scrolls */
+  touch-action: none;
+}
+.slide-grip:active { cursor: grabbing; }
+.slide-grip .grip-art { width: 100%; height: 100%; display: block; }
+.slide-track.is-moving .slide-grip { box-shadow: 0 0 0 3px rgba(138, 106, 58, 0.35); }
+
+.stage-side { display: grid; gap: 6px; width: 100%; }
+.side-title { margin: 0; font-size: clamp(14px, 1.9vw, 17px); color: var(--ink-soft); }
+.side-art {
+  border-radius: var(--radius);
+  background: var(--paper-deep);
+  padding: clamp(8px, 1.4vw, 14px);
+  /* The side view carries its own labels, so it needs room to stay readable
+     on a phone rather than shrinking until the marks are a few pixels a
+     letter. */
+  min-height: clamp(150px, 34vw, 240px);
+}
+.shadow-side-art { width: 100%; height: auto; display: block; }
+/* the marks on the track; the one the puppet is standing on is the darker one */
+.shadow-mark text { opacity: 0.65; }
+.shadow-mark.is-here text { opacity: 1; font-weight: 700; }
+
+/* Said in words, because a line drawn in the air is not something anyone can
+   really see. */
+.guide-label {
+  margin: 0;
+  font-size: clamp(12px, 1.6vw, 15px);
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+/* ---------- what is true right now ---------- */
+
+/* Four readings in a fixed grid, not a wrapping row. A wrapping row packs
+   itself by how wide the text happens to be, so "8 cm" becoming "12 cm" could
+   push a reading onto a new line and move every control below it between one
+   tap and the next. A grid has the same number of rows whatever the numbers
+   say. */
+.readout {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 6px 18px;
+  width: 100%;
+  max-width: 62ch;
+}
+.readout li {
+  margin: 0;
+  min-height: 1.6em;
+  line-height: 1.5;
+  text-align: center;
+  font-size: clamp(14px, 1.9vw, 17px);
+  font-variant-numeric: tabular-nums;
+}
+@media (min-width: 620px) {
+  .readout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* two narrower columns, so the longest reading takes two lines; every
+     reading is given two lines and a shorter number cannot change the height
+     of the row it sits in */
+  .readout li { min-height: 3.2em; }
+}
+/* Two lines' worth of room, always. The status has a longer and a shorter
+   wording, and letting the taller one push everything below it would move the
+   controls between one tap and the next. */
+.stage-note {
+  margin: 0;
+  min-height: 3.2em;
+  line-height: 1.5;
+  font-size: clamp(14px, 1.9vw, 17px);
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* ---------- a closer look at the same cloth ---------- */
+
+/* The close-up is the same screen, cropped. Its shape is fixed and equal to
+   the crop's, so a centimetre across and a centimetre up stay the same length
+   - a frame of a different shape would stretch the geometry. The rehearsal
+   painting is not behind it: at this distance we have zoomed past the little
+   screen inside that picture, so the book's own cloth and wood make the frame
+   instead. No new background was painted for this. */
+.scene-frame.is-close {
+  aspect-ratio: 1.8;
+  max-height: none;
+  background:
+    linear-gradient(180deg, #fffaf1 0%, #f7eddc 100%);
+  border: 3px solid var(--wood, #c79f65);
+  box-shadow: inset 0 0 0 1px rgba(138, 106, 58, 0.25), var(--shadow-lift);
+}
+.scene-frame.is-close .scene-art { display: none; }
+.scene-frame.is-close .screen-layer { position: absolute; inset: 0; }
+
+/* ---------- what they saw earlier ---------- */
+
+/* Two small views of the same moment, side by side, so the comparison the
+   story turns on is one glance rather than two pages. They are pictures of
+   something that already happened and say so. */
+.then {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  max-width: 760px;
+}
+.then-title {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(13px, 1.7vw, 15px);
+  color: var(--ink-soft);
+}
+.then-row { display: grid; gap: 10px; }
+@media (min-width: 620px) { .then-row { grid-template-columns: 1fr 1fr; } }
+.then-scene { margin: 0; display: grid; gap: 4px; }
+.then-frame {
+  position: relative;
+  aspect-ratio: 1.8;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: linear-gradient(180deg, #fffaf1 0%, #f7eddc 100%);
+  border: 2px solid var(--wood, #c79f65);
+}
+.then-frame .shadow-screen-art { width: 100%; height: 100%; display: block; }
+.then-caption {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(12px, 1.6vw, 14px);
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+/* ---------- the optional comparison ---------- */
+
+/* Two known heights and three numbers. Every part of it keeps its own room
+   whether or not it has anything in it yet, so choosing, asking for help and
+   checking never move a button that is already under a finger. */
+.compare {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  width: 100%;
+  max-width: 52ch;
+  padding: 10px 14px;
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--radius);
+  background: var(--paper-deep);
+}
+.compare-question {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(15px, 2vw, 18px);
+  line-height: 1.5;
+}
+.compare-choices { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+/* A real target, and never a marked one: no colour, tick or order says which
+   of the three is the answer. */
+.compare-choice { min-height: 48px; min-width: 64px; font-variant-numeric: tabular-nums; }
+.compare-choice.is-chosen { background: var(--sage-wash); color: var(--sage-ink); }
+.compare-choice[disabled] { opacity: 0.55; cursor: default; }
+/* room for either wording, so nothing below it moves between one tap and the
+   next */
+.compare-said {
+  margin: 0;
+  min-height: 1.6em;
+  text-align: center;
+  font-size: clamp(13px, 1.7vw, 15px);
+  color: var(--ink-soft);
+}
+.compare-help { display: grid; gap: 6px; width: 100%; }
+.compare-step {
+  margin: 0;
+  font-size: clamp(14px, 1.9vw, 17px);
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+.compare-found { width: 100%; text-align: center; }
+
+/* Something that happened earlier in this rehearsal, said as such. */
+.compare-earlier {
+  margin: 0;
+  max-width: 52ch;
+  text-align: center;
+  font-size: clamp(13px, 1.7vw, 15px);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+/* ---------- the words ---------- */
+
+.beat-text { display: grid; gap: 9px; max-width: 62ch; margin: 0 auto; width: 100%; }
+.beat-line { margin: 0; font-size: clamp(16px, 2.1vw, 21px); line-height: 1.55; }
+
+.restart-note {
+  margin: 0 auto;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  background: var(--sage-wash);
+  color: var(--ink-soft);
+  font-size: clamp(14px, 1.9vw, 17px);
+  line-height: 1.5;
+  max-width: 52ch;
+  text-align: center;
+}
+
+.beat-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+/* a place the puppet cannot go to keeps its slot and says it is not available,
+   rather than vanishing and moving everything beside it */
+.beat-actions .btn[disabled] { opacity: 0.45; cursor: default; }
+.shadow-foot { display: flex; justify-content: center; margin-top: auto; padding-top: 8px; }
+.shadow-foot .btn { text-decoration: none; }
+
+/* Every control is a real button at a real size, whatever the layout does. */
+.beat-actions .btn { min-height: 48px; min-width: 44px; }
+
+@media (max-width: 560px) {
+  /* The screen and the strip that changes it have to be in one view on a
+     phone, so the picture gives up some height rather than pushing the hand
+     off the bottom of the screen. */
+  .scene-frame { max-height: 38svh; }
+  .beat-actions .btn { width: 100%; }
+  .side-title { font-size: 14px; }
+}

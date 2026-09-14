@@ -1,13 +1,18 @@
-# YOYO Study
+# YOYO Story Worlds
 
-A local-first English and maths learning game for iPad and desktop.
+English illustrated stories for reading and exploring together.
 
-## iPad use
+Read at https://cloverclover-web.github.io/
 
-Open the published GitHub Pages link in Safari while online. Wait until the game shows that offline audio is ready, then use Safari's Share button and choose **Add to Home Screen**. After that, the game can open from the iPad home screen and continue working offline with the cached audio.
+## Offline reading on iPad
 
-The first offline setup downloads the full audio set, so keep the iPad awake and online until the offline-ready message appears.
+1. Open the site in Safari and add it to the Home Screen.
+2. Open the Home Screen icon while connected to Wi-Fi.
+3. Open the library's offline-reading controls and save the books.
+4. Wait for Offline ready before going offline. Pictures and recorded narration are included.
 
-## Audio credits
+Completed files are kept when a download is interrupted. Reopen and resume to download only missing or changed files. An unfinished individual file may restart. Downloads may pause when the app is closed or suspended. Saving in Safari does not guarantee the Home Screen app has the same offline files.
 
-The violin open-string sample is based on ["G, D, A and E on violin.ogg"](https://commons.wikimedia.org/wiki/File:G,_D,_A_and_E_on_violin.ogg) by Mutatis mutandis / Pierre Vigue on Wikimedia Commons, licensed under CC BY 2.5 or GFDL. The app uses the Wikimedia MP3 transcode for local offline playback.
+Browser storage is managed by the device; clearing website data or system storage eviction can remove offline files. The app checks its saved files and offers repair instead of claiming an incomplete library is ready. Child records and drawings stay on the device and are not uploaded.
+
+This repository contains only the current public reading assets, not private production records, credentials, or the earlier practice-game interface.

@@ -1,0 +1,136 @@
+/* Same paper, serif and painted series identity; no animated entrance. */
+body { --ink-soft: #68584b; }
+[hidden] { display: none !important; }
+button, .juice-top a, .juice-bottom a { min-height: 46px; min-width: 46px; }
+button { cursor: pointer; border: 1px solid #b5a58f; background: #fffaf2; border-radius: 12px; padding: 10px 16px; line-height: 1.3; font-size: 17px; }
+button:hover:not(:disabled) { background: #eef3ea; border-color: #536b49; color: #4a3f35; }
+button:disabled { cursor: default; opacity: .62; }
+button[aria-pressed="true"], button.primary { background: #4f6b48; border-color: #4f6b48; color: white; }
+a { color: #496242; text-underline-offset: 4px; }
+button:focus-visible, a:focus-visible { outline: 3px solid #496242; outline-offset: 4px; }
+.juice-top { max-width: 1120px; margin: auto; padding: 14px 24px; display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+.juice-top a, .juice-bottom a { display: inline-flex; align-items: center; }
+.juice-top span { font-size: 17px; color: var(--ink-soft); }
+.juice-top button { font-size: 15px; }
+.juice-book { width: min(100% - 40px, 980px); margin: 0 auto 30px; }
+.book-heading { text-align: center; padding: 14px 0 22px; }
+.book-heading p { color: #6f604e; margin: 0 0 8px; font-size: 17px; }
+h1 { font-weight: 500; font-size: clamp(29px, 4.3vw, 44px); line-height: 1.13; margin: 0; text-wrap: balance; }
+h2 { font-weight: 500; margin: 0 0 14px; font-size: 27px; text-wrap: balance; }
+h3 { font-weight: 600; font-size: 20px; margin: 10px 0; }
+.painting { position: relative; margin: 0; border-radius: 12px; overflow: hidden; background: #ead7b4; }
+.painting > img { display: block; width: 100%; height: auto; aspect-ratio: 3/2; object-fit: contain; }
+.juice-stage { position: absolute; left: 8%; right: 8%; bottom: 2%; height: 33%; }
+.juice-stage svg { width: 100%; height: 100%; display: block; }
+.reading { width: min(100%, 730px); margin: 20px auto 0; }
+.reading p { margin: 12px 0; font-size: clamp(19px, 2.3vw, 23px); line-height: 1.65; text-wrap: pretty; }
+#audio-status { color: #6f604e; font-size: 15px; min-height: 2.7em; margin: 0 auto; padding: 0 24px; max-width: 1120px; text-align: right; }
+.activity { margin: 26px auto 0; padding: 24px 0 4px; border-top: 1px solid #d3c4ad; max-width: 820px; }
+.activity p { line-height: 1.55; font-size: 20px; margin: 12px 0; }
+.activity .aside { font-size: 16px; color: #655645; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.ingredients { display: flex; gap: 16px; flex-wrap: wrap; margin: 16px 0; }
+.ingredient { flex: 1 1 160px; padding: 16px; background: #f1e5d2; border-radius: 12px; }
+.ingredient p { margin: 8px 0; font-size: 18px; min-height: 28px; }
+.ingredient .row { gap: 8px; }
+.recipe { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; padding: 12px 0; }
+.recipe span { font-size: 21px; }
+.recipe strong { font-size: 29px; font-weight: 600; }
+.options { display: flex; gap: 12px; margin: 16px 0; }
+.options button { width: 84px; height: 62px; font-size: 29px; font-variant-numeric: tabular-nums; }
+.activity .answer-feedback { min-height: 132px; padding: 12px 16px; border: 0; border-radius: 12px; background: #f4eddf; }
+.answer-feedback[data-result="correct"] { background: #e7eedf; color: #354f30; }
+.answer-feedback[data-result="empty"] { background: transparent; }
+.activity .answer-feedback p { font-size: 18px; line-height: 1.45; margin: 3px 0; }
+.activity .step-guidance { margin-top: 16px; padding: 14px 18px; border: 0; background: #e7eedf; border-radius: 12px; min-height: 78px; }
+.activity .step-guidance p { margin: 0; font-size: 20px; color: #354f30; }
+.step-guidance button { margin-top: 12px; }
+.equation { font-size: 28px !important; letter-spacing: .035em; }
+.hint { padding: 14px 0; min-height: 0; }
+.hint:empty { display: none; }
+.branch-choices { display: flex; flex-direction: column; gap: 12px; }
+.branch-choices button { text-align: left; padding: 18px 22px; font-size: 21px; }
+.branch-choices small { display: block; margin-top: 5px; font-size: 16px; color: #665747; }
+.fruit-choice { display: inline-flex; flex-direction: column; align-items: center; gap: 5px; min-width: 98px; }
+.fruit-choice img { width: 74px; height: 74px; object-fit: contain; }
+.fruit-choice.selected { background: #e6efdf; border-color: #496242; color: #4a3f35; }
+.juice-choice { min-width: 122px; }
+.juice-choice img { width: 76px; height: 114px; }
+.supply-picture { display: block; width: 64px; height: 96px; object-fit: contain; }
+.fruit-note { min-height: 64px; }
+.dose-readout { font-size: 18px; font-variant-numeric: tabular-nums; }
+.cup-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.cup-controls button { min-height: 60px; }
+.serving-cups { margin: 20px 0; }
+.serving-cup { min-width: 0; text-align: center; }
+.serving-cup h3 { margin: 0; font-size: 20px; }
+.activity .serving-amount { margin: 6px 0 0; font-size: 28px; font-weight: 600; line-height: 1.25; color: #3c5738; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.activity .serving-label { margin: 3px 0 12px; font-size: 16px; color: #655645; }
+.serving-cup button { width: 100%; }
+.workspace { margin: 16px 0; padding: 12px; border-radius: 12px; background: #f0e0c5; }
+.workspace svg { width: 100%; height: auto; display: block; max-height: 230px; }
+.workspace-label { color: #65513c; text-align: center; font-size: 16px !important; margin: 0 0 8px !important; }
+.scoop-key { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; padding: 8px 0 12px; }
+.scoop-key strong { font-size: 22px; color: #3c5738; }
+.scoop-key button { font-size: 15px; padding: 8px 12px; }
+.volume-readout { color: #403329; font-variant-numeric: tabular-nums; }
+.activity .volume-title { font-size: 22px; margin: 0; }
+.volume-values { display: flex; gap: 16px; justify-content: space-between; }
+.activity .volume-values p { margin: 4px 0; }
+.volume-values span { display: block; font-size: 17px; }
+.volume-values strong { display: block; font-size: 36px; line-height: 1.15; font-weight: 600; }
+.volume-current strong { color: #3c5738; }
+.activity .volume-context { font-size: 16px; margin: 6px 0; }
+.volume-change { display: flex; flex-direction: column; justify-content: center; min-height: 62px; padding: 5px 0; border-top: 1px solid #c4ad8b; }
+.volume-change strong { font-size: 24px; color: #3c5738; line-height: 1.2; }
+.volume-change span { font-size: 17px; line-height: 1.5; }
+.button-volume { display: block; font-size: 19px; font-weight: 600; margin-top: 4px; }
+.measuring-active { position: sticky; top: 8px; z-index: 2; display: grid; grid-template-columns: minmax(0, 1fr) 160px; gap: 0 20px; }
+/* Cup results and coaster choices must not scroll behind a pinned jug. */
+.workspace.serving-workspace, .workspace:not(.measuring-active) { position: relative; top: auto; z-index: auto; }
+.measuring-active .scoop-key { grid-column: 1 / -1; }
+.measuring-active #measure-diagram { grid-column: 2; grid-row: 2; align-self: center; }
+.measuring-active svg { max-height: 190px; }
+.colour-choice { width: 70px; height: 52px; border: 2px solid #7c6a54; }
+.colour-choice[aria-pressed="true"] { outline: 3px solid #4f6b48; outline-offset: 3px; }
+.notice { max-width: 820px; margin: 12px auto; min-height: 28px; font-size: 18px; line-height: 1.5; color: #685541; }
+.page-nav { display: flex; justify-content: space-between; gap: 18px; max-width: 820px; margin: 22px auto 28px; border-top: 1px solid #d3c4ad; padding-top: 20px; }
+#next-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+.juice-bottom { border-top: 1px solid #ded1bf; padding: 18px 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; font-size: 15px; }
+.juice-bottom button { font-size: 15px; background: none; }
+.juice-bottom span { color: #6f604e; }
+.preparation-record summary { cursor: pointer; min-height: 46px; padding: 10px 0; font-size: 18px; }
+.preparation-record svg { width: 100%; max-height: 240px; }
+dialog { max-width: min(620px, calc(100% - 30px)); border: none; border-radius: 14px; padding: 28px; background: #faf3e8; color: #4a3f35; }
+dialog p { font-size: 18px; line-height: 1.6; }
+dialog::backdrop { background: #302b2466; }
+@media (max-width: 600px) {
+  .juice-top { padding: 10px 16px; flex-wrap: wrap; }
+  .juice-top span { display: none; }
+  .juice-book { width: calc(100% - 28px); }
+  .book-heading { padding: 12px 0 20px; }
+  .juice-stage { left: 3%; right: 3%; bottom: 0; height: 35%; }
+  .workspace { position: sticky; top: 8px; z-index: 2; }
+  .measuring-active { display: block; padding: 10px 12px; }
+  .measuring-active .scoop-key { padding: 0 0 8px; gap: 3px; }
+  .measuring-active .scoop-key strong { font-size: 21px; }
+  .measuring-active .scoop-key button { position: absolute; right: 12px; bottom: 10px; padding: 8px; max-width: 95px; font-size: 14px; }
+  .measuring-active #measure-diagram { width: calc(100% - 97px); }
+  .measuring-active svg { max-height: 120px; }
+  .measuring-active .volume-values strong { font-size: 32px; }
+  .measuring-active .volume-context { font-size: 15px; }
+  .reading { margin-top: 16px; }
+  .reading p { font-size: 20px; }
+  .activity { padding-top: 20px; }
+  .ingredient { flex-basis: 100%; }
+  .cup-controls { gap: 7px; }
+  .cup-controls button { font-size: 17px; padding: 10px 5px; }
+  .fruit-choice { min-width: 90px; padding: 9px; }
+  .fruit-choice img { width: 62px; height: 62px; }
+  .juice-choice { min-width: 118px; }
+  .juice-choice img { width: 68px; height: 102px; }
+  .juice-bottom { justify-content: center; }
+  .row { gap: 9px; }
+}
+@media (max-height: 650px) { .workspace { position: static; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }

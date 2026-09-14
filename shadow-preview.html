@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#faf3e8">
+    <title>Story sample: The Shadow Theatre</title>
+    <!-- A standalone sample of one route through a book that is being made.
+         It borrows the series typography and colour from story.css without
+         changing it, adds only its own stylesheet, and registers no service
+         worker: this page is not installed, not in the library, and makes no
+         offline claim. Nothing here is written to the device. -->
+    <link rel="stylesheet" href="story.css">
+    <!-- The shared reader chrome, so this sample's frame matches the books.
+         It styles only its own .reader-* classes and touches nothing the
+         rehearsal draws. -->
+    <link rel="stylesheet" href="story-reader.css?v=2026-09-14-shadow-reader-r11">
+    <link rel="stylesheet" href="shadow-preview.css?v=2026-09-14-shadow-reader-r11">
+    <script src="sw-bootstrap.js"></script>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+</head>
+  <body>
+    <div class="shadow">
+
+      <header class="shadow-top">
+        <!-- The same top row as every other book: the way back to the shelf on
+             the left, and this page's ONE sound control on the right.
+
+             While there are no recordings the control is not there at all -
+             a button that would do nothing is worse than the sentence below
+             saying the voice is not made yet. It appears when READY turns true
+             in shadow-narration.js, which is the single switch. -->
+        <div class="reader-toolbar">
+          <a class="btn btn-quiet shadow-home reader-home" href="./index.html">Back to the library</a>
+          <div class="reader-audio" id="beatAudio" hidden>
+            <button class="btn btn-secondary reader-audio-btn" id="listenBtn" type="button"
+                    aria-pressed="false" hidden></button>
+          </div>
+        </div>
+        <p class="reader-status" id="audioStatus" aria-live="polite"></p>
+        <!-- Replaced on every drawing with what is really still missing; this
+             is what a reader sees before the script runs. -->
+        <p class="preview-tag" id="previewTag">
+          Story preview. Read together.
+        </p>
+        <h1 class="shadow-title">The Shadow Theatre</h1>
+        <p class="shadow-progress" id="beatProgress" aria-live="polite"></p>
+      </header>
+
+      <main class="shadow-beat" id="beat" aria-labelledby="beatHeading">
+        <h2 class="beat-heading" id="beatHeading"></h2>
+
+        <!-- The selected picture for a page that is only a story. A page with no
+             painting of its own shows none: the rehearsal picture is never
+             borrowed to stand in for a scene it is not. -->
+        <figure class="story-scene" id="storyScene" hidden>
+          <img class="story-art" id="storyArt" alt="">
+          <figcaption class="story-caption" id="storyCaption"></figcaption>
+        </figure>
+
+        <!-- Anything written but not built yet. A sentence, not a button. -->
+        <p class="later-note" id="laterNote" hidden></p>
+
+        <!-- What the friends saw earlier, drawn from the same model: the same
+             shadow, from the same place, beside one picture and then the
+             other. It is a look back at something that already happened, so it
+             is labelled as one and it changes nothing about where the puppet
+             is standing now. -->
+        <section class="then" id="thenScenes" hidden aria-labelledby="thenTitle">
+          <p class="then-title" id="thenTitle"></p>
+          <div class="then-row" id="thenRow"></div>
+        </section>
+
+        <!-- The screen the audience sees. The painting behind it was made with
+             a deliberately empty screen; the sunflower, the shadow and the
+             ground line are drawn over it from the model, never painted into
+             it and never hidden underneath it. -->
+        <div class="stage" id="stage">
+          <div class="stage-front" id="stageFront">
+            <div class="scene-frame" id="sceneFrame">
+              <img class="scene-art" id="sceneArt" alt="" src="assets/shadow/rehearsal-v1.jpg">
+              <div class="screen-layer" id="screenLayer" aria-hidden="true"></div>
+            </div>
+            <p class="scene-caption" id="sceneCaption"></p>
+
+            <!-- The track the child slides, directly under the shadow it
+                 changes, so the cause and the result are in one look. It
+                 carries only the 15-30 cm part of the track, drawn larger and
+                 saying so; the side view beside it keeps the real distances.
+                 The holder is a permanent element: a drag captures it, so it
+                 must never be rebuilt while a finger is on it. -->
+            <div class="slide-track" id="slideTrack" hidden>
+              <p class="slide-title" id="slideTitle"></p>
+              <div class="slide-lane" id="slideLane">
+                <div class="slide-rail" id="slideRail" aria-hidden="true"></div>
+                <button class="slide-grip" id="slideGrip" type="button" role="slider"
+                  aria-valuemin="15" aria-valuemax="30" aria-valuenow="20"></button>
+              </div>
+              <p class="slide-scale" id="slideScale"></p>
+            </div>
+          </div>
+
+          <!-- The same theatre from the side, drawn in code so that the lamp,
+               the marks, the paper and the screen are exactly where the model
+               says they are. -->
+          <div class="stage-side" id="stageSide">
+            <p class="side-title" id="sideTitle"></p>
+            <div class="side-art" id="sideArt"></div>
+            <p class="guide-label" id="guideLabel" hidden></p>
+          </div>
+        </div>
+
+        <!-- What is true right now, beside the stage where the child is
+             working: the unit, the fixed paper, the current place and the two
+             heights being compared. -->
+        <ul class="readout" id="readout"></ul>
+        <p class="stage-note" id="stageNote" aria-live="polite"></p>
+
+        <!-- The optional comparison for the little door. Both heights are
+             already known and both are on the page; the difference is not,
+             until the child asks for it or checks. Nothing here moves the
+             puppet, and nothing here has to be right before the story goes
+             on. -->
+        <section class="compare" id="compare" hidden aria-labelledby="compareQuestion">
+          <p class="compare-question reader-prose" id="compareQuestion"></p>
+          <div class="compare-choices" id="compareChoices" role="group"
+               aria-label="Three numbers to choose from"></div>
+          <p class="compare-said" id="compareSaid" aria-live="polite"></p>
+          <!-- Shown only once it has been asked for, or once the heights have
+               been compared. An answer that arrives first is not an answer
+               anyone found. -->
+          <div class="compare-help" id="compareHelp" hidden></div>
+          <p class="compare-found reader-feedback" id="compareFound" aria-live="polite" hidden></p>
+        </section>
+
+        <!-- A comparison made before the puppet moved. It stays exactly as it
+             was and says when it happened, rather than being rewritten into a
+             sum about heights nobody compared. -->
+        <p class="compare-earlier" id="compareEarlier" hidden></p>
+
+        <p class="restart-note" id="restartNote" aria-live="polite" hidden></p>
+
+        <!-- The controls sit above the words on purpose. What the friends say
+             changes length with what really happened, and a sentence that
+             grows must never move a button a child is already reaching
+             for. -->
+        <div class="beat-actions" id="beatActions"></div>
+
+        <div class="beat-text" id="beatText"></div>
+
+        <!-- Two words, offered and never asked about. Folded with the other
+             secondary things, so nothing on the page is a test. -->
+        <details class="reader-more word-notes" id="wordNotes" hidden>
+          <summary>What these words mean</summary>
+          <div class="reader-more-body word-list" id="wordList"></div>
+        </details>
+      </main>
+
+      <footer class="shadow-foot reader-nav">
+        <a class="btn btn-quiet reader-home" href="./index.html">Back to the library</a>
+      </footer>
+
+    </div>
+
+    <noscript>
+      <p class="preview-tag">
+        This story needs JavaScript for its choices, moving shadows and sound.
+        <a href="./index.html">Back to the library</a>.
+      </p>
+    </noscript>
+
+    <script src="shadow-model.js?v=2026-09-14-shadow-reader-r11"></script>
+    <!-- The unchanged shared player, and this book's own reading order. Nothing
+         is recorded yet, so no Listen control is offered at all. -->
+    <script src="story-audio.js?v=2026-09-14-shadow-reader-r11"></script>
+    <script src="shadow-narration.js?v=2026-09-14-shadow-reader-r11"></script>
+    <script src="shadow-story.js?v=2026-09-14-shadow-reader-r11"></script>
+    <script src="shadow-art.js?v=2026-09-14-shadow-reader-r11"></script>
+    <script src="shadow-preview.js?v=2026-09-14-shadow-reader-r11"></script>
+  </body>
+</html>

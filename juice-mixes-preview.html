@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#faf3e8">
+  <title>Our Little Recipes | Juice for Our Friends</title>
+  <link rel="icon" href="icons/icon.svg">
+  <link rel="stylesheet" href="story.css?v=2026-09-14-juice-mixes-j10">
+  <link rel="stylesheet" href="juice-preview.css?v=2026-09-14-juice-mixes-j10">
+  <link rel="stylesheet" href="juice-mixes-preview.css?v=2026-09-14-juice-mixes-j10">
+  <script src="sw-bootstrap.js"></script>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+</head>
+<body class="mixes-book">
+  <header class="juice-top"><a href="juice-preview.html">Back to the juice story</a><span>Little Kitchen</span><button id="parent-open" type="button">For grown-ups</button></header>
+  <main class="juice-book">
+    <div class="book-heading"><p>Juice for Our Friends</p><h1 id="title" tabindex="-1">Our little recipes</h1></div>
+    <figure class="painting" id="painting"><img src="assets/juice/measuring-table-v2.jpg" alt="Bunny, Bear and Duck gather beside their clean kitchen counter." width="1536" height="1024"><div id="cups-scene" class="juice-stage" hidden></div></figure>
+    <div id="lines" class="reading"></div>
+    <section id="activity" class="activity" aria-label="Make a recipe together"></section>
+    <p id="notice" class="notice" role="status" aria-live="polite"></p>
+    <nav class="page-nav" aria-label="Recipe story pages"><button id="back" type="button">Back</button><div id="next-actions"></div></nav>
+    <footer class="juice-bottom"><a href="index.html">Return to library</a><button id="new-reading" type="button">A new reading</button><span>Interaction preview. New narration is not recorded yet.</span></footer>
+  </main>
+  <dialog id="parent-dialog"><h2>About this preview</h2><p>This is a short interaction sample for the juice story, not the finished revision. New English narration is not recorded yet. The original narrated book is unchanged.</p><p>The child can combine up to 2 prepared fruit juices with optional drinking water. The 25 mL scoop and 100 mL cup belong to this screen model, not every household spoon or cup. The record adds the measured portions used; real mixtures need not have perfectly additive final volumes.</p><p>These are opaque cups. The ingredient record is not a picture of liquid layers or a simulation of blend colour. No mixture colour is predicted, drawn or graded. The proposed colour-observation activity is still awaiting appropriate evidence.</p><p>This is screen play, not a serving recommendation. A grown-up checks real ingredients, allergies, suitable amounts and hygiene, and handles equipment. No child records, microphone, uploads, scores or live AI are used.</p><button id="parent-close" type="button">Back to the story</button></dialog>
+  <dialog id="restart-dialog"><h2>Start a different reading?</h2><p>The current recipes and measured drinks in this sample will be replaced. Other stories and drawings stay untouched.</p><div class="row"><button id="restart-no" type="button">Keep this reading</button><button id="restart-yes" type="button">Start a new reading</button></div></dialog>
+  <noscript>This sample needs JavaScript. The link back to the juice story still works.</noscript>
+  <script src="juice-mixing.js?v=2026-09-14-juice-mixes-j10"></script>
+  <script src="juice-story-data.js?v=2026-09-14-juice-j10"></script>
+  <script src="juice-mixes-preview.js?v=2026-09-14-juice-mixes-j10"></script>
+</body>
+</html>

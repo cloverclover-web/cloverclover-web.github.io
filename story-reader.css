@@ -1,0 +1,236 @@
+/* The shared reader: the same few controls, in the same places, in every book.
+
+   The parent read three books in a row and found three different control
+   panels: sentence-by-sentence Listen buttons around the prose in one, an
+   icon cluster in another, nothing at all in a third. This stylesheet is the
+   one shape they all take.
+
+     .reader-toolbar   above the story: the way back to the library, and ONE
+                       page audio control (Listen again / Stop listening)
+     .reader-status    what the sound is doing, in words, in reserved space
+     .reader-nav       under the story: Back, and the next real story action
+     .reader-more      everything else, folded away
+     .reader-feedback  a gentle answer beside an objective choice
+
+   It changes nothing else. Every rule below is on one of these classes, so
+   adding this file to a book cannot alter that book's own pictures, pieces,
+   trays or activities - only the frame around them.
+
+   No new palette, no new typeface, no new shapes: the colours, the serif and
+   the green primary button all come from the book's own stylesheet, which is
+   loaded first. This is a rearrangement, not a redesign.
+
+   Three rules are load-bearing and are checked rather than eyeballed:
+     - every control the child presses is at least 44 CSS pixels each way;
+     - a hidden thing is really hidden, whatever display it would otherwise
+       have;
+     - prose is never squeezed into a narrow column beside a control. A
+       button in the same grid row as a paragraph made the words one per line
+       on a phone, so text and controls are never in the same row here. */
+
+/* A HIDDEN ELEMENT IS HIDDEN - including one INSIDE a reader container.
+
+   The first version only covered the containers themselves. The retry button
+   sits inside .reader-audio and carries .btn, whose `display: inline-flex`
+   beats the browser's own rule for the hidden attribute: in a real browser it
+   reported hidden = true and computed display = flex, and stayed on screen at
+   187 by 46 pixels. Anything hidden anywhere in the reader is hidden now. */
+.reader-toolbar[hidden],
+.reader-nav[hidden],
+.reader-more[hidden],
+.reader-feedback[hidden],
+.reader-audio[hidden],
+.reader-note[hidden],
+.reader-status[hidden],
+.reader-bar[hidden],
+.reader-toolbar [hidden],
+.reader-audio [hidden],
+.reader-nav [hidden],
+.reader-more [hidden],
+.reader-bar [hidden] { display: none !important; }
+
+/* ---------- above the story ---------- */
+
+.reader-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin: 0 auto;
+}
+.reader-toolbar .reader-home {
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* One control for the whole page, never one per sentence. */
+.reader-audio {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.reader-audio-btn {
+  min-height: 48px;
+  min-width: 44px;
+}
+
+/* What the sound is doing, said in words. It keeps two lines' worth of room
+   whether or not it has anything to say: a message appearing must not push
+   the picture, the tray or a button out from under a finger. */
+.reader-status {
+  margin: 0;
+  min-height: 2.7em;
+  line-height: 1.35;
+  max-width: 46ch;
+  font-size: clamp(13px, 1.7vw, 15px);
+  color: var(--ink-soft);
+}
+.reader-status.is-problem { color: var(--blush-ink); }
+
+/* When there is no recording at all yet, this says so instead of offering a
+   button that would do nothing. */
+.reader-note {
+  margin: 0;
+  max-width: 52ch;
+  line-height: 1.45;
+  font-size: clamp(13px, 1.7vw, 15px);
+  color: var(--ink-soft);
+}
+
+/* ---------- under the story ---------- */
+
+/* Back on the left, the next real thing to do on the right, in that order on
+   every page of every book. */
+.reader-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+.reader-nav .btn { min-height: 48px; min-width: 44px; }
+.reader-back { margin-right: auto; }
+.reader-primary { margin-left: auto; }
+.reader-nav .btn[disabled] { opacity: 0.45; cursor: default; }
+
+/* ---------- folded away ---------- */
+
+/* Everything that is useful sometimes and in the way always. One tap, and it
+   is never needed in order to read or to take part. */
+.reader-more {
+  width: 100%;
+  border-top: 1px solid var(--paper-edge);
+  padding-top: 8px;
+}
+.reader-more > summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--ink-soft);
+  font-size: clamp(14px, 1.8vw, 16px);
+  list-style: none;
+}
+.reader-more > summary::-webkit-details-marker { display: none; }
+.reader-more > summary::after { content: "▾"; font-size: 0.8em; }
+.reader-more[open] > summary::after { content: "▴"; }
+.reader-more-body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 0 4px;
+}
+.reader-more-body .btn { min-height: 48px; min-width: 44px; }
+
+/* ---------- an answer, said gently, beside the choice ---------- */
+
+/* For a question that really has a right answer. It says what is true, and
+   what to do next; it never scores a feeling, a taste or a design, and it
+   never turns the page by itself. */
+.reader-feedback {
+  margin: 8px 0 0;
+  padding: 10px 14px;
+  /* A light tinted card with one thin border all the way round, in the book's
+     own paper colours. The first version used a heavy 4px bar down one side,
+     which read as a system notice pasted into a picture book rather than
+     something the friends had said. */
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--radius);
+  background: var(--paper-deep);
+  color: var(--ink);
+  line-height: 1.45;
+  font-size: clamp(15px, 1.9vw, 17px);
+  /* room for either answer, so the buttons below do not move between one tap
+     and the next */
+  min-height: 3.2em;
+  max-width: 52ch;
+}
+.reader-feedback.is-right { background: var(--sage-wash); border-color: var(--sage); }
+.reader-feedback.is-again { background: var(--blush-wash); border-color: var(--blush-soft); }
+/* The tint is decoration. The words say which it is, because a colour is not
+   something to rely on. */
+.reader-feedback .reader-next {
+  display: block;
+  margin-top: 4px;
+  color: var(--ink-soft);
+}
+
+/* ---------- the cover's one way in ---------- */
+
+/* Every recorded book opens the same way: one clear action under the cover
+   picture that goes in AND starts reading. The other ways of opening the book
+   are kept beside it as quieter choices, because taking a mode away is not the
+   same as making one obvious. */
+.reader-start {
+  min-height: 56px;
+  font-size: clamp(17px, 2.2vw, 20px);
+  padding-left: 26px;
+  padding-right: 26px;
+}
+
+/* ---------- where the voice is now ---------- */
+
+/* The part being read carries a soft tint and nothing else.
+
+   Everything about this rule is chosen so that it cannot move anything: the
+   colour is painted with a background and an outward box-shadow of the same
+   colour, so the element's own box, its font, its weight and its position are
+   all exactly what they were a moment ago. No border, no padding, no outline,
+   no transform, no transition and no animation - a paragraph that grew by two
+   pixels as the voice reached it would push the page under a finger, and a
+   fading tint would be motion nobody asked for.
+
+   The page never scrolls to follow it either. A child who has looked away
+   should find the words where they left them. */
+.reader-speaking {
+  background: var(--sage-wash);
+  box-shadow: 0 0 0 5px var(--sage-wash);
+  border-radius: 3px;
+}
+
+/* ---------- prose ---------- */
+
+/* Words are never in the same row as a control. A 44px button beside a
+   paragraph in a two-column grid squeezed the text to one word per line on a
+   phone; this floor makes that arrangement fail a check rather than ship. */
+.reader-prose {
+  min-width: 12rem;
+  max-width: 62ch;
+  line-height: 1.55;
+}
+
+@media (max-width: 560px) {
+  .reader-nav { justify-content: stretch; }
+  .reader-nav .btn { flex: 1 1 40%; }
+  .reader-back, .reader-primary { margin: 0; }
+  .reader-audio-btn { flex: 1 1 100%; }
+}

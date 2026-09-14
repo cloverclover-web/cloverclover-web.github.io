@@ -1,1 +1,0 @@
-window.yoyoAudioFormats = ["mp3"];

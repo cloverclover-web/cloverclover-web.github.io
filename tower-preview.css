@@ -1,0 +1,355 @@
+/* The Tower That Fell preview.
+
+   story.css is loaded first and supplies the serif, the cream paper, the
+   blush/sage/ochre variables and the .btn controls, so this excerpt reads as
+   the same series. Nothing in that file is changed.
+
+   Deliberately still: no entrance transforms, no wobble, no opacity that
+   essential content waits on, and nothing that scrolls the page by itself. A
+   block that arrives on the board is simply there. */
+
+/* The native hidden attribute has to win. A display rule further down would
+   otherwise keep a region on screen after the engine hid it - which left the
+   tray visible, and tappable, on beats that are not the building beat. */
+[hidden] { display: none !important; }
+
+.tower {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.6vh, 18px);
+  padding: clamp(12px, 2.5vw, 28px) clamp(14px, 4vw, 48px) clamp(20px, 4vh, 48px);
+  max-width: 980px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ---------- heading ---------- */
+
+.tower-top { display: grid; gap: 4px; justify-items: center; text-align: center; }
+/* The return sits above everything else on the page and is a real link, at
+   the same size as every other control the child taps. It is now the left
+   half of the shared top row, with this page's one sound control on the
+   right; the row itself takes its shape from story-reader.css. */
+.tower-top .reader-toolbar { width: 100%; text-align: left; }
+.tower-home { text-decoration: none; min-height: 44px; }
+.tower-top .reader-status { text-align: center; }
+
+/* Said plainly, and never dressed up as a finished book. */
+.preview-tag {
+  margin: 0;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--sage-wash);
+  color: var(--ink-soft);
+  font-size: clamp(12px, 1.6vw, 15px);
+  max-width: 52ch;
+}
+
+.tower-title { margin: 0; font-size: clamp(21px, 4vw, 34px); font-weight: 600; }
+.tower-progress { margin: 0; font-size: clamp(12px, 1.5vw, 15px); color: var(--ink-soft); }
+.tower-cover { display: grid; justify-items: center; gap: clamp(18px, 3vh, 28px); }
+.tower-cover > .btn { min-width: 190px; }
+
+/* ---------- one beat ---------- */
+
+.tower-beat { display: grid; gap: clamp(10px, 1.6vh, 18px); }
+.beat-heading {
+  margin: 0;
+  font-size: clamp(18px, 2.5vw, 25px);
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.scene { display: grid; gap: 5px; justify-items: center; width: 100%; }
+
+/* The frame holds 3:2 whether or not the painting has arrived, so the words
+   and the buttons below it never jump while a child is reaching for them. */
+.scene-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--paper-deep);
+  box-shadow: var(--shadow-lift);
+}
+.scene-art { width: 100%; height: 100%; object-fit: contain; display: block; }
+.scene-blocks { position: absolute; inset: 0; pointer-events: none; }
+.scene-caption {
+  margin: 0;
+  font-size: clamp(11px, 1.4vw, 14px);
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* Pieces and waiting spaces are placed in pixels by the engine, measured
+   against the painting's own rectangle. */
+.board-piece, .board-slot { position: absolute; display: block; }
+.board-slot svg, .board-piece svg { width: 100%; height: 100%; display: block; }
+.board-piece { filter: drop-shadow(0 1px 2px rgba(94, 74, 48, 0.30)); }
+
+/* One piece, drawn from its own geometry so that the shape is exact at any
+   size. Its box carries the piece's own ratio, and the drawing inside keeps
+   that ratio wherever it is placed, so a long rectangle is a long rectangle
+   in the materials list, in a help diagram, on the tray and on the board.
+
+   It used to be given a 16px square box in help, which turned every long
+   rectangle into a square. The ratio now belongs to the piece, and only the
+   board - where the engine has measured an exact box of the right shape -
+   asks the sprite to fill its container instead. */
+.piece-sprite { display: block; aspect-ratio: 1 / 1; }
+.piece-sprite.is-long { aspect-ratio: 2 / 1; }
+.piece-sprite svg { width: 100%; height: 100%; display: block; }
+.board-piece .piece-sprite { width: 100%; height: 100%; aspect-ratio: auto; }
+
+/* Help points at what is still waiting. It fills nothing. */
+.scene-blocks.is-helping .board-slot svg { opacity: 1; }
+.scene-blocks.is-helping .board-slot svg > * {
+  stroke: var(--blush-ink);
+  stroke-width: 6;
+}
+
+/* ---------- what the plan needs, and what it asks ---------- */
+
+.plan-ask {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  width: 100%;
+  max-width: 52ch;
+  margin: 0 auto;
+}
+.plan-question {
+  margin: 0;
+  font-size: clamp(16px, 2.1vw, 20px);
+  line-height: 1.5;
+  text-align: center;
+}
+.plan-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 16px;
+}
+.plan-item { display: flex; align-items: center; gap: 6px; }
+.plan-item b { font-size: clamp(17px, 2.2vw, 21px); font-variant-numeric: tabular-nums; }
+/* one accurate sample of the kind, beside its amount */
+.plan-sample { display: flex; align-items: center; }
+.plan-sample .piece-sprite { height: 26px; width: auto; }
+
+.plan-hint { margin: 4px 0 0; font-size: clamp(14px, 1.9vw, 17px); color: var(--ink-soft); }
+
+/* While building, the panel is a compact reminder under the working area, not
+   a second full-height question between the board and the pieces. */
+.plan-ask.is-compact { gap: 4px; }
+.plan-ask.is-compact .plan-question { font-size: clamp(14px, 1.8vw, 16px); }
+.plan-ask.is-compact .plan-choice { min-height: 44px; font-size: clamp(17px, 2.2vw, 20px); }
+.plan-ask.is-compact .plan-help-steps { margin: 2px 0; }
+.plan-ask.is-compact .plan-help-step { margin-bottom: 6px; }
+.plan-choices { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.plan-choice {
+  min-width: 64px;
+  min-height: 56px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: clamp(20px, 2.6vw, 26px);
+  font-variant-numeric: tabular-nums;
+  border: 2px solid var(--ink-soft);
+  border-radius: 14px;
+  background: var(--paper-deep);
+  color: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+/* the chosen one is marked as chosen, never as right or wrong */
+.plan-choice[aria-pressed="true"] { border-width: 3px; background: var(--sage-wash); }
+.plan-choice[disabled] { cursor: default; opacity: 0.85; }
+.plan-choice:focus-visible { outline: 3px solid var(--sage-deep); outline-offset: 3px; }
+.plan-said, .plan-compare { margin: 0; font-size: clamp(14px, 1.9vw, 17px); }
+
+.plan-help { width: 100%; padding: 6px 14px; border-radius: var(--radius); background: var(--paper-deep); }
+.plan-help > summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-size: clamp(14px, 1.9vw, 17px);
+  color: var(--ink-soft);
+}
+.plan-help-label { margin: 4px 0; font-weight: 700; }
+.plan-help-steps { margin: 4px 0; padding-left: 20px; }
+.plan-help-step { margin-bottom: 10px; }
+.plan-help-symbols { display: block; font-variant-numeric: tabular-nums; }
+.plan-help-parts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+.plan-help-part { display: flex; align-items: center; gap: 5px; }
+/* The worked example has to be readable, and each drawn piece has to be the
+   kind it says it is. Sizing by height lets a long rectangle take the width
+   its own shape needs. */
+.plan-help-shapes { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; max-width: 210px; }
+.plan-help-shapes .piece-sprite { height: 20px; width: auto; }
+.plan-help-count { font-variant-numeric: tabular-nums; font-weight: 700; }
+/* the next step sits with the steps it continues, not below the whole tray */
+.plan-help-controls { margin-top: 6px; }
+
+.beat-text, .beat-fold-text { display: grid; gap: 9px; max-width: 62ch; margin: 0 auto; }
+.beat-line { margin: 0; font-size: clamp(16px, 2.1vw, 21px); line-height: 1.55; }
+
+/* ---------- listening ---------- */
+
+/* The shape and the sizes come from story-reader.css, which every book now
+   shares. Only what is particular to this preview is here.
+
+   The per-paragraph "hear it again" controls that used to live beside the
+   text are gone. Each was a 44px button in the same grid row as a paragraph,
+   which on a phone left the words about 44px wide - one word to a line. One
+   control for the page, above the picture and the tray, replaces all of
+   them. */
+.beat-audio {
+  justify-content: center;
+  width: 100%;
+  max-width: 62ch;
+  margin: 0 auto;
+}
+.beat-audio .reader-note,
+.beat-audio .reader-status { flex: 1 1 100%; text-align: center; }
+
+
+/* The folded words on the building beat. */
+.beat-fold {
+  max-width: 62ch;
+  margin: 0 auto;
+  width: 100%;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  background: var(--paper-deep);
+}
+.beat-fold > summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-size: clamp(14px, 1.9vw, 17px);
+  color: var(--ink-soft);
+}
+.beat-fold[open] > summary { margin-bottom: 6px; }
+
+/* ---------- the two quiet notes ----------
+   One frames an alternative telling; the other explains what starting over
+   would do before it is done. Both are plain text in the page, not an alert,
+   a badge or anything the child has to dismiss. */
+
+.route-note, .restart-note {
+  margin: 0 auto;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  background: var(--sage-wash);
+  color: var(--ink-soft);
+  font-size: clamp(14px, 1.9vw, 17px);
+  line-height: 1.5;
+  max-width: 52ch;
+  text-align: center;
+}
+
+/* ---------- the tray ---------- */
+
+.build { display: grid; gap: 8px; justify-items: center; }
+.build-plan { margin: 0; font-size: clamp(15px, 2vw, 18px); color: var(--ink-soft); }
+.build-note { margin: 0; font-size: clamp(12px, 1.6vw, 15px); color: var(--ink-soft); }
+
+/* Only ever shown after the plan is filled, and only about that plan. */
+.build-explain {
+  margin: 2px 0 0;
+  padding: 11px 16px;
+  border-radius: var(--radius);
+  background: var(--sage-wash);
+  color: var(--sage-ink);
+  font-size: clamp(15px, 2vw, 18px);
+  line-height: 1.5;
+  max-width: 52ch;
+  text-align: center;
+}
+
+.tray {
+  display: grid;
+  gap: clamp(6px, 1.2vw, 10px);
+  justify-items: center;
+  gap: clamp(6px, 1.2vw, 10px);
+  padding: clamp(8px, 1.4vw, 14px);
+  border-radius: var(--radius);
+  background: var(--sage-wash);
+  width: 100%;
+}
+
+/* Every piece that started on the tray keeps its own place for the whole
+   building node. When one is taken its place stays, empty, so nothing slides
+   sideways under a finger that is already reaching for the next piece.
+
+   The height belongs to the place, not to the drawing inside it, so an
+   emptied row holds its space open and nothing underneath moves. */
+.tray-row { display: grid; gap: 4px; justify-items: center; width: 100%; }
+.tray-row-label {
+  margin: 0;
+  font-size: clamp(12px, 1.6vw, 15px);
+  color: var(--ink-soft);
+}
+.tray-places { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(6px, 1.2vw, 10px); }
+.tray-slot {
+  width: clamp(48px, 6.4vw, 60px);
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+}
+.tray-slot.is-long { width: clamp(76px, 10vw, 96px); }
+.tray-slot.is-empty { opacity: 0.28; }
+
+/* A real button, not a picture with a click handler. The button is the whole
+   place, so the target is the full slot and not just the drawn face. */
+.tray-block .piece-sprite { width: 100%; height: auto; max-height: 100%; }
+.tray-block {
+  width: 100%;
+  height: 100%;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.tray-block:focus-visible { outline: 3px solid var(--sage-deep); outline-offset: 3px; }
+.tray-block[disabled] { cursor: default; opacity: 0.5; }
+
+.beat-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.tower-foot { display: flex; justify-content: center; margin-top: auto; padding-top: 8px; }
+.tower-foot .btn { text-decoration: none; }
+
+/* ---------- a phone ----------
+   While building, the picture and the tray have to be on screen together.
+   The painting is capped so the board is still legible but the tray sits
+   inside the same view; the narration is folded and moved below both. */
+
+@media (max-width: 560px) {
+  .tower { padding-left: 10px; padding-right: 10px; gap: 8px; }
+  .beat-actions .btn { width: 100%; }
+  .tray-slot { width: 66px; }
+
+  .tower-beat.is-building .scene-frame { max-height: 34svh; }
+  .tower-beat.is-building .scene-art { height: 100%; }
+  .tower-beat.is-building .beat-heading { font-size: 17px; }
+  .tower-beat.is-building .scene-caption { display: none; }
+  .tower-beat.is-building .tray { padding: 8px; }
+}
+
+/* A short screen in any orientation gets the same treatment. */
+@media (max-height: 720px) {
+  .tower-beat.is-building .scene-frame { max-height: 36svh; }
+}

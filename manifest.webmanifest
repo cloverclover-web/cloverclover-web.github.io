@@ -1,13 +1,13 @@
 {
-  "name": "YOYO Study Quest",
-  "short_name": "YOYO Study",
-  "description": "A gentle English, phonics, maths, logic, and measure quest game for iPad.",
+  "name": "YOYO Story Worlds",
+  "short_name": "Story Worlds",
+  "description": "A picture-book library for young children: choose a story world, then listen, count and draw along.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "orientation": "landscape",
-  "background_color": "#fff0f8",
-  "theme_color": "#fff0f8",
+  "orientation": "any",
+  "background_color": "#faf3e8",
+  "theme_color": "#faf3e8",
   "icons": [
     {
       "src": "icons/icon.svg",

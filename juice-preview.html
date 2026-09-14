@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#faf3e8">
+  <title>Juice for Our Friends | YOYO Story Worlds</title>
+  <link rel="icon" href="icons/icon.svg">
+  <link rel="stylesheet" href="story.css?v=2026-09-14-juice-j10">
+  <link rel="stylesheet" href="story-reader.css?v=2026-09-14-juice-j10">
+  <link rel="stylesheet" href="juice-preview.css?v=2026-09-14-juice-j10">
+  <link rel="stylesheet" href="juice-mixes-preview.css?v=2026-09-14-juice-j10">
+  <script src="sw-bootstrap.js"></script>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+</head>
+<body>
+  <header class="juice-top reader-toolbar"><a class="reader-home" href="index.html">Back to the library</a><div class="reader-audio"><button id="listen" class="reader-audio-btn" type="button" aria-label="Listen" hidden>Listen</button></div></header>
+  <p id="audio-status" class="reader-status" role="status"></p>
+  <main class="juice-book" id="book">
+    <div class="book-heading"><p id="chapter">A story to make together</p><h1 id="title" tabindex="-1">Juice for Our Friends</h1></div>
+    <figure class="painting" id="painting"><img id="scene-art" src="assets/juice/invitation-v1.jpg" alt="Bear welcomes Bunny and Duck into his kitchen" width="1536" height="1024"><div id="stage" class="juice-stage" hidden></div></figure>
+    <div class="reading"><div id="lines"></div></div>
+    <section id="activity" class="activity" aria-label="Make something with the friends" hidden></section>
+    <p id="notice" class="notice" role="status" aria-live="polite"></p>
+    <nav class="page-nav reader-nav" aria-label="Story pages"><button id="back" type="button">Back</button><div id="next-actions"></div></nav>
+    <footer class="juice-bottom"><details class="reader-more"><summary>More controls</summary><div class="reader-more-body"><button id="parent-open" type="button">For grown-ups</button><button id="new-reading" type="button">A new reading</button><a href="index.html">Return to library</a></div></details><span id="preview-status">Read and make together</span></footer>
+  </main>
+  <dialog id="parent-dialog"><h2>Reading together</h2><p>This is a screen-based measuring story, not a recipe or a recommended serving size. A scoop here means the same 25 mL measure throughout. The diagrams are simplified; real fruit yield and mixing colours are not calculated.</p><p>The free-recipe route uses opaque mugs. Its record adds the measured ingredient portions, not liquid layers or predicted blend colours; real mixtures need not have perfectly additive final volumes. No colour result is simulated or graded.</p><p>For any real preparation, a grown-up checks ingredients, allergies, suitable textures, amounts and equipment, and supervises. Use treated or pasteurised juice and drinking water. Wash hands and produce appropriately. Blades, blenders and heat are grown-up jobs. Tasting is optional.</p><p>No scores, recording, uploads or learning profiles are collected. A selected answer does not tell us how a child worked it out. This story is awaiting parent playtest.</p><button id="parent-close" type="button">Back to the story</button></dialog>
+  <dialog id="restart-dialog"><h2>Start a different reading?</h2><p>This starts new recipes. Your current making in this book will be replaced. Other stories and drawings stay untouched.</p><div class="row"><button id="restart-no" type="button">Keep this reading</button><button id="restart-yes" type="button">Start a new reading</button></div></dialog>
+  <noscript>This picture book needs JavaScript for its pages. You can still return to the library.</noscript>
+  <script src="story-audio.js?v=2026-09-14-juice-j10"></script>
+  <script src="juice-model.js?v=2026-09-14-juice-j10"></script>
+  <script src="juice-story-data.js?v=2026-09-14-juice-j10"></script>
+  <script src="juice-art.js?v=2026-09-14-juice-j10"></script>
+  <script src="juice-mixing.js?v=2026-09-14-juice-j10"></script>
+  <script src="juice-mixes-preview.js?v=2026-09-14-juice-j10"></script>
+  <script src="juice-preview.js?v=2026-09-14-juice-j10"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#faf3e8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="My Stories">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>My Stories</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <!-- A place is kept for the child's own stories. Nothing here asks her for
+         one: there is no recorder, no form, no upload and no saved draft. The
+         page is deliberately plain HTML reusing story.css, so it carries the
+         book's typography and colours without adding a stylesheet of its own
+         and without touching the storybook's code. -->
+    <link rel="stylesheet" href="story.css?v=2026-09-07-v2-home11-r7">
+    <!-- The only script, shared with the other pages, so this entry takes part
+         in the ordinary update chain. It loads no story and collects nothing. -->
+    <script src="sw-bootstrap.js?v=2026-09-07-v2-home11-r7"></script>
+  </head>
+  <body>
+    <div class="book">
+      <section class="screen home is-active" aria-label="My Stories">
+        <svg class="home-crest" viewBox="0 0 80 60" aria-hidden="true">
+          <path d="M14 50 V14 Q26 8 40 14 V50 Q26 44 14 50 Z"
+                fill="#faf3e8" stroke="#b98f42" stroke-width="2.4" stroke-linejoin="round"/>
+          <path d="M66 50 V14 Q54 8 40 14 V50 Q54 44 66 50 Z"
+                fill="#faf3e8" stroke="#b98f42" stroke-width="2.4" stroke-linejoin="round"/>
+          <path d="M40 14 V50" stroke="#b98f42" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="27" cy="24" r="2.4" fill="#e8a0b4"/>
+          <circle cx="53" cy="24" r="2.4" fill="#a3b89a"/>
+          <circle cx="27" cy="34" r="2.4" fill="#a3b89a"/>
+          <circle cx="53" cy="34" r="2.4" fill="#e8a0b4"/>
+        </svg>
+
+        <h1 class="home-title">My Stories</h1>
+        <p class="home-sub">
+          This is where your own stories will live, when you have one to tell.
+        </p>
+        <p class="home-sub">
+          There is nothing to do here yet. If you think of a character, a place or
+          just a beginning, tell a grown-up about it and we will make the book together.
+          You can take as long as you like.
+        </p>
+
+        <div class="home-actions">
+          <a class="btn btn-primary" href="index.html">Back to the library</a>
+        </div>
+
+        <div class="home-footer">
+          <a class="btn btn-quiet" href="picnic.html">Bunny's Birthday Picnic</a>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

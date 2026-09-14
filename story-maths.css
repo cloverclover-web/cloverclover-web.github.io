@@ -1,0 +1,227 @@
+/* The picnic's arithmetic card, inside the book's own visual lane.
+
+   story.css already supplies the paper, the serif, the warm palette and the
+   large quiet buttons. Everything here is scoped under .smaths so that adding
+   this stylesheet to a page cannot change any other activity. */
+
+/* A strawberry that has moved is gone from this collection. The card's own
+   display rules would otherwise keep drawing it, because display beats the
+   hidden attribute. */
+.smaths [hidden] { display: none !important; }
+
+.smaths .smaths-question {
+  margin: 6px 0 2px;
+  font-size: 1.06rem;
+  line-height: 1.45;
+}
+
+/* What we already know, kept beside the question the whole time. These are
+   starting-time amounts: they are drawn once when the page opens and never
+   again while fruit is moving, because text above the strawberries that grows
+   moves the strawberries. */
+.smaths-givens {
+  list-style: none;
+  margin: 6px 0 10px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+.smaths-given {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.smaths-given b {
+  font-size: 1.35rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- three direct numbers ---------- */
+
+.smaths-predict { margin: 10px 0 4px; }
+.smaths-predict-hint { margin: 0 0 8px; }
+.smaths-choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 420px;
+}
+.smaths-choice {
+  min-height: 56px;
+  min-width: 56px;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  border: 2px solid var(--ink-soft, #8a7a66);
+  border-radius: 14px;
+  background: var(--paper, #fbf5ea);
+  color: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+/* the chosen one is marked as chosen, never as right or wrong */
+.smaths-choice[aria-pressed="true"] {
+  border-width: 3px;
+  background: var(--blush-wash, #f7e6e6);
+}
+.smaths-choice[disabled] { cursor: default; opacity: 0.85; }
+.smaths-said { margin: 8px 0 0; }
+
+/* ---------- one way to work it out ---------- */
+
+.smaths-help { margin: 10px 0; }
+.smaths-help-toggle { cursor: pointer; min-height: 44px; padding: 10px 0; }
+.smaths-help-label { margin: 4px 0; font-weight: 700; }
+.smaths-help-steps { margin: 4px 0; padding-left: 20px; }
+.smaths-help-step { margin-bottom: 10px; }
+.smaths-help-symbols {
+  display: block;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.1rem;
+}
+/* the amounts a step is talking about, drawn as pictures. They are diagrams,
+   not stock: asking for help never moves a real strawberry. */
+.smaths-help-parts { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 6px; }
+.smaths-help-part { display: flex; align-items: center; gap: 6px; }
+.smaths-help-fruit { display: flex; flex-wrap: wrap; gap: 2px; max-width: 132px; }
+.smaths-help-berry { width: 18px; height: 18px; display: block; }
+.smaths-help-berry img { width: 100%; height: auto; display: block; }
+.smaths-help-count { font-variant-numeric: tabular-nums; font-weight: 700; }
+/* the next step sits with the steps it continues, not below the whole basket */
+.smaths-help-controls { margin-top: 6px; }
+
+/* ---------- the strawberries themselves ---------- */
+
+/* Hidden until the child asks to check. The question is answered by the fruit,
+   so the fruit does not arrive before the question has been read. */
+.smaths-work { display: none; }
+.smaths-work.is-open { display: block; }
+
+.smaths-group { margin: 12px 0; }
+.smaths-group-label { margin: 0 0 6px; font-variant-numeric: tabular-nums; }
+
+.smaths-berries {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  justify-items: center;
+  max-width: 300px;
+  width: 100%;
+  margin: 0;
+}
+
+/* Every strawberry that started here keeps its own place for the whole page.
+   When one is taken its place stays, empty, so nothing slides sideways under
+   a finger already reaching for the next one. */
+.smaths-slot {
+  width: 100%;
+  min-height: 56px;
+  display: grid;
+  place-items: center;
+}
+.smaths-slot.is-empty { opacity: 0.26; }
+
+.smaths-berry {
+  width: 100%;
+  height: 100%;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 2px;
+  border: none;
+  border-radius: 12px;
+  background: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.smaths-berry[disabled] { cursor: default; }
+.smaths-berry.is-still { cursor: default; }
+.smaths-berry img { width: 100%; height: auto; display: block; pointer-events: none; }
+
+/* ---------- the painted dishes ---------- */
+
+.smaths-plate {
+  position: relative;
+  width: min(100%, 260px);
+  margin: 0;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+}
+.smaths-plate-art { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+/* A dish is a picture of what has been given, not a set of controls. The grid
+   is bounded by the painted blank centre: a square inside a circle can only be
+   about 0.707 of its diameter, so a box inset 28% on every side sits inside
+   the middle rather than riding up onto the rim. The source's real buttons
+   keep their own >=44px minimums; these display sprites are sized by their
+   cells instead. */
+.smaths-plate-berries {
+  position: absolute;
+  inset: 28%;
+  width: auto;
+  height: auto;
+  max-width: none;
+  margin: 0;
+  grid-template-columns: repeat(var(--plate-columns, 3), minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  gap: 4%;
+}
+.smaths-plate-berries .smaths-berry {
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: auto;
+  padding: 0;
+}
+
+.smaths-destination .smaths-dish { display: block; }
+.smaths-kept .smaths-berries { opacity: 0.9; }
+
+/* The little plates are dishes, not berry cells. Laying them out in the
+   berry grid gave each whole plate one 5-column cell - about 55px wide at an
+   ordinary desktop width - so its painted dish and the fruit on it were
+   smaller than a single strawberry on the tray beside them. They get their
+   own row instead: each dish takes a readable share of the width, wraps when
+   it runs out, and never grows above the live source because it sits in the
+   destination group below it. */
+.smaths-plates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+  width: 100%;
+}
+.smaths-little-plate {
+  flex: 1 1 150px;
+  max-width: 200px;
+  min-width: 130px;
+  margin: 0;
+}
+.smaths-little-plate .smaths-plate { width: 100%; }
+.smaths-plate-label { display: block; margin-bottom: 4px; }
+
+/* ---------- what actually happened ---------- */
+
+.smaths-note:empty, .smaths-result:empty, .smaths-compare:empty { display: none; }
+.smaths-note { margin: 10px 0 0; }
+.smaths-result { margin: 10px 0 0; }
+.smaths-equation {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.smaths-compare { margin: 6px 0 0; }
+
+@media (min-width: 640px) {
+  .smaths-work.is-open { display: flex; gap: 24px; align-items: flex-start; }
+  .smaths-group { flex: 1 1 260px; }
+}

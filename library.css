@@ -1,0 +1,216 @@
+/* The library shelf.
+
+   Same family as the book: story.css is loaded first and supplies the serif,
+   the cream paper, the blush/sage/ochre variables and the .btn controls. This
+   file only lays out the shelf, so the two never disagree about type or
+   colour.
+
+   Browsing is meant to dominate, so the heading block stays small and the
+   covers start high on the screen. Cards are books to choose, not panels of
+   statistics: no scores, no streaks, no locks, no progress bars, and nothing
+   that moves on arrival. */
+
+.library {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.view { display: none; }
+.view.is-active {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: clamp(16px, 2.6vh, 28px);
+  padding: clamp(18px, 3vw, 36px) clamp(16px, 4vw, 52px) clamp(32px, 5vh, 60px);
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ---------- the heading, deliberately modest ---------- */
+
+.library-top {
+  display: grid;
+  justify-items: center;
+  gap: clamp(6px, 1vh, 12px);
+  text-align: center;
+}
+.library-top.is-compact { justify-items: start; text-align: left; }
+
+.library-crest { width: clamp(44px, 7vw, 62px); height: auto; display: block; }
+
+.library-title {
+  margin: 0;
+  font-size: clamp(26px, 4.6vw, 40px);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.library-title:focus-visible { outline: 3px solid var(--sage-deep); outline-offset: 4px; }
+
+.library-invite {
+  margin: 0;
+  font-size: clamp(16px, 2.2vw, 21px);
+  color: var(--ink-soft);
+}
+.library-invite:empty { display: none; }
+
+.quick-read { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 4px; }
+.quick-read:empty { display: none; }
+
+.quiet-note {
+  margin: 0;
+  padding: 12px 18px;
+  border-radius: var(--radius);
+  background: var(--sage-wash);
+  color: var(--ink-soft);
+  font-size: clamp(14px, 1.9vw, 16px);
+  max-width: 46ch;
+  text-align: center;
+}
+
+/* ---------- the cards ----------
+   Column count follows the labels rather than a fixed number. With eleven
+   shelves the temptation is to shrink them until they all fit on one screen;
+   these stay wide enough to read and to hit, and the shelf simply scrolls. A
+   card the child cannot read is worse than one they have to scroll to. */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: clamp(12px, 2vw, 22px);
+  align-content: start;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  min-height: 44px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #fdf7ec;
+  box-shadow: var(--shadow-soft);
+  color: inherit;
+  text-decoration: none;
+  transition: box-shadow 160ms ease;
+}
+.card:hover { box-shadow: var(--shadow-lift); }
+.card:focus-visible { outline: 3px solid var(--sage-deep); outline-offset: 3px; }
+
+/* The frame holds its shape before the picture arrives, so the card below it
+   never jumps while a child is reaching for it. */
+.cover {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  background: var(--paper-deep);
+  display: grid;
+  place-items: center;
+}
+.cover-art { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* An unfinished slot says so in words. It is not a lock, a silhouette or a
+   borrowed painting from another story.
+
+   With eleven shelves the old diagonal stripes read as busy wallpaper, so the
+   waiting slot is now a plain cover in the book's own paper colour, with a
+   spine down its binding edge. It looks like a book whose cover has not been
+   painted yet, which is exactly what it is. */
+.cover.is-waiting {
+  background: var(--paper-deep);
+  box-shadow: inset 9px 0 0 -5px rgba(138, 106, 58, 0.28);
+}
+.cover-note {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink-soft);
+  font-size: clamp(12px, 1.6vw, 14px);
+  letter-spacing: 0.01em;
+}
+
+.card-body {
+  display: grid;
+  gap: 4px;
+  padding: clamp(12px, 1.8vw, 18px);
+}
+.card-title { margin: 0; font-size: clamp(18px, 2.4vw, 23px); font-weight: 600; }
+.card-blurb { margin: 0; font-size: clamp(14px, 1.8vw, 16px); color: var(--ink-soft); line-height: 1.45; }
+.card-status {
+  margin: 2px 0 0;
+  font-size: clamp(13px, 1.6vw, 15px);
+  color: var(--sage-ink);
+  font-weight: 600;
+}
+
+/* A preview says what it is, under its status. It is the same card as a book:
+   the difference is in the words, not in a badge that has to be decoded, and
+   its status reads quieter than a finished book's. */
+.card.is-preview .card-status { color: var(--ink-soft); }
+.card-note {
+  margin: 2px 0 0;
+  font-size: clamp(12px, 1.5vw, 14px);
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+/* The previews sit on the shelf, above the categories: quieter than the
+   finished book, still a real illustrated card and a real link. */
+.previews {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+}
+.previews[hidden] { display: none; }
+.previews-title { margin: 0; font-size: clamp(17px, 2.2vw, 21px); font-weight: 600; }
+.previews-note {
+  margin: 0 0 4px;
+  font-size: clamp(13px, 1.7vw, 15px);
+  line-height: 1.45;
+  color: var(--ink-soft);
+  max-width: 52ch;
+}
+/* one preview should not stretch to the width of eleven category cards */
+.card-grid-previews { grid-template-columns: repeat(auto-fill, minmax(240px, 340px)); }
+
+@media (min-width: 561px) {
+  .card-grid-previews { grid-template-columns: minmax(0, 720px); }
+  .card-grid-previews .card {
+    display: grid;
+    grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+    align-items: center;
+  }
+}
+
+.empty-note {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: clamp(16px, 2.4vw, 24px);
+  border-radius: var(--radius);
+  background: var(--sage-wash);
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+.empty-note p { margin: 0; }
+.empty-note .btn { margin-top: 4px; text-decoration: none; }
+
+.library-foot {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: clamp(10px, 2vh, 20px);
+}
+
+/* ---------- narrow screens ----------
+   A tablet at 820px: two comfortable columns, not three narrow ones. */
+@media (max-width: 900px) and (min-width: 561px) {
+  .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* A phone: one card at a time, full width, nothing squeezed. */
+@media (max-width: 560px) {
+  .card-grid { grid-template-columns: 1fr; }
+  .view.is-active { padding-left: 14px; padding-right: 14px; }
+  .quick-read .btn { width: 100%; }
+}

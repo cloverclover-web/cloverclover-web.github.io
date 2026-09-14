@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#faf3e8">
+    <title>Story preview: The Tower That Fell</title>
+    <!-- A standalone preview. It borrows the storybook's typography and colour
+         from story.css without changing it, adds only its own stylesheet, and
+         registers no service worker. The library links it as a preview, not a
+         READY book or a required offline bundle. The existing root worker may
+         cache visited resources; reading state stays in memory for this visit. -->
+    <link rel="stylesheet" href="story.css">
+    <!-- The shared reader chrome: the same few controls in the same places as
+         every other book. It styles only its own .reader-* classes. -->
+    <link rel="stylesheet" href="story-reader.css?v=2026-09-09-tower-reader-r6">
+    <!-- The preview's own files carry their own release marker, so an ordinary
+         reload of this page picks up a new branch without touching the
+         library's release, its worker or its cached core. -->
+    <link rel="stylesheet" href="tower-preview.css?v=2026-09-09-tower-reader-r6">
+    <script src="sw-bootstrap.js"></script>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+</head>
+  <body>
+    <div class="tower">
+
+      <header class="tower-top reader-toolbar-wrap">
+        <!-- The same top row as every other book: the way back to the shelf on
+             the left, and this page's ONE sound control on the right. A child
+             who has found either of them in one book has found them in all of
+             them. The endings and the footer keep their own returns: this is an
+             extra way out, not a replacement for them. -->
+        <div class="reader-toolbar">
+          <a class="btn btn-quiet tower-home reader-home" href="index.html">Back to the library</a>
+          <div class="beat-audio reader-audio" id="beatAudio">
+            <!-- One control for the whole page, never one per sentence: a
+                 button beside every paragraph squeezed the words into a
+                 44-pixel column, one word to a line, on a phone. It says
+                 Listen until this page has been heard, Listen again once it
+                 has, and Stop listening while it is reading. -->
+            <button class="btn btn-secondary reader-audio-btn" id="listenBtn" type="button"
+                    aria-pressed="false" hidden></button>
+            <!-- Kept, and kept hidden: the visible control above does both
+                 jobs. It is here so that anything still bound to it keeps
+                 working. -->
+            <button class="btn btn-quiet" id="stopBtn" type="button" hidden></button>
+          </div>
+        </div>
+        <p class="reader-status" id="audioStatus" aria-live="polite"></p>
+        <p class="preview-tag" id="previewTag">
+          Story preview. Read together.
+        </p>
+        <h1 class="tower-title">The Tower That Fell</h1>
+        <p class="tower-progress" id="beatProgress" aria-live="polite" hidden></p>
+      </header>
+
+      <section class="tower-cover" id="readerCover" aria-label="Book cover">
+        <div class="scene-frame">
+          <img class="scene-art" src="assets/tower/wish-wardrobe-v1.jpg"
+               alt="Bunny and Bear with Bunny's block tower and her drawing of a lookout.">
+        </div>
+        <button class="btn btn-primary" id="readWithMe" type="button">Read with me</button>
+      </section>
+
+      <main class="tower-beat" id="beat" aria-labelledby="beatHeading" hidden>
+        <h2 class="beat-heading" id="beatHeading"></h2>
+
+        <!-- Said only when the reader is being shown another way the same
+             story could go, so an alternative telling is never mistaken for
+             the first one being undone. -->
+        <p class="route-note" id="routeNote" aria-live="polite" hidden></p>
+
+        <!-- The picture for this beat. Its frame keeps its shape before the
+             painting arrives, so nothing shifts under a finger, and the blocks
+             are drawn into this same box against the painting's real
+             rectangle. -->
+        <div class="scene" id="scene">
+          <div class="scene-frame" id="sceneFrame">
+            <img class="scene-art" id="sceneArt" alt="">
+            <div class="scene-blocks" id="sceneBlocks" aria-hidden="true"></div>
+          </div>
+          <p class="scene-caption" id="sceneCaption"></p>
+        </div>
+
+        <!-- On the building beat the tray sits directly under the picture, so
+             the board a child is aiming at and the pieces they are choosing
+             from are on screen together. Only that beat fills this in. -->
+        <div class="build" id="build" hidden>
+          <p class="build-plan" id="buildPlan" aria-live="polite"></p>
+          <div class="tray" id="tray"></div>
+          <p class="build-note" id="buildNote"></p>
+          <p class="build-explain" id="buildExplain" hidden></p>
+        </div>
+
+        <div class="beat-text" id="beatText"></div>
+
+        <!-- The same words, folded away while building. One tap, never needed
+             in order to take part. -->
+        <details class="beat-fold" id="beatFold" hidden>
+          <summary>Read this part</summary>
+          <div class="beat-fold-text" id="beatFoldText"></div>
+        </details>
+
+        <!-- The plan itself: what the picture needs, the question it asks and
+             three numbers to choose from. It is written once when the page
+             opens and does not change while pieces are moving, so nothing
+             above the tray grows under a finger. The countable pieces and
+             their waiting spaces appear only after the explicit check. -->
+        <section class="plan-ask" id="planAsk" hidden>
+          <p class="plan-question" id="planQuestion"></p>
+          <ul class="plan-list" id="planList"></ul>
+          <div class="plan-predict" id="planPredict">
+            <p class="plan-hint" id="planHint"></p>
+            <div class="plan-choices" id="planChoices" role="group"
+                 aria-label="Three numbers to choose from"></div>
+            <p class="plan-said" id="planSaid" aria-live="polite"></p>
+          </div>
+          <details class="plan-help" id="planHelp">
+            <summary id="planHelpToggle">Show me a way</summary>
+            <div class="plan-help-body">
+              <p class="plan-help-label">One way to work it out</p>
+              <ol class="plan-help-steps" id="planHelpSteps"></ol>
+              <div class="plan-help-controls" id="planHelpControls"></div>
+            </div>
+          </details>
+          <p class="plan-compare" id="planCompare" aria-live="polite" hidden></p>
+        </section>
+
+
+        <!-- Starting the preview over is explained before it happens, and it
+             is the only action that clears this reading's building. -->
+        <p class="restart-note" id="restartNote" aria-live="polite" hidden></p>
+
+        <div class="beat-actions reader-nav" id="beatActions"></div>
+      </main>
+
+      <footer class="tower-foot">
+        <a class="btn btn-quiet" href="index.html">Return to library</a>
+      </footer>
+
+    </div>
+
+    <noscript>
+      <p class="preview-tag">
+        This preview needs JavaScript. It is an excerpt of a story that is still
+        being made, not a finished book.
+        <a href="index.html">Return to library</a>.
+      </p>
+    </noscript>
+
+    <!-- The unchanged shared player: it finds each clip by the hash of its
+         own text and never falls back to a different voice. -->
+    <script src="story-audio.js?v=2026-09-09-tower-reader-r6"></script>
+    <script src="tower-narration.js?v=2026-09-09-tower-reader-r6"></script>
+    <script src="tower-preview-data.js?v=2026-09-09-tower-reader-r6"></script>
+    <script src="tower-materials.js?v=2026-09-09-tower-reader-r6"></script>
+    <script src="tower-preview.js?v=2026-09-09-tower-reader-r6"></script>
+  </body>
+</html>

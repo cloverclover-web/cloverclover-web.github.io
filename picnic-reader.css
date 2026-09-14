@@ -1,0 +1,45 @@
+/* The picnic's own small part of the shared reader.
+
+   story-reader.css holds the shape every book takes. This file holds only
+   what is particular to this one: how the reader sits under the picture in
+   the storybook's stage, and the .btn-quiet look for the four controls that
+   moved into More controls when the two icon clusters were replaced.
+
+   Nothing here changes a picture, a strawberry, a plate or a task. */
+
+/* The top row: the way back on the left, the page's sound on the right, the
+   title on its own line under both. The title is never squeezed between two
+   controls, which is what a three-across header did to it. */
+/* Scoped to the reading screen only. .stage-top is shared with the bunting,
+   the drawing board and the grown-ups page, and those keep the row they have
+   always had. */
+[data-screen="story"] .stage-top {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+}
+[data-screen="story"] .stage-top .reader-toolbar { width: 100%; }
+[data-screen="story"] .stage-top .reader-status { text-align: center; }
+[data-screen="story"] .stage-top .stage-title { text-align: center; margin: 0; }
+[data-screen="story"] .reader-toolbar .reader-retry { min-height: 44px; }
+
+.stage-controls.reader-bar {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 62ch;
+  margin: 0 auto;
+  padding-bottom: 6px;
+}
+
+/* The four folded controls are words now, not icons in a row. They keep the
+   quiet look they had, and the one that is currently on keeps its mark. */
+.reader-more-body .btn.is-on {
+  background: var(--sage-wash);
+  color: var(--sage-ink);
+}
+
+@media (max-width: 560px) {
+  .stage-controls.reader-bar { max-width: none; }
+}

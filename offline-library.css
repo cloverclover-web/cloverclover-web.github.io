@@ -1,0 +1,119 @@
+/* The grown-up's offline panel.
+
+   story.css is loaded first and supplies the paper, the serif, the colour
+   variables and the large quiet buttons; this file adds nothing of its own
+   beyond layout. Every rule is inside #offline-library, so putting this
+   stylesheet on the library page cannot change a single thing about the
+   library page.
+
+   It is folded by default. The child's shelf is the page; this is a job for
+   whoever is holding the iPad, and it should be findable without being in the
+   way. */
+
+#offline-library {
+  display: block;
+  width: 100%;
+  max-width: 62ch;
+  margin: clamp(16px, 3vw, 28px) auto 0;
+  padding: 0 clamp(12px, 2.4vw, 20px);
+}
+
+#offline-library .offline-panel {
+  border: 1px solid var(--paper-edge, #d9c49f);
+  border-radius: var(--radius, 12px);
+  background: var(--paper-deep, #f6ecd9);
+  padding: 4px 14px;
+}
+/* Saved and checked: a quiet mark, not a badge. */
+#offline-library .offline-panel.is-ready {
+  border-color: var(--sage, #9fb08d);
+  background: var(--sage-wash, #eef2e7);
+}
+
+/* A real target: the whole summary row, not just the words in it. */
+#offline-library .offline-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  cursor: pointer;
+  list-style: none;
+  color: var(--ink, #4a4038);
+  font-size: clamp(15px, 2vw, 17px);
+}
+#offline-library .offline-summary::-webkit-details-marker { display: none; }
+#offline-library .offline-summary::after { content: "▾"; margin-left: auto; font-size: 0.8em; }
+#offline-library .offline-panel[open] .offline-summary::after { content: "▴"; }
+
+#offline-library .offline-body {
+  display: grid;
+  gap: 10px;
+  padding: 4px 0 12px;
+}
+
+#offline-library .offline-intro {
+  margin: 0;
+  line-height: 1.5;
+  font-size: clamp(14px, 1.9vw, 16px);
+  color: var(--ink, #4a4038);
+}
+#offline-library .offline-note {
+  margin: 0;
+  line-height: 1.45;
+  font-size: clamp(13px, 1.7vw, 15px);
+  color: var(--ink-soft, #7a6b58);
+}
+
+/* Room for either wording, always, so a message arriving never pushes a
+   button out from under a finger that is already reaching for it. */
+#offline-library .offline-status {
+  margin: 0;
+  min-height: 2.8em;
+  line-height: 1.45;
+  font-size: clamp(14px, 1.9vw, 16px);
+  color: var(--ink, #4a4038);
+}
+#offline-library .offline-status.is-problem { color: var(--blush-ink, #a2596a); }
+
+/* The bar is decoration for the count beside it. It has no animation: a
+   transition on a bar that updates every few files is a flicker, and the
+   numbers are what a parent is actually reading. */
+#offline-library .offline-meter {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--paper-edge, #d9c49f);
+  overflow: hidden;
+}
+#offline-library .offline-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: var(--sage, #9fb08d);
+}
+
+#offline-library .offline-counts {
+  margin: 0;
+  min-height: 1.5em;
+  font-size: clamp(13px, 1.7vw, 15px);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft, #7a6b58);
+}
+
+#offline-library .offline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+#offline-library .offline-btn {
+  min-height: 48px;
+  min-width: 44px;
+}
+#offline-library .offline-btn[disabled] { opacity: 0.45; cursor: default; }
+
+#offline-library .offline-keep:empty { display: none; }
+
+@media (max-width: 560px) {
+  /* Full-width targets on a phone, and never two half-buttons a thumb has to
+     aim between. */
+  #offline-library .offline-btn { flex: 1 1 100%; }
+}
